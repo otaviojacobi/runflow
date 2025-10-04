@@ -1,0 +1,68 @@
+{
+  "Navigation": {
+    "features": "Recursos",
+    "pricing": "Preços",
+    "forTrainers": "Para Treinadores",
+    "forAthletes": "Para Atletas",
+    "signIn": "Entrar",
+    "getStarted": "Começar"
+  },
+  "Hero": {
+    "badge": "Confiado por treinadores em todo o mundo",
+    "title": "Potencialize seus atletas",
+    "titleHighlight": "com RunFlow",
+    "description": "A plataforma de treinamento feita para treinadores e corredores. Crie, agende e envie programas personalizados de corrida e musculação para seus atletas.",
+    "emailPlaceholder": "Digite seu e-mail",
+    "ctaButton": "Começar",
+    "freeText": "Grátis para até 10 atletas · Não precisa cartão de crédito"
+  },
+  "Features": {
+    "title": "Tudo que você precisa para treinar melhor",
+    "subtitle": "Recursos poderosos projetados para treinadores e atletas",
+    "planBuilder": {
+      "title": "Construtor de Planos de Treino",
+      "description": "Crie programas detalhados de corrida e musculação personalizados para os objetivos de cada atleta"
+    },
+    "scheduleDelivery": {
+      "title": "Envio de Programação",
+      "description": "Envie programações semanais ou personalizadas diretamente para os celulares dos seus atletas"
+    },
+    "progressTracking": {
+      "title": "Acompanhamento de Progresso",
+      "description": "Monitore a conclusão dos treinos, desempenho e feedback dos seus atletas em tempo real"
+    },
+    "runningStrength": {
+      "title": "Corrida e Musculação",
+      "description": "Suporte para todos os treinos de corrida (intervalados, tempo, longos) além de musculação completa"
+    },
+    "athleteManagement": {
+      "title": "Gestão de Atletas",
+      "description": "Gerencie múltiplos atletas com planos individuais, metas e comunicação em um só lugar"
+    },
+    "templateLibrary": {
+      "title": "Biblioteca de Modelos",
+      "description": "Crie modelos de treinos reutilizáveis e blocos de treinamento para economizar tempo no planejamento"
+    }
+  },
+  "Footer": {
+    "product": "Produto",
+    "resources": "Recursos",
+    "company": "Empresa",
+    "legal": "Legal",
+    "features": "Recursos",
+    "pricing": "Preços",
+    "forTrainers": "Para Treinadores",
+    "forAthletes": "Para Atletas",
+    "helpCenter": "Central de Ajuda",
+    "trainingGuides": "Guias de Treino",
+    "workoutLibrary": "Biblioteca de Exercícios",
+    "community": "Comunidade",
+    "about": "Sobre",
+    "blog": "Blog",
+    "contact": "Contato",
+    "privacy": "Privacidade",
+    "terms": "Termos",
+    "cookiePolicy": "Política de Cookies",
+    "copyright": "© 2025 RunFlow. Todos os direitos reservados."
+  }
+}

@@ -1,12 +1,15 @@
-import Link from "next/link";
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Calendar, Send, TrendingUp, Dumbbell, Users, BookTemplate } from "lucide-react";
 
 export default function Home() {
+  const t = useTranslations();
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       {/* Top Navigation Bar */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-8">
@@ -17,62 +20,69 @@ export default function Home() {
               </span>
             </Link>
             <nav className="hidden md:flex gap-6">
-              <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Features
-              </Link>
-              <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
-              </Link>
-              <Link href="#for-trainers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                For Trainers
-              </Link>
-              <Link href="#for-athletes" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                For Athletes
-              </Link>
+              <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                {t('Navigation.features')}
+              </a>
+              <a href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                {t('Navigation.pricing')}
+              </a>
+              <a href="#for-trainers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                {t('Navigation.forTrainers')}
+              </a>
+              <a href="#for-athletes" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                {t('Navigation.forAthletes')}
+              </a>
             </nav>
           </div>
           <div className="flex items-center gap-4">
             <Button variant="ghost" asChild>
-              <Link href="/login">Sign in</Link>
+              <Link href="/login">{t('Navigation.signIn')}</Link>
             </Button>
             <Button asChild>
-              <Link href="/signup">Get started</Link>
+              <Link href="/signup">{t('Navigation.getStarted')}</Link>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section with Gradient */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-50 via-blue-50 to-violet-50 dark:from-cyan-950/20 dark:via-blue-950/20 dark:to-violet-950/20" />
+      <section className="relative overflow-hidden bg-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-50 via-blue-50 to-violet-50" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(6,182,212,0.2),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(59,130,246,0.2),transparent_50%)]" />
 
         <div className="relative container max-w-7xl mx-auto px-8 py-32 md:py-48">
           <div className="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
             <Badge variant="secondary" className="text-sm">
-              Trusted by coaches worldwide
+              {t('Hero.badge')}
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-              Empower your athletes{" "}
+              {t('Hero.title')}{" "}
               <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                with RunFlow
+                {t('Hero.titleHighlight')}
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl">
-              The training platform built for coaches and runners. Create, schedule, and deliver personalized running and strength training programs to your athletes.
+              {t('Hero.description')}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" className="text-lg px-8 h-12">
-                Start coaching
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 h-12">
-                View demo
-              </Button>
+            <div className="w-full max-w-md pt-4">
+              <div className="relative flex items-center">
+                <Input
+                  type="email"
+                  placeholder={t('Hero.emailPlaceholder')}
+                  className="h-14 pr-36 text-lg font-semibold border-2 focus-visible:border-blue-900 focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
+                <Button
+                  size="lg"
+                  className="absolute cursor-pointer right-1 h-12 px-6"
+                >
+                  {t('Hero.ctaButton')}
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground text-center mt-4">
+                {t('Hero.freeText')}
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Free for individual coaches · No credit card required
-            </p>
           </div>
         </div>
       </section>
@@ -81,82 +91,82 @@ export default function Home() {
       <section id="features" className="py-24 md:py-32 container max-w-7xl mx-auto px-8">
         <div className="flex flex-col items-center text-center space-y-4 mb-16">
           <h2 className="text-3xl md:text-5xl font-bold">
-            Everything you need to coach better
+            {t('Features.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl">
-            Powerful features designed for coaches and athletes
+            {t('Features.subtitle')}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="border-2 hover:border-cyan-200 dark:hover:border-cyan-800 transition-colors">
+          <Card className="border-2 hover:border-cyan-200 transition-colors bg-white">
             <CardHeader className="pb-4">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
-              <CardTitle>Training Plan Builder</CardTitle>
+              <CardTitle>{t('Features.planBuilder.title')}</CardTitle>
               <CardDescription>
-                Create detailed running and strength training schedules tailored to each athlete's goals
+                {t('Features.planBuilder.description')}
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="border-2 hover:border-teal-200 dark:hover:border-teal-800 transition-colors">
+          <Card className="border-2 hover:border-teal-200 transition-colors bg-white">
             <CardHeader className="pb-4">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mb-4">
                 <Send className="w-6 h-6 text-white" />
               </div>
-              <CardTitle>Schedule Delivery</CardTitle>
+              <CardTitle>{t('Features.scheduleDelivery.title')}</CardTitle>
               <CardDescription>
-                Send weekly or custom training schedules directly to your athletes' phones
+                {t('Features.scheduleDelivery.description')}
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="border-2 hover:border-purple-200 dark:hover:border-purple-800 transition-colors">
+          <Card className="border-2 hover:border-purple-200 transition-colors bg-white">
             <CardHeader className="pb-4">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center mb-4">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
-              <CardTitle>Progress Tracking</CardTitle>
+              <CardTitle>{t('Features.progressTracking.title')}</CardTitle>
               <CardDescription>
-                Monitor your athletes' training completion, performance, and feedback in real-time
+                {t('Features.progressTracking.description')}
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="border-2 hover:border-amber-200 dark:hover:border-amber-800 transition-colors">
+          <Card className="border-2 hover:border-amber-200 transition-colors bg-white">
             <CardHeader className="pb-4">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mb-4">
                 <Dumbbell className="w-6 h-6 text-white" />
               </div>
-              <CardTitle>Running & Strength Training</CardTitle>
+              <CardTitle>{t('Features.runningStrength.title')}</CardTitle>
               <CardDescription>
-                Support for all running workouts (intervals, tempo, long runs) plus comprehensive strength training
+                {t('Features.runningStrength.description')}
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="border-2 hover:border-rose-200 dark:hover:border-rose-800 transition-colors">
+          <Card className="border-2 hover:border-rose-200 transition-colors bg-white">
             <CardHeader className="pb-4">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center mb-4">
                 <Users className="w-6 h-6 text-white" />
               </div>
-              <CardTitle>Athlete Management</CardTitle>
+              <CardTitle>{t('Features.athleteManagement.title')}</CardTitle>
               <CardDescription>
-                Manage multiple athletes with individual plans, goals, and communication in one place
+                {t('Features.athleteManagement.description')}
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="border-2 hover:border-blue-200 dark:hover:border-blue-800 transition-colors">
+          <Card className="border-2 hover:border-blue-200 transition-colors bg-white">
             <CardHeader className="pb-4">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center mb-4">
                 <BookTemplate className="w-6 h-6 text-white" />
               </div>
-              <CardTitle>Template Library</CardTitle>
+              <CardTitle>{t('Features.templateLibrary.title')}</CardTitle>
               <CardDescription>
-                Build reusable workout templates and training blocks to save time planning
+                {t('Features.templateLibrary.description')}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -168,42 +178,42 @@ export default function Home() {
         <div className="container max-w-7xl mx-auto px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-semibold mb-4">Product</h3>
+              <h3 className="font-semibold mb-4">{t('Footer.product')}</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="#features" className="hover:text-foreground transition-colors">Features</Link></li>
-                <li><Link href="#pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
-                <li><Link href="#for-trainers" className="hover:text-foreground transition-colors">For Trainers</Link></li>
-                <li><Link href="#for-athletes" className="hover:text-foreground transition-colors">For Athletes</Link></li>
+                <li><a href="#features" className="hover:text-foreground transition-colors">{t('Footer.features')}</a></li>
+                <li><a href="#pricing" className="hover:text-foreground transition-colors">{t('Footer.pricing')}</a></li>
+                <li><a href="#for-trainers" className="hover:text-foreground transition-colors">{t('Footer.forTrainers')}</a></li>
+                <li><a href="#for-athletes" className="hover:text-foreground transition-colors">{t('Footer.forAthletes')}</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Resources</h3>
+              <h3 className="font-semibold mb-4">{t('Footer.resources')}</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="#" className="hover:text-foreground transition-colors">Help Center</Link></li>
-                <li><Link href="#" className="hover:text-foreground transition-colors">Training Guides</Link></li>
-                <li><Link href="#" className="hover:text-foreground transition-colors">Workout Library</Link></li>
-                <li><Link href="#" className="hover:text-foreground transition-colors">Community</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.helpCenter')}</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.trainingGuides')}</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.workoutLibrary')}</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.community')}</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Company</h3>
+              <h3 className="font-semibold mb-4">{t('Footer.company')}</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="#" className="hover:text-foreground transition-colors">About</Link></li>
-                <li><Link href="#" className="hover:text-foreground transition-colors">Blog</Link></li>
-                <li><Link href="#" className="hover:text-foreground transition-colors">Contact</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.about')}</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.blog')}</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.contact')}</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Legal</h3>
+              <h3 className="font-semibold mb-4">{t('Footer.legal')}</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="#" className="hover:text-foreground transition-colors">Privacy</Link></li>
-                <li><Link href="#" className="hover:text-foreground transition-colors">Terms</Link></li>
-                <li><Link href="#" className="hover:text-foreground transition-colors">Cookie Policy</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.privacy')}</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.terms')}</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">{t('Footer.cookiePolicy')}</a></li>
               </ul>
             </div>
           </div>
           <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 RunFlow. All rights reserved.</p>
+            <p>{t('Footer.copyright')}</p>
           </div>
         </div>
       </footer>

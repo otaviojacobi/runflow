@@ -1,0 +1,68 @@
+{
+  "Navigation": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "forTrainers": "For Trainers",
+    "forAthletes": "For Athletes",
+    "signIn": "Sign in",
+    "getStarted": "Get started"
+  },
+  "Hero": {
+    "badge": "Trusted by coaches worldwide",
+    "title": "Empower your athletes",
+    "titleHighlight": "with RunFlow",
+    "description": "The training platform built for coaches and runners. Create, schedule, and deliver personalized running and strength training programs to your athletes.",
+    "emailPlaceholder": "Enter your email",
+    "ctaButton": "Get started",
+    "freeText": "Free for up to 10 athletes · No credit card required"
+  },
+  "Features": {
+    "title": "Everything you need to coach better",
+    "subtitle": "Powerful features designed for coaches and athletes",
+    "planBuilder": {
+      "title": "Training Plan Builder",
+      "description": "Create detailed running and strength training schedules tailored to each athlete's goals"
+    },
+    "scheduleDelivery": {
+      "title": "Schedule Delivery",
+      "description": "Send weekly or custom training schedules directly to your athletes' phones"
+    },
+    "progressTracking": {
+      "title": "Progress Tracking",
+      "description": "Monitor your athletes' training completion, performance, and feedback in real-time"
+    },
+    "runningStrength": {
+      "title": "Running & Strength Training",
+      "description": "Support for all running workouts (intervals, tempo, long runs) plus comprehensive strength training"
+    },
+    "athleteManagement": {
+      "title": "Athlete Management",
+      "description": "Manage multiple athletes with individual plans, goals, and communication in one place"
+    },
+    "templateLibrary": {
+      "title": "Template Library",
+      "description": "Build reusable workout templates and training blocks to save time planning"
+    }
+  },
+  "Footer": {
+    "product": "Product",
+    "resources": "Resources",
+    "company": "Company",
+    "legal": "Legal",
+    "features": "Features",
+    "pricing": "Pricing",
+    "forTrainers": "For Trainers",
+    "forAthletes": "For Athletes",
+    "helpCenter": "Help Center",
+    "trainingGuides": "Training Guides",
+    "workoutLibrary": "Workout Library",
+    "community": "Community",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookiePolicy": "Cookie Policy",
+    "copyright": "© 2025 RunFlow. All rights reserved."
+  }
+}
