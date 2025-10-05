@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db'
 import { createClient } from '@supabase/supabase-js'
+import { NextRequest } from 'next/server'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -112,7 +113,7 @@ describe('/api/auth/login', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -132,7 +133,7 @@ describe('/api/auth/login', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -151,7 +152,7 @@ describe('/api/auth/login', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -170,7 +171,7 @@ describe('/api/auth/login', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)

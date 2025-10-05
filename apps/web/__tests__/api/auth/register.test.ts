@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db'
 import { createClient } from '@supabase/supabase-js'
+import { NextRequest } from 'next/server'
 
 // Create admin client for testing
 const supabase = createClient(
@@ -143,7 +144,7 @@ describe('/api/auth/register', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -163,7 +164,7 @@ describe('/api/auth/register', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -183,7 +184,7 @@ describe('/api/auth/register', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -205,7 +206,7 @@ describe('/api/auth/register', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -226,7 +227,7 @@ describe('/api/auth/register', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -245,7 +246,7 @@ describe('/api/auth/register', () => {
         }),
       })
 
-      const response = await POST(request as any)
+      const response = await POST(request as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)

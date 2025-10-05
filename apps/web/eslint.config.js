@@ -4,6 +4,6 @@ import { nextJsConfig } from "@repo/eslint-config/next-js";
 export default [
   ...nextJsConfig,
   {
-    ignores: ["lib/generated/**"],
+    ignores: ["lib/generated/**", ".next/**", "node_modules/**"],
   },
 ];

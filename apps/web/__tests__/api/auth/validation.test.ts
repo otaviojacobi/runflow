@@ -146,7 +146,7 @@ describe('Auth Validation Schemas', () => {
     it('should reject missing email', () => {
       const invalidData = {
         password: 'anypassword',
-      } as any
+      }
 
       expect(() => loginSchema.parse(invalidData)).toThrow(ZodError)
     })
