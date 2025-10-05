@@ -13,10 +13,15 @@ export async function middleware(request: NextRequest) {
     },
   })
 
-  // Apply i18n middleware
-  const intlResponse = intlMiddleware(request)
-  if (intlResponse) {
-    response = intlResponse
+  // Skip i18n middleware for auth callback routes
+  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback')
+
+  if (!isAuthCallback) {
+    // Apply i18n middleware
+    const intlResponse = intlMiddleware(request)
+    if (intlResponse) {
+      response = intlResponse
+    }
   }
 
   const supabase = createServerClient(

@@ -50,6 +50,12 @@ services:
       GOTRUE_MAILER_URLPATHS_CONFIRMATION: "/auth/v1/verify"
       GOTRUE_MAILER_URLPATHS_RECOVERY: "/auth/v1/verify"
       GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: "/auth/v1/verify"
+      # Google OAuth
+      GOTRUE_EXTERNAL_GOOGLE_ENABLED: "true"
+      # Testing keys from old "stride" app on google cloud
+      GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: "891514499449-j6rucif9f4orl8lqi0u7428jtfscfh8f.apps.googleusercontent.com"
+      GOTRUE_EXTERNAL_GOOGLE_SECRET: "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"
+      GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: "http://localhost:8000/auth/v1/callback"
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
       interval: 10s

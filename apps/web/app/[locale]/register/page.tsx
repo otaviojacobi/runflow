@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { createClient } from '@/lib/supabase/client';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -42,9 +43,22 @@ export default function RegisterPage() {
     }
   };
 
-  const handleGoogleSignUp = () => {
-    // Placeholder for Google SSO
-    console.log('Google sign up clicked');
+  const handleGoogleSignUp = async () => {
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError('Failed to sign up with Google');
+    }
   };
 
   return (
