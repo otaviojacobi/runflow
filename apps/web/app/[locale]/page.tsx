@@ -39,7 +39,7 @@ export default function Home() {
               <Link href="/login">{t('Navigation.signIn')}</Link>
             </Button>
             <Button asChild>
-              <Link href="/signup">{t('Navigation.getStarted')}</Link>
+              <Link href="/register">{t('Navigation.getStarted')}</Link>
             </Button>
           </div>
         </div>
