@@ -64,5 +64,35 @@
     "terms": "Terms",
     "cookiePolicy": "Cookie Policy",
     "copyright": "© 2025 RunFlow. All rights reserved."
+  },
+  "Auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account to continue",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "submitButton": "Sign in",
+      "orContinueWith": "Or continue with",
+      "googleButton": "Continue with Google",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Get started with RunFlow today",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Create a password",
+      "submitButton": "Create account",
+      "orContinueWith": "Or continue with",
+      "googleButton": "Continue with Google",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    }
   }
 }

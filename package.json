@@ -6,12 +6,16 @@
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=web",
     "dev:mobile": "turbo run dev --filter=mobile",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down -v",
+    "docker:logs": "docker compose logs -f",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
+    "supabase": "^2.48.3",
     "turbo": "^2.5.8",
     "typescript": "5.9.2"
   },
