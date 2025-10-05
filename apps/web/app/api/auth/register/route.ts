@@ -1,24 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/db'
+import { registerSchema, type RegisterResponse, type AuthErrorResponse } from '@repo/schemas/auth'
+import { ZodError } from 'zod'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse<RegisterResponse | AuthErrorResponse>> {
   try {
-    const { email, password, name } = await request.json()
+    const body = await request.json()
 
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      )
-    }
+    // Validate input with Zod schema
+    const validatedData = registerSchema.parse(body)
 
     const supabase = await createClient()
 
     // Create user in Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
+      email: validatedData.email,
+      password: validatedData.password,
     })
 
     if (authError) {
@@ -36,8 +34,8 @@ export async function POST(request: NextRequest) {
     const userProfile = await prisma.userProfile.create({
       data: {
         id: authData.user.id,
-        email,
-        name: name || null,
+        email: validatedData.email,
+        name: validatedData.name || null,
       },
     })
 
@@ -52,6 +50,21 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
+    // Handle Zod validation errors
+    if (error instanceof ZodError) {
+      const details = error.errors.reduce((acc, err) => {
+        const path = err.path.join('.')
+        if (!acc[path]) acc[path] = []
+        acc[path].push(err.message)
+        return acc
+      }, {} as Record<string, string[]>)
+
+      return NextResponse.json(
+        { error: 'Validation failed', details },
+        { status: 400 }
+      )
+    }
+
     console.error('Register error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

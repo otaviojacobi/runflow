@@ -99,4 +99,84 @@ describe('/api/auth/login', () => {
       expect(data.user?.email).toBe(testEmail)
     }
   })
+
+  describe('validation via API route', () => {
+    it('should reject invalid email format with specific error message', async () => {
+      const { POST } = await import('@/app/api/auth/login/route')
+
+      const request = new Request('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: 'invalid-email',
+          password: 'TestPassword123!',
+        }),
+      })
+
+      const response = await POST(request as any)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe('Validation failed')
+      expect(data.details?.email).toBeDefined()
+      expect(data.details.email).toContain('Invalid email address')
+    })
+
+    it('should reject empty password with specific error message', async () => {
+      const { POST } = await import('@/app/api/auth/login/route')
+
+      const request = new Request('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: testEmail,
+          password: '',
+        }),
+      })
+
+      const response = await POST(request as any)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe('Validation failed')
+      expect(data.details?.password).toBeDefined()
+      expect(data.details.password).toContain('Password is required')
+    })
+
+    it('should reject missing email with specific error message', async () => {
+      const { POST } = await import('@/app/api/auth/login/route')
+
+      const request = new Request('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          password: 'TestPassword123!',
+        }),
+      })
+
+      const response = await POST(request as any)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe('Validation failed')
+      expect(data.details?.email).toBeDefined()
+      expect(data.details.email).toContain('Required')
+    })
+
+    it('should reject missing password with specific error message', async () => {
+      const { POST } = await import('@/app/api/auth/login/route')
+
+      const request = new Request('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: testEmail,
+        }),
+      })
+
+      const response = await POST(request as any)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe('Validation failed')
+      expect(data.details?.password).toBeDefined()
+      expect(data.details.password).toContain('Required')
+    })
+  })
 })

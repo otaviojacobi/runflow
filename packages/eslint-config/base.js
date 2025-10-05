@@ -27,6 +27,12 @@ export const config = [
     },
   },
   {
+    rules: {
+      "semi": ["error", "always"],
+      "@typescript-eslint/semi": ["error", "always"],
+    },
+  },
+  {
     ignores: ["dist/**"],
   },
 ];
