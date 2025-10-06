@@ -19,11 +19,25 @@ export async function createVerifiedTestUser(params: {
 }) {
   const client = createTestClient()
 
-  const { data, error } = await client.auth.admin.createUser({
+  const { data: createData, error: createError } = await client.auth.admin.createUser({
     email: params.email,
     password: params.password,
     email_confirm: params.emailConfirm ?? true, // Auto-verify email by default
   })
 
-  return { data, error }
+  if (createError || !createData.user) {
+    return { data: createData, error: createError }
+  }
+
+  // Sign in to get a session
+  const { data: signInData, error: signInError } = await client.auth.signInWithPassword({
+    email: params.email,
+    password: params.password,
+  })
+
+  if (signInError) {
+    return { data: { user: createData.user, session: null }, error: signInError }
+  }
+
+  return { data: { user: createData.user, session: signInData.session }, error: null }
 }

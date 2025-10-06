@@ -8,7 +8,7 @@ Implement a multi-organization platform where users can belong to multiple organ
 **Important:** All new tables MUST have proper Row Level Security (RLS) policies implemented as part of their migration scripts. This ensures data isolation and security at the database level.
 
 ### 1. Create Organization Model
-- [ ] Create `Organization` table with fields:
+- [x] Create `Organization` table with fields:
   - `id` (UUID)
   - `name` (String)
   - `slug` (String, unique)
@@ -16,7 +16,7 @@ Implement a multi-organization platform where users can belong to multiple organ
   - `logo` (String, optional)
   - `createdAt` (DateTime)
   - `updatedAt` (DateTime)
-- [ ] **Create RLS policies for Organization table:**
+- [x] **Create RLS policies for Organization table:**
   - Enable RLS on table
   - SELECT: Users can view organizations they belong to
   - INSERT: Authenticated users can create organizations
@@ -24,14 +24,14 @@ Implement a multi-organization platform where users can belong to multiple organ
   - DELETE: Only organization owners can delete
 
 ### 2. Create Organization Membership Model
-- [ ] Create `OrganizationMember` table with fields:
+- [x] Create `OrganizationMember` table with fields:
   - `id` (UUID)
   - `organizationId` (Foreign Key)
   - `userId` (Foreign Key)
   - `role` (Enum: OWNER, TRAINER, ATHLETE)
   - `joinedAt` (DateTime)
   - `invitedBy` (Foreign Key to User, optional)
-- [ ] **Create RLS policies for OrganizationMember table:**
+- [x] **Create RLS policies for OrganizationMember table:**
   - Enable RLS on table
   - SELECT: Users can view members of their organizations
   - INSERT: Only organization owners and trainers can add members (via invite acceptance)
@@ -39,7 +39,7 @@ Implement a multi-organization platform where users can belong to multiple organ
   - DELETE: Only organization owners can remove members
 
 ### 3. Create Organization Invites Model
-- [ ] Create `OrganizationInvite` table with fields:
+- [x] Create `OrganizationInvite` table with fields:
   - `id` (UUID)
   - `organizationId` (Foreign Key)
   - `email` (String)
@@ -49,7 +49,7 @@ Implement a multi-organization platform where users can belong to multiple organ
   - `status` (Enum: PENDING, ACCEPTED, EXPIRED, CANCELLED)
   - `expiresAt` (DateTime)
   - `createdAt` (DateTime)
-- [ ] **Create RLS policies for OrganizationInvite table:**
+- [x] **Create RLS policies for OrganizationInvite table:**
   - Enable RLS on table
   - SELECT: Organization owners/trainers can view their org's invites, users can view invites for their email
   - INSERT: Only organization owners and trainers can create invites
@@ -57,9 +57,9 @@ Implement a multi-organization platform where users can belong to multiple organ
   - DELETE: Only organization owners can delete invites
 
 ### 4. Update User Model
-- [ ] Add `currentOrganizationId` field to User table (nullable)
-- [ ] Update existing RLS policies to accommodate organization context
-- [ ] Create migration scripts for all database changes including RLS policies
+- [x] Add `currentOrganizationId` field to User table (nullable)
+- [x] Update existing RLS policies to accommodate organization context
+- [x] Create migration scripts for all database changes including RLS policies
 
 ## Backend API Endpoints
 
@@ -68,27 +68,27 @@ Implement a multi-organization platform where users can belong to multiple organ
 ### Organization Management
 
 #### 1. Organization CRUD Operations
-- [ ] `POST /api/organizations` - Create new organization
+- [x] `POST /api/organizations` - Create new organization
   - Auto-assign creator as OWNER
   - Generate unique slug from name
   - **Rate Limit Required:** Maximum 3 organizations per user per day (creating orgs is uncommon)
-- [ ] `GET /api/organizations` - List user's organizations
-- [ ] `GET /api/organizations/:id` - Get organization details
-- [ ] `PUT /api/organizations/:id` - Update organization (OWNER only)
+- [x] `GET /api/organizations` - List user's organizations
+- [x] `GET /api/organizations/:id` - Get organization details
+- [x] `PUT /api/organizations/:id` - Update organization (OWNER only)
   - **Rate Limit Required:** Maximum 10 updates per hour per organization
-- [ ] `DELETE /api/organizations/:id` - Delete organization (OWNER only)
+- [x] `DELETE /api/organizations/:id` - Delete organization (OWNER only)
 
 #### 2. Organization Member Management
-- [ ] `GET /api/organizations/:id/members` - List organization members
+- [x] `GET /api/organizations/:id/members` - List organization members
   - Filter by role
   - Pagination support
-- [ ] `PUT /api/organizations/:id/members/:userId` - Update member role (OWNER only)
+- [x] `PUT /api/organizations/:id/members/:userId` - Update member role (OWNER only)
   - **Rate Limit Required:** Maximum 20 role updates per hour per organization
-- [ ] `DELETE /api/organizations/:id/members/:userId` - Remove member (OWNER only)
+- [x] `DELETE /api/organizations/:id/members/:userId` - Remove member (OWNER only)
   - **Rate Limit Required:** Maximum 10 removals per hour per organization
 
 #### 3. Organization Switching
-- [ ] `POST /api/users/switch-organization` - Switch current organization
+- [x] `POST /api/users/switch-organization` - Switch current organization
   - Update `currentOrganizationId` in User model
   - Return updated user context
   - **Rate Limit Required:** Maximum 30 switches per hour per user (flexible for testing/development)
@@ -96,41 +96,58 @@ Implement a multi-organization platform where users can belong to multiple organ
 ### Invitation System
 
 #### 4. Invite Management
-- [ ] `POST /api/organizations/:id/invites` - Create invitation (OWNER/TRAINER only)
+- [x] `POST /api/organizations/:id/invites` - Create invitation (OWNER/TRAINER only)
   - Generate unique token
   - Send invitation email
   - Set expiration (7 days default)
   - **Rate Limit Required:** Maximum 5000 invites per day per organization (very permissive - bulk invites common)
   - **Additional Rate Limit:** Maximum 500 invites per hour per organization (support bulk operations)
-- [ ] `GET /api/organizations/:id/invites` - List pending invites
-- [ ] `DELETE /api/organizations/:id/invites/:inviteId` - Cancel invitation
+- [x] `GET /api/organizations/:id/invites` - List pending invites
+- [x] `DELETE /api/organizations/:id/invites/:inviteId` - Cancel invitation
   - **Rate Limit Required:** Maximum 20 cancellations per hour per organization
-- [ ] `POST /api/invites/:token/accept` - Accept invitation (authenticated)
+- [x] `POST /api/invites/:token/accept` - Accept invitation (authenticated)
   - **Rate Limit Required:** Maximum 10 acceptance attempts per hour per user (prevent brute force)
-- [ ] `GET /api/invites/:token` - Get invite details (public)
+- [x] `GET /api/invites/:token` - Get invite details (public)
 
 ### User Context
 #### 5. User Profile Updates
 - [ ] Update `GET /api/users/me` to include:
   - Current organization details
   - List of organizations with roles
+  - **Pending invites for user's email** (critical for post-registration flow)
 - [ ] Add organization context to auth token/session
+- [ ] Create `GET /api/users/me/pending-invites` endpoint to:
+  - Return all pending invites for the authenticated user's email
+  - Include organization details for each invite
+  - Used immediately after registration/first login
 
 ## Frontend Implementation
 
 ### Post-Registration Flow
 
-#### 1. Organization Setup Screen
+#### 1. Check for Pending Invites (CRITICAL - New User Flow)
+- [ ] **IMPORTANT**: After user registers/verifies email/SSO login for the first time:
+  - Check for pending invites for their email address
+  - Display list of pending organization invites if any exist
+  - Allow user to accept/decline each invite
+  - This must happen BEFORE organization setup screen
+- [ ] Create `PendingInvitesCheck` screen that shows:
+  - List of organizations that invited the user
+  - Role being offered in each organization
+  - Accept/Decline buttons for each invite
+  - "Continue without joining" option
+
+#### 2. Organization Setup Screen
 - [ ] Create `OrganizationSetup` screen with options:
   - Create new organization
   - Join existing organization (if have invite code)
-  - Skip for now
+  - Skip for now (only show if user has no pending invites)
 - [ ] Organization creation form:
   - Organization name
   - Organization type/description
   - Logo upload (optional)
 
-#### 2. Invite Code Entry Screen
+#### 3. Invite Code Entry Screen
 - [ ] Create `JoinOrganization` screen
   - Input field for invite code/link
   - Validate and display organization details
@@ -189,16 +206,16 @@ Implement a multi-organization platform where users can belong to multiple organ
 ## Testing
 
 ### 8. Unit Tests
-- [ ] Test organization CRUD operations
-- [ ] Test membership management
-- [ ] Test invitation flow
-- [ ] Test role-based permissions
+- [x] Test organization CRUD operations
+- [x] Test membership management
+- [x] Test invitation flow
+- [x] Test role-based permissions
 
 ### 9. Integration Tests
-- [ ] Test complete invitation flow
-- [ ] Test organization switching
-- [ ] Test multi-org user scenarios
-- [ ] Test permission boundaries
+- [x] Test complete invitation flow
+- [x] Test organization switching
+- [x] Test multi-org user scenarios
+- [x] Test permission boundaries
 
 ## Security & Permissions
 
