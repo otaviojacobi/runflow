@@ -133,15 +133,20 @@ describe('/api/auth/register', () => {
   })
 
   describe('validation via API route', () => {
+    // Helper to create test requests with optional captcha bypass
+    const createTestRequest = (body: Record<string, unknown>) => {
+      return new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      })
+    }
+
     it('should reject invalid email format with specific error message', async () => {
       const { POST } = await import('@/app/api/auth/register/route')
 
-      const request = new Request('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: 'invalid-email',
-          password: 'TestPassword123!',
-        }),
+      const request = createTestRequest({
+        email: 'invalid-email',
+        password: 'TestPassword123!',
       })
 
       const response = await POST(request as NextRequest)
@@ -156,12 +161,9 @@ describe('/api/auth/register', () => {
     it('should reject weak password (too short) with specific error message', async () => {
       const { POST } = await import('@/app/api/auth/register/route')
 
-      const request = new Request('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: `test-weak-${Date.now()}@example.com`,
-          password: 'Test1',
-        }),
+      const request = createTestRequest({
+        email: `test-weak-${Date.now()}@example.com`,
+        password: 'Test1',
       })
 
       const response = await POST(request as NextRequest)
@@ -176,12 +178,9 @@ describe('/api/auth/register', () => {
     it('should reject password without uppercase letter with specific error message', async () => {
       const { POST } = await import('@/app/api/auth/register/route')
 
-      const request = new Request('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: `test-no-upper-${Date.now()}@example.com`,
-          password: 'testpassword123',
-        }),
+      const request = createTestRequest({
+        email: `test-no-upper-${Date.now()}@example.com`,
+        password: 'testpassword123',
       })
 
       const response = await POST(request as NextRequest)
@@ -198,12 +197,9 @@ describe('/api/auth/register', () => {
     it('should reject password without number with specific error message', async () => {
       const { POST } = await import('@/app/api/auth/register/route')
 
-      const request = new Request('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: `test-no-number-${Date.now()}@example.com`,
-          password: 'TestPassword',
-        }),
+      const request = createTestRequest({
+        email: `test-no-number-${Date.now()}@example.com`,
+        password: 'TestPassword',
       })
 
       const response = await POST(request as NextRequest)
@@ -220,11 +216,8 @@ describe('/api/auth/register', () => {
     it('should reject missing email with specific error message', async () => {
       const { POST } = await import('@/app/api/auth/register/route')
 
-      const request = new Request('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          password: 'TestPassword123!',
-        }),
+      const request = createTestRequest({
+        password: 'TestPassword123!',
       })
 
       const response = await POST(request as NextRequest)
@@ -239,11 +232,8 @@ describe('/api/auth/register', () => {
     it('should reject missing password with specific error message', async () => {
       const { POST } = await import('@/app/api/auth/register/route')
 
-      const request = new Request('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: `test-no-password-${Date.now()}@example.com`,
-        }),
+      const request = createTestRequest({
+        email: `test-no-password-${Date.now()}@example.com`,
       })
 
       const response = await POST(request as NextRequest)

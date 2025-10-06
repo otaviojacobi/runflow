@@ -13,10 +13,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<RegisterR
 
     const supabase = await createClient()
 
-    // Create user in Supabase Auth
+    // Create user in Supabase Auth with captcha token (if provided)
+    // Supabase will verify the captcha token automatically if captcha is enabled in settings
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: validatedData.email,
       password: validatedData.password,
+      options: validatedData.captchaToken
+        ? { captchaToken: validatedData.captchaToken }
+        : undefined,
     })
 
     if (authError) {

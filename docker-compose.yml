@@ -13,10 +13,10 @@ services:
       - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      interval: 3s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 5s
 
   gotrue:
     image: supabase/gotrue:v2.174.0
@@ -24,6 +24,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    restart: on-failure:5
     ports:
       - "9999:9999"
     environment:
@@ -57,10 +58,11 @@ services:
       GOTRUE_EXTERNAL_GOOGLE_SECRET: "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"
       GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: "http://localhost:8000/auth/v1/callback"
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
-      interval: 10s
+      test: ["CMD", "sh", "-c", "wget --no-verbose --tries=1 --spider http://localhost:9999/health || exit 1"]
+      interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 20
+      start_period: 30s
 
   inbucket:
     image: inbucket/inbucket:stable
@@ -76,8 +78,7 @@ services:
     image: kong:2.8.1
     container_name: runflow_kong
     depends_on:
-      gotrue:
-        condition: service_healthy
+      - gotrue
     ports:
       - "8000:8000"
     environment:
@@ -89,6 +90,12 @@ services:
       KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
     volumes:
       - ./kong.yml:/var/lib/kong/kong.yml:ro
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   meta:
     image: supabase/postgres-meta:v0.68.0
@@ -112,7 +119,7 @@ services:
       postgres:
         condition: service_healthy
       gotrue:
-        condition: service_healthy
+        condition: service_started
     restart: unless-stopped
     ports:
       - "3001:3000"

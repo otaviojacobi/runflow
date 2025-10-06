@@ -13,6 +13,7 @@ export const registerSchema = z.object({
       'Password must contain at least one uppercase letter, one lowercase letter, and one number'
     ),
   name: z.string().min(1, 'Name is required').optional(),
+  captchaToken: z.string().min(1, 'Captcha verification is required').optional(),
 })
 
 /**
