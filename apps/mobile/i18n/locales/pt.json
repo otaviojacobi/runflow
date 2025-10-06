@@ -1,0 +1,69 @@
+{
+  "auth": {
+    "login": {
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu e-mail",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite sua senha",
+      "forgotPassword": "Esqueceu a senha?",
+      "submitButton": "Entrar",
+      "loadingButton": "Entrando...",
+      "orContinueWith": "Ou continue com",
+      "googleButton": "Entrar com Google",
+      "noAccount": "Não tem uma conta?",
+      "signUpLink": "Cadastre-se"
+    },
+    "register": {
+      "nameLabel": "Nome (opcional)",
+      "namePlaceholder": "Digite seu nome",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu e-mail",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite sua senha",
+      "passwordHelper": "Mínimo 8 caracteres com maiúscula, minúscula e número",
+      "submitButton": "Criar conta",
+      "loadingButton": "Criando conta...",
+      "orContinueWith": "Ou continue com",
+      "googleButton": "Cadastrar com Google",
+      "haveAccount": "Já tem uma conta?",
+      "signInLink": "Entre",
+      "errorRequired": "Por favor, preencha todos os campos obrigatórios"
+    },
+    "forgotPassword": {
+      "title": "Esqueceu a senha?",
+      "subtitle": "Digite seu e-mail e enviaremos um link para redefinir sua senha",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu e-mail",
+      "submitButton": "Enviar link",
+      "sendingButton": "Enviando...",
+      "backToLogin": "Voltar ao login",
+      "successTitle": "Verifique seu e-mail",
+      "successMessage": "Enviamos um link de redefinição de senha para",
+      "successHint": "Por favor, verifique sua caixa de entrada e siga as instruções para redefinir sua senha.",
+      "errorRequired": "Por favor, digite seu e-mail"
+    },
+    "verifyEmail": {
+      "title": "Verifique seu e-mail",
+      "message": "Enviamos um e-mail de confirmação para",
+      "hint": "Por favor, verifique sua caixa de entrada e clique no link de confirmação para verificar sua conta.",
+      "resendButton": "Reenviar e-mail",
+      "backToLogin": "Voltar ao login",
+      "successResend": "E-mail de confirmação enviado com sucesso",
+      "errorResend": "Falha ao reenviar e-mail"
+    },
+    "profile": {
+      "title": "Perfil",
+      "emailLabel": "E-mail",
+      "userIdLabel": "ID do Usuário",
+      "logoutButton": "Sair",
+      "notAvailable": "Não disponível"
+    },
+    "errors": {
+      "loginFailed": "Falha no login",
+      "registerFailed": "Falha no cadastro",
+      "errorGeneric": "Ocorreu um erro. Por favor, tente novamente.",
+      "errorGoogle": "Falha ao entrar com Google",
+      "errorLogout": "Falha ao sair"
+    }
+  }
+}

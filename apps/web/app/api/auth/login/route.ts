@@ -3,6 +3,10 @@ import { createClient } from '@/lib/supabase/server'
 import { loginSchema, type LoginResponse, type AuthErrorResponse } from '@repo/schemas/auth'
 import { ZodError } from 'zod'
 
+export async function OPTIONS() {
+  return NextResponse.json({}, { status: 200 })
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse<LoginResponse | AuthErrorResponse>> {
   try {
     const body = await request.json()

@@ -4,6 +4,10 @@ import { prisma } from '@/lib/db'
 import { registerSchema, type RegisterResponse, type AuthErrorResponse } from '@repo/schemas/auth'
 import { ZodError } from 'zod'
 
+export async function OPTIONS() {
+  return NextResponse.json({}, { status: 200 })
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse<RegisterResponse | AuthErrorResponse>> {
   try {
     const body = await request.json()

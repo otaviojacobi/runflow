@@ -1,0 +1,69 @@
+{
+  "auth": {
+    "login": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "submitButton": "Sign in",
+      "loadingButton": "Signing in...",
+      "orContinueWith": "Or continue with",
+      "googleButton": "Sign in with Google",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "register": {
+      "nameLabel": "Name (optional)",
+      "namePlaceholder": "Enter your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "passwordHelper": "Must be at least 8 characters with uppercase, lowercase, and number",
+      "submitButton": "Create account",
+      "loadingButton": "Creating account...",
+      "orContinueWith": "Or continue with",
+      "googleButton": "Sign up with Google",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "errorRequired": "Please fill in all required fields"
+    },
+    "forgotPassword": {
+      "title": "Forgot password?",
+      "subtitle": "Enter your email address and we'll send you a link to reset your password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "submitButton": "Send reset link",
+      "sendingButton": "Sending...",
+      "backToLogin": "Back to login",
+      "successTitle": "Check your email",
+      "successMessage": "We've sent a password reset link to",
+      "successHint": "Please check your inbox and follow the instructions to reset your password.",
+      "errorRequired": "Please enter your email address"
+    },
+    "verifyEmail": {
+      "title": "Check your email",
+      "message": "We've sent a confirmation email to",
+      "hint": "Please check your inbox and click the confirmation link to verify your account.",
+      "resendButton": "Resend email",
+      "backToLogin": "Back to login",
+      "successResend": "Confirmation email sent successfully",
+      "errorResend": "Failed to resend email"
+    },
+    "profile": {
+      "title": "Profile",
+      "emailLabel": "Email",
+      "userIdLabel": "User ID",
+      "logoutButton": "Logout",
+      "notAvailable": "Not available"
+    },
+    "errors": {
+      "loginFailed": "Login failed",
+      "registerFailed": "Registration failed",
+      "errorGeneric": "An error occurred. Please try again.",
+      "errorGoogle": "Failed to sign in with Google",
+      "errorLogout": "Failed to logout"
+    }
+  }
+}
