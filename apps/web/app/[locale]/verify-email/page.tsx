@@ -2,10 +2,12 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
 import { createClient } from '@/lib/supabase/client'
 
 function VerifyEmailContent() {
+  const t = useTranslations('Auth.verifyEmail')
   const searchParams = useSearchParams()
   const email = searchParams.get('email')
   const [otp, setOtp] = useState('')
@@ -36,7 +38,7 @@ function VerifyEmailContent() {
         setSuccess(true)
       }
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      setError(t('errorGeneric'))
     } finally {
       setLoading(false)
     }
@@ -61,12 +63,12 @@ function VerifyEmailContent() {
       const data = await response.json()
 
       if (response.ok) {
-        setResendMessage('Confirmation email sent! Please check your inbox.')
+        setResendMessage(t('resendSuccess'))
       } else {
-        setError(data.error || 'Failed to resend confirmation email.')
+        setError(data.error || t('resendError'))
       }
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      setError(t('errorGeneric'))
     } finally {
       setResending(false)
     }
@@ -81,15 +83,15 @@ function VerifyEmailContent() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Email Verified!</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('successTitle')}</h1>
           <p className="text-gray-600 mb-6">
-            Your email has been successfully verified. You can now sign in to your account.
+            {t('successMessage')}
           </p>
           <Link
             href="/login"
             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Go to Sign In
+            {t('goToSignIn')}
           </Link>
         </div>
       </div>
@@ -117,16 +119,16 @@ function VerifyEmailContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('title')}</h1>
             <p className="text-gray-600">
-              We've sent a verification email to{' '}
+              {t('subtitle')}{' '}
               <span className="font-medium text-gray-900">{email}</span>
             </p>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-blue-800">
-              Click the link in the email to verify your account, or enter the verification code below.
+              {t('instructions')}
             </p>
           </div>
 
@@ -145,14 +147,14 @@ function VerifyEmailContent() {
 
             <div>
               <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-2">
-                Verification Code
+                {t('verificationCodeLabel')}
               </label>
               <input
                 id="otp"
                 type="text"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                placeholder="Enter 6-digit code"
+                placeholder={t('verificationCodePlaceholder')}
                 maxLength={6}
                 className="block w-full px-4 py-3 text-center text-2xl tracking-widest border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
@@ -163,25 +165,25 @@ function VerifyEmailContent() {
               disabled={loading || otp.length !== 6}
               className="w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? 'Verifying...' : 'Verify Email'}
+              {loading ? t('verifyingButton') : t('verifyButton')}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600 mb-2">Didn't receive the email?</p>
+            <p className="text-sm text-gray-600 mb-2">{t('didntReceive')}</p>
             <button
               onClick={handleResend}
               disabled={resending}
               className="text-sm font-medium text-blue-600 hover:text-blue-500 disabled:opacity-50"
             >
-              {resending ? 'Sending...' : 'Resend verification email'}
+              {resending ? t('sendingButton') : t('resendButton')}
             </button>
           </div>
 
           <div className="mt-6 pt-6 border-t text-center text-sm">
-            <span className="text-gray-600">Already verified? </span>
+            <span className="text-gray-600">{t('alreadyVerified')} </span>
             <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              Sign in
+              {t('signInLink')}
             </Link>
           </div>
         </div>
@@ -191,10 +193,12 @@ function VerifyEmailContent() {
 }
 
 export default function VerifyEmailPage() {
+  const t = useTranslations('Auth.verifyEmail')
+
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600">{t('loading')}</div>
       </div>
     }>
       <VerifyEmailContent />

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
+import { PasswordInput } from '@/components/auth/PasswordInput';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -47,13 +48,13 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Failed to sign in');
+        setError(data.error || t('errorFailedSignIn'));
         return;
       }
 
       router.push('/profile');
     } catch {
-      setError('An error occurred. Please try again.');
+      setError(t('errorGeneric'));
     } finally {
       setLoading(false);
     }
@@ -73,7 +74,7 @@ export default function LoginPage() {
         setError(error.message);
       }
     } catch (err) {
-      setError('Failed to sign in with Google');
+      setError(t('errorGoogleSignIn'));
     }
   };
 
@@ -81,7 +82,7 @@ export default function LoginPage() {
   if (checking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-violet-100">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600">{t('loadingPage')}</div>
       </div>
     );
   }
@@ -140,19 +141,22 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                {t('passwordLabel')}
-              </label>
-              <input
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  {t('passwordLabel')}
+                </label>
+                <Link href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
+                  {t('forgotPassword')}
+                </Link>
+              </div>
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
-                autoComplete="current-password"
-                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('passwordPlaceholder')}
+                autoComplete="current-password"
+                required
               />
             </div>
           </div>
@@ -162,7 +166,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
-            {loading ? 'Loading...' : t('submitButton')}
+            {loading ? t('loadingButton') : t('submitButton')}
           </button>
 
           <div className="relative">

@@ -2,9 +2,11 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { ResendConfirmationButton } from '@/components/auth/ResendConfirmationButton'
 import { LogoutButton } from '@/components/auth/LogoutButton'
+import { getTranslations } from 'next-intl/server'
 
 export default async function ProfilePage() {
   const supabase = await createClient()
+  const t = await getTranslations('Profile')
 
   const {
     data: { user },
@@ -22,34 +24,34 @@ export default async function ProfilePage() {
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile</h1>
-              <p className="text-gray-600">Welcome, {user.email}!</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h1>
+              <p className="text-gray-600">{t('welcome', { email: user.email! })}</p>
             </div>
             <LogoutButton />
           </div>
 
           {/* Email Verification Status */}
           <div className="border-t pt-6 mt-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Email Verification</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">{t('emailVerificationTitle')}</h2>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Email Status</p>
+                <p className="text-sm text-gray-600 mb-1">{t('emailStatusLabel')}</p>
                 {isEmailConfirmed ? (
                   <div className="flex items-center gap-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                      ✓ Verified
+                      {t('verifiedBadge')}
                     </span>
                     <span className="text-xs text-gray-500">
-                      Confirmed on {new Date(user.email_confirmed_at!).toLocaleDateString()}
+                      {t('confirmedOn', { date: new Date(user.email_confirmed_at!).toLocaleDateString() })}
                     </span>
                   </div>
                 ) : (
                   <div className="space-y-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                      ⚠ Not Verified
+                      {t('notVerifiedBadge')}
                     </span>
                     <p className="text-sm text-gray-600">
-                      Please check your email for a verification link.
+                      {t('checkEmailMessage')}
                     </p>
                     <ResendConfirmationButton email={user.email!} />
                   </div>

@@ -21,6 +21,13 @@ export async function middleware(request: NextRequest) {
   if (code && !isAuthRoute) {
     const callbackUrl = new URL('/auth/callback', request.url)
     callbackUrl.searchParams.set('code', code)
+
+    // Preserve the type parameter if present (e.g., recovery for password reset)
+    const type = request.nextUrl.searchParams.get('type')
+    if (type) {
+      callbackUrl.searchParams.set('type', type)
+    }
+
     return NextResponse.redirect(callbackUrl)
   }
 

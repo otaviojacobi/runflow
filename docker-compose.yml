@@ -24,6 +24,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      templates:
+        condition: service_started
     restart: on-failure:5
     ports:
       - "9999:9999"
@@ -51,6 +53,11 @@ services:
       GOTRUE_MAILER_URLPATHS_CONFIRMATION: "/auth/v1/verify"
       GOTRUE_MAILER_URLPATHS_RECOVERY: "/auth/v1/verify"
       GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: "/auth/v1/verify"
+      # Email templates (served via nginx container)
+      GOTRUE_MAILER_TEMPLATES_CONFIRMATION: "http://templates/confirmation.html"
+      GOTRUE_MAILER_TEMPLATES_RECOVERY: "http://templates/recovery.html"
+      GOTRUE_MAILER_SUBJECTS_CONFIRMATION: "Confirm your email - RunFlow"
+      GOTRUE_MAILER_SUBJECTS_RECOVERY: "Reset your password - RunFlow"
       # Google OAuth
       GOTRUE_EXTERNAL_GOOGLE_ENABLED: "true"
       # Testing keys from old "stride" app on google cloud
@@ -63,6 +70,14 @@ services:
       timeout: 5s
       retries: 20
       start_period: 30s
+
+  templates:
+    image: nginx:alpine
+    container_name: runflow_templates
+    volumes:
+      - ./supabase/templates:/usr/share/nginx/html:ro
+    ports:
+      - "8888:80"
 
   inbucket:
     image: inbucket/inbucket:stable

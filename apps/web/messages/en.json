@@ -78,7 +78,13 @@
       "orContinueWith": "Or continue with",
       "googleButton": "Continue with Google",
       "noAccount": "Don't have an account?",
-      "signUpLink": "Sign up"
+      "signUpLink": "Sign up",
+      "forgotPassword": "Forgot password?",
+      "errorFailedSignIn": "Failed to sign in",
+      "errorGeneric": "An error occurred. Please try again.",
+      "errorGoogleSignIn": "Failed to sign in with Google",
+      "loadingButton": "Loading...",
+      "loadingPage": "Loading..."
     },
     "register": {
       "title": "Create an account",
@@ -93,7 +99,87 @@
       "orContinueWith": "Or continue with",
       "googleButton": "Continue with Google",
       "haveAccount": "Already have an account?",
-      "signInLink": "Sign in"
+      "signInLink": "Sign in",
+      "errorCaptchaRequired": "Please complete the captcha verification",
+      "errorFailedCreate": "Failed to create account",
+      "errorGeneric": "An error occurred. Please try again.",
+      "errorGoogleSignUp": "Failed to sign up with Google",
+      "errorCaptchaFailed": "Captcha verification failed. Please try again.",
+      "loadingButton": "Loading...",
+      "loadingPage": "Loading..."
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email and we'll send you a link to reset your password",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "submitButton": "Send Reset Link",
+      "sendingButton": "Sending...",
+      "backToLogin": "Back to Login",
+      "successTitle": "Check Your Email",
+      "successMessage": "We've sent password reset instructions to",
+      "successHint": "If you don't see the email, check your spam folder."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your new password below",
+      "newPasswordLabel": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "passwordHint": "Must be at least 8 characters",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "submitButton": "Reset Password",
+      "resettingButton": "Resetting...",
+      "backToLogin": "Back to Login",
+      "successTitle": "Password Reset!",
+      "successMessage": "Your password has been successfully reset. You can now sign in with your new password.",
+      "redirectingMessage": "Redirecting to login...",
+      "errorInvalidLink": "Invalid or expired reset link. Please request a new one.",
+      "errorPasswordMismatch": "Passwords do not match",
+      "errorPasswordLength": "Password must be at least 8 characters",
+      "errorGeneric": "An error occurred. Please try again."
+    },
+    "verifyEmail": {
+      "title": "Check Your Email",
+      "subtitle": "We've sent a verification email to",
+      "instructions": "Click the link in the email to verify your account, or enter the verification code below.",
+      "verificationCodeLabel": "Verification Code",
+      "verificationCodePlaceholder": "Enter 6-digit code",
+      "verifyButton": "Verify Email",
+      "verifyingButton": "Verifying...",
+      "didntReceive": "Didn't receive the email?",
+      "resendButton": "Resend verification email",
+      "sendingButton": "Sending...",
+      "alreadyVerified": "Already verified?",
+      "signInLink": "Sign in",
+      "successTitle": "Email Verified!",
+      "successMessage": "Your email has been successfully verified. You can now sign in to your account.",
+      "goToSignIn": "Go to Sign In",
+      "resendSuccess": "Confirmation email sent! Please check your inbox.",
+      "resendError": "Failed to resend confirmation email.",
+      "errorGeneric": "An error occurred. Please try again.",
+      "loading": "Loading..."
+    },
+    "logout": {
+      "button": "Sign Out",
+      "signingOut": "Signing out..."
+    },
+    "resendConfirmation": {
+      "button": "Resend Confirmation Email",
+      "sending": "Sending...",
+      "successMessage": "Confirmation email sent! Please check your inbox.",
+      "errorMessage": "Failed to send confirmation email. Please try again.",
+      "errorUnexpected": "An unexpected error occurred. Please try again."
     }
+  },
+  "Profile": {
+    "title": "Profile",
+    "welcome": "Welcome, {email}!",
+    "emailVerificationTitle": "Email Verification",
+    "emailStatusLabel": "Email Status",
+    "verifiedBadge": "✓ Verified",
+    "confirmedOn": "Confirmed on {date}",
+    "notVerifiedBadge": "⚠ Not Verified",
+    "checkEmailMessage": "Please check your email for a verification link."
   }
 }

@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
 import { Turnstile } from '@marsidev/react-turnstile';
+import { PasswordInput } from '@/components/auth/PasswordInput';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     if (!captchaToken) {
-      setError('Please complete the captcha verification');
+      setError(t('errorCaptchaRequired'));
       setLoading(false);
       return;
     }
@@ -56,14 +57,14 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Failed to create account');
+        setError(data.error || t('errorFailedCreate'));
         return;
       }
 
       // Redirect to email verification page
       router.push(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch {
-      setError('An error occurred. Please try again.');
+      setError(t('errorGeneric'));
     } finally {
       setLoading(false);
     }
@@ -83,7 +84,7 @@ export default function RegisterPage() {
         setError(error.message);
       }
     } catch (err) {
-      setError('Failed to sign up with Google');
+      setError(t('errorGoogleSignUp'));
     }
   };
 
@@ -91,7 +92,7 @@ export default function RegisterPage() {
   if (checking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-violet-100">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600">{t('loadingPage')}</div>
       </div>
     );
   }
@@ -169,16 +170,14 @@ export default function RegisterPage() {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 {t('passwordLabel')}
               </label>
-              <input
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
-                autoComplete="new-password"
-                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('passwordPlaceholder')}
+                autoComplete="new-password"
+                required
               />
             </div>
           </div>
@@ -191,7 +190,7 @@ export default function RegisterPage() {
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
               onSuccess={(token) => setCaptchaToken(token)}
               onError={() => {
-                setError('Captcha verification failed. Please try again.');
+                setError(t('errorCaptchaFailed'));
                 setCaptchaToken('');
               }}
               onExpire={() => setCaptchaToken('')}
@@ -203,7 +202,7 @@ export default function RegisterPage() {
             disabled={loading || !captchaToken}
             className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
-            {loading ? 'Loading...' : t('submitButton')}
+            {loading ? t('loadingButton') : t('submitButton')}
           </button>
 
           <div className="relative">

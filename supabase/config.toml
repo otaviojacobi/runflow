@@ -195,7 +195,15 @@ otp_expiry = 3600
 # admin_email = "noreply@runflow.app"
 # sender_name = "RunFlow"
 
-# Uncomment to customize email template
+# Custom email templates
+[auth.email.template.confirmation]
+subject = "Confirm your email - RunFlow"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your password - RunFlow"
+content_path = "./supabase/templates/recovery.html"
+
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"

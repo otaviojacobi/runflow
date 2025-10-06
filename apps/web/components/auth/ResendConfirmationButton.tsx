@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface ResendConfirmationButtonProps {
   email: string
 }
 
 export function ResendConfirmationButton({ email }: ResendConfirmationButtonProps) {
+  const t = useTranslations('Auth.resendConfirmation')
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -28,18 +30,18 @@ export function ResendConfirmationButton({ email }: ResendConfirmationButtonProp
       if (response.ok) {
         setMessage({
           type: 'success',
-          text: 'Confirmation email sent! Please check your inbox.',
+          text: t('successMessage'),
         })
       } else {
         setMessage({
           type: 'error',
-          text: data.error || 'Failed to send confirmation email. Please try again.',
+          text: data.error || t('errorMessage'),
         })
       }
     } catch (error) {
       setMessage({
         type: 'error',
-        text: 'An unexpected error occurred. Please try again.',
+        text: t('errorUnexpected'),
       })
     } finally {
       setIsLoading(false)
@@ -53,7 +55,7 @@ export function ResendConfirmationButton({ email }: ResendConfirmationButtonProp
         disabled={isLoading}
         className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        {isLoading ? 'Sending...' : 'Resend Confirmation Email'}
+        {isLoading ? t('sending') : t('button')}
       </button>
       {message && (
         <p

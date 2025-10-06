@@ -6,6 +6,13 @@ import { prisma } from '@/lib/db';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const type = requestUrl.searchParams.get('type');
+  const allParams = Array.from(requestUrl.searchParams.entries());
+
+  console.log('[Auth Callback] Full URL:', requestUrl.href);
+  console.log('[Auth Callback] All params:', allParams);
+  console.log('[Auth Callback] Code:', code);
+  console.log('[Auth Callback] Type:', type);
 
   if (code) {
     const cookieStore = await cookies();
@@ -27,9 +34,23 @@ export async function GET(request: NextRequest) {
       }
     );
 
+    // Exchange code for session
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!error && data.user) {
+    if (error) {
+      console.log('[Auth Callback] Error exchanging code:', error);
+      return NextResponse.redirect(new URL('/login?error=auth_failed', requestUrl.origin));
+    }
+
+    // If this is a password recovery, redirect to reset-password page
+    if (type === 'recovery') {
+      console.log('[Auth Callback] ✓ Type is recovery - redirecting to reset-password page');
+      return NextResponse.redirect(new URL('/reset-password', requestUrl.origin));
+    }
+
+    console.log('[Auth Callback] ✗ Type is NOT recovery - checking/creating user profile');
+
+    if (data.user) {
       // Check if user profile exists, create if not
       try {
         const existingProfile = await prisma.userProfile.findUnique({
