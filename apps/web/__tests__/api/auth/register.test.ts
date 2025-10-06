@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db'
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest } from 'next/server'
+import { createVerifiedTestUser } from '@/lib/supabase/test-client'
 
 // Create admin client for testing
 const supabase = createClient(
@@ -41,8 +42,8 @@ describe('/api/auth/register', () => {
     const testPassword = 'TestPassword123!'
     const testName = 'Test User'
 
-    // Register user via Supabase
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    // Register user via Supabase with auto-verified email
+    const { data: authData, error: authError } = await createVerifiedTestUser({
       email: testEmail,
       password: testPassword,
     })
@@ -77,7 +78,7 @@ describe('/api/auth/register', () => {
     const testEmail = `test-no-name-${Date.now()}@example.com`
     const testPassword = 'TestPassword123!'
 
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    const { data: authData, error: authError } = await createVerifiedTestUser({
       email: testEmail,
       password: testPassword,
     })
@@ -100,7 +101,7 @@ describe('/api/auth/register', () => {
     const testPassword = 'TestPassword123!'
 
     // First registration
-    const { data: firstAuth } = await supabase.auth.signUp({
+    const { data: firstAuth } = await createVerifiedTestUser({
       email: testEmail,
       password: testPassword,
     })

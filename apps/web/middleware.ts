@@ -13,10 +13,18 @@ export async function middleware(request: NextRequest) {
     },
   })
 
-  // Skip i18n middleware for auth callback routes
-  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback')
+  // Skip i18n middleware for all auth routes
+  const isAuthRoute = request.nextUrl.pathname.startsWith('/auth/')
 
-  if (!isAuthCallback) {
+  // If there's a 'code' parameter in the query, redirect to auth callback
+  const code = request.nextUrl.searchParams.get('code')
+  if (code && !isAuthRoute) {
+    const callbackUrl = new URL('/auth/callback', request.url)
+    callbackUrl.searchParams.set('code', code)
+    return NextResponse.redirect(callbackUrl)
+  }
+
+  if (!isAuthRoute) {
     // Apply i18n middleware
     const intlResponse = intlMiddleware(request)
     if (intlResponse) {

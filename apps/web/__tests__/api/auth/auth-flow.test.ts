@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db'
 import { createClient } from '@supabase/supabase-js'
+import { createVerifiedTestUser } from '@/lib/supabase/test-client'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -39,8 +40,8 @@ describe('Full Authentication Flow', () => {
     const testPassword = 'TestPassword123!'
     const testName = 'Flow Test User'
 
-    // Step 1: Register a new user
-    const { data: registerData, error: registerError } = await supabase.auth.signUp({
+    // Step 1: Register a new user with auto-verified email
+    const { data: registerData, error: registerError } = await createVerifiedTestUser({
       email: testEmail,
       password: testPassword,
     })
@@ -86,8 +87,8 @@ describe('Full Authentication Flow', () => {
     const testEmail = `test-wrong-pw-${Date.now()}@example.com`
     const testPassword = 'TestPassword123!'
 
-    // Register
-    const { data: registerData } = await supabase.auth.signUp({
+    // Register with auto-verified email
+    const { data: registerData } = await createVerifiedTestUser({
       email: testEmail,
       password: testPassword,
     })
@@ -116,8 +117,8 @@ describe('Full Authentication Flow', () => {
     const testEmail = `test-session-${Date.now()}@example.com`
     const testPassword = 'TestPassword123!'
 
-    // Register
-    const { data: registerData } = await supabase.auth.signUp({
+    // Register with auto-verified email
+    const { data: registerData } = await createVerifiedTestUser({
       email: testEmail,
       password: testPassword,
     })

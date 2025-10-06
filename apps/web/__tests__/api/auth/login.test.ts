@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db'
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest } from 'next/server'
+import { createVerifiedTestUser } from '@/lib/supabase/test-client'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,8 +15,8 @@ describe('/api/auth/login', () => {
   let testUserId: string | null = null
 
   beforeEach(async () => {
-    // Create a user to test login
-    const { data: authData } = await supabase.auth.signUp({
+    // Create a user to test login with auto-verified email
+    const { data: authData } = await createVerifiedTestUser({
       email: testEmail,
       password: testPassword,
     })
