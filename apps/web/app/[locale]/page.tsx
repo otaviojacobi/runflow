@@ -35,10 +35,10 @@ export default function Home() {
             </nav>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" asChild>
+            <Button variant="outline" asChild className="border-gray-400 hover:bg-gray-50">
               <Link href="/login">{t('Navigation.signIn')}</Link>
             </Button>
-            <Button asChild>
+            <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
               <Link href="/register">{t('Navigation.getStarted')}</Link>
             </Button>
           </div>
@@ -53,7 +53,7 @@ export default function Home() {
 
         <div className="relative container max-w-7xl mx-auto px-8 py-32 md:py-48">
           <div className="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
-            <Badge variant="secondary" className="text-sm">
+            <Badge variant="secondary" className="text-sm border-transparent bg-transparent hover:bg-transparent">
               {t('Hero.badge')}
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
@@ -70,11 +70,11 @@ export default function Home() {
                 <Input
                   type="email"
                   placeholder={t('Hero.emailPlaceholder')}
-                  className="h-14 pr-36 text-lg font-semibold border-2 focus-visible:border-blue-900 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="h-14 pr-36 text-lg"
                 />
                 <Button
                   size="lg"
-                  className="absolute cursor-pointer right-1 h-12 px-6"
+                  className="absolute right-1 h-12 px-6"
                 >
                   {t('Hero.ctaButton')}
                 </Button>

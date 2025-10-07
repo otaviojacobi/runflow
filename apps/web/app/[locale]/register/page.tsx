@@ -27,7 +27,7 @@ export default function RegisterPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (user) {
-        router.push('/profile');
+        router.push('/dashboard');
       } else {
         setChecking(false);
       }
