@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useOrganization } from '@/contexts/OrganizationContext'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -13,6 +14,7 @@ import { formatDistanceToNow } from 'date-fns'
 export default function PendingInvitesPage() {
   const router = useRouter()
   const { pendingInvites, acceptInvite, declineInvite, refreshOrganizations } = useOrganization()
+  const t = useTranslations('Organizations')
   const [loadingStates, setLoadingStates] = useState<{ [key: string]: boolean }>({})
 
   const handleAccept = async (token: string, inviteId: string) => {
@@ -53,24 +55,24 @@ export default function PendingInvitesPage() {
   if (pendingInvites.length === 0) {
     return (
       <div className="max-w-2xl mx-auto">
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle>No Pending Invitations</CardTitle>
+            <CardTitle>{t('noPendingInvites')}</CardTitle>
             <CardDescription>
-              You don't have any pending organization invitations at the moment.
+              {t('noPendingInvitesDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              Would you like to create your own organization or wait for an invitation?
+              {t('wouldYouLike')}
             </p>
           </CardContent>
           <CardFooter className="flex gap-2">
             <Button onClick={() => router.push('/dashboard/organizations/new')}>
-              Create Organization
+              {t('createOrganization')}
             </Button>
             <Button variant="outline" onClick={() => router.push('/dashboard')}>
-              Go to Dashboard
+              {t('goToDashboard')}
             </Button>
           </CardFooter>
         </Card>
@@ -94,15 +96,15 @@ export default function PendingInvitesPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Pending Invitations</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('pendingInvites')}</h1>
         <p className="text-muted-foreground mt-2">
-          You have been invited to join the following organizations. Accept or decline each invitation below.
+          {t('Invites.description')}
         </p>
       </div>
 
       <div className="grid gap-4">
         {pendingInvites.map((invite) => (
-          <Card key={invite.id}>
+          <Card key={invite.id} className="bg-white">
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -121,7 +123,7 @@ export default function PendingInvitesPage() {
                   </div>
                 </div>
                 <Badge variant={getRoleBadgeVariant(invite.role)}>
-                  {invite.role}
+                  {t(`role.${invite.role}`)}
                 </Badge>
               </div>
             </CardHeader>
@@ -130,13 +132,13 @@ export default function PendingInvitesPage() {
                 <div className="flex items-center gap-2">
                   <UserPlus className="h-4 w-4" />
                   <span>
-                    Invited by {invite.invitedBy.name || invite.invitedBy.email}
+                    {t('invitedBy')} {invite.invitedBy.name || invite.invitedBy.email}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   <span>
-                    Expires {formatDistanceToNow(new Date(invite.expiresAt), { addSuffix: true })}
+                    {t('expiresIn')} {formatDistanceToNow(new Date(invite.expiresAt), { addSuffix: true })}
                   </span>
                 </div>
               </div>
@@ -149,29 +151,29 @@ export default function PendingInvitesPage() {
                 {loadingStates[invite.id] ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Accepting...
+                    {t('accepting')}
                   </>
                 ) : (
                   <>
                     <Check className="h-4 w-4 mr-2" />
-                    Accept Invitation
+                    {t('acceptInvite')}
                   </>
                 )}
               </Button>
               <Button
-                variant="outline"
+                variant="destructive"
                 onClick={() => handleDecline(invite.id)}
                 disabled={loadingStates[invite.id] || loadingStates[`decline-${invite.id}`]}
               >
                 {loadingStates[`decline-${invite.id}`] ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-foreground mr-2"></div>
-                    Declining...
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    {t('declining')}
                   </>
                 ) : (
                   <>
                     <X className="h-4 w-4 mr-2" />
-                    Decline
+                    {t('declineInvite')}
                   </>
                 )}
               </Button>
@@ -180,11 +182,13 @@ export default function PendingInvitesPage() {
         ))}
       </div>
 
-      <div className="flex justify-center pt-4">
-        <Button variant="ghost" onClick={handleSkip}>
-          Skip for now - I'll create my own organization
-        </Button>
-      </div>
+      <Card className="bg-white border-yellow-200 bg-yellow-50/50">
+        <CardContent className="flex items-center justify-center py-6">
+          <Button variant="outline" onClick={handleSkip} className="bg-white">
+            {t('skipForNow')}
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   )
 }

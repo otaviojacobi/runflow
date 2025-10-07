@@ -134,7 +134,7 @@ export default function NewOrganizationPage() {
           <CardFooter className="flex gap-2">
             <Button
               type="button"
-              variant="cancel"
+              variant="outline"
               onClick={() => router.back()}
               disabled={loading}
             >

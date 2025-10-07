@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useOrganization } from '@/contexts/OrganizationContext'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -22,6 +23,8 @@ import {
 export default function DashboardPage() {
   const router = useRouter()
   const { user, currentOrganization, organizations, pendingInvites, loading } = useOrganization()
+  const t = useTranslations('Dashboard')
+  const tOrg = useTranslations('Organizations')
 
   // Check if we need to redirect
   const shouldRedirect = !loading && (
@@ -45,7 +48,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-500">Loading...</p>
+          <p className="mt-4 text-gray-500">{t('loading')}</p>
         </div>
       </div>
     )
@@ -60,15 +63,15 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {user?.name || user?.email?.split('@')[0]}!
+          {t('welcomeBack')}, {user?.name || user?.email?.split('@')[0]}!
         </h1>
         <p className="text-muted-foreground mt-2">
           {currentOrganization ? (
             <>
-              You're currently viewing <span className="font-semibold">{currentOrganization.name}</span> as {userRole.toLowerCase()}
+              {t('currentlyViewing')} <span className="font-semibold">{currentOrganization.name}</span> {t('asRole', { role: tOrg(`role.${userRole}`) })}
             </>
           ) : (
-            'Select an organization to get started'
+            t('selectOrganization')
           )}
         </p>
       </div>
@@ -79,15 +82,15 @@ export default function DashboardPage() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Bell className="h-5 w-5 text-yellow-600" />
-              <CardTitle className="text-lg">You have pending invitations</CardTitle>
+              <CardTitle className="text-lg">{t('pendingInvitationsAlert')}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              You've been invited to join {pendingInvites.length} organization{pendingInvites.length > 1 ? 's' : ''}.
+              {t('invitedToOrganizations', { count: pendingInvites.length })}
             </p>
             <Button onClick={() => router.push('/dashboard/invites')}>
-              View Invitations
+              {t('viewInvitations')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardContent>
@@ -100,42 +103,42 @@ export default function DashboardPage() {
           <>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/athletes')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Team Management</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('quickActions.teamManagement')}</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Athletes</div>
-                <p className="text-xs text-muted-foreground">Manage your team members</p>
+                <div className="text-2xl font-bold">{t('athletes')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.manageTeam')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/training/new')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Create Training</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('quickActions.createTraining')}</CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">New Program</div>
-                <p className="text-xs text-muted-foreground">Design training sheets</p>
+                <div className="text-2xl font-bold">{t('quickActions.newProgram')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.designSheets')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/organizations/invite')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Invitations</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('invitations')}</CardTitle>
                 <Bell className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Manage Invites</div>
-                <p className="text-xs text-muted-foreground">Send and track invitations</p>
+                <div className="text-2xl font-bold">{t('quickActions.manageInvites')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.sendTrackInvites')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/analytics')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Team Analytics</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('quickActions.teamAnalytics')}</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Performance</div>
-                <p className="text-xs text-muted-foreground">Track team progress</p>
+                <div className="text-2xl font-bold">{t('quickActions.performance')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.trackProgress')}</p>
               </CardContent>
             </Card>
           </>
@@ -143,42 +146,42 @@ export default function DashboardPage() {
           <>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/schedule')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Today's Training</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('quickActions.todaysTraining')}</CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Schedule</div>
-                <p className="text-xs text-muted-foreground">View your training plan</p>
+                <div className="text-2xl font-bold">{t('schedule')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.viewPlan')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/training')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Training Sheets</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('trainingSheets')}</CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Programs</div>
-                <p className="text-xs text-muted-foreground">Access your training</p>
+                <div className="text-2xl font-bold">{t('quickActions.programs')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.accessTraining')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/progress')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">My Progress</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('quickActions.myProgress')}</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Analytics</div>
-                <p className="text-xs text-muted-foreground">Track your performance</p>
+                <div className="text-2xl font-bold">{t('analytics')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.trackPerformance')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/achievements')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Achievements</CardTitle>
+                <CardTitle className="text-sm font-medium">{t('quickActions.achievements')}</CardTitle>
                 <Target className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Goals</div>
-                <p className="text-xs text-muted-foreground">View your milestones</p>
+                <div className="text-2xl font-bold">{t('quickActions.goals')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.viewMilestones')}</p>
               </CardContent>
             </Card>
           </>
@@ -189,10 +192,10 @@ export default function DashboardPage() {
       {currentOrganization && (
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+            <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
+            <TabsTrigger value="activity">{t('tabs.recentActivity')}</TabsTrigger>
             {(userRole === 'OWNER' || userRole === 'TRAINER') && (
-              <TabsTrigger value="team">Team</TabsTrigger>
+              <TabsTrigger value="team">{t('tabs.team')}</TabsTrigger>
             )}
           </TabsList>
 
@@ -202,21 +205,21 @@ export default function DashboardPage() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Organization Stats</CardTitle>
-                    <CardDescription>Team overview</CardDescription>
+                    <CardTitle>{t('overview.organizationStats')}</CardTitle>
+                    <CardDescription>{t('overview.teamOverview')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Total Members</span>
+                        <span className="text-sm text-muted-foreground">{t('overview.totalMembers')}</span>
                         <span className="font-semibold">0</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Active Athletes</span>
+                        <span className="text-sm text-muted-foreground">{t('overview.activeAthletes')}</span>
                         <span className="font-semibold">0</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Pending Invites</span>
+                        <span className="text-sm text-muted-foreground">{t('overview.pendingInvites')}</span>
                         <span className="font-semibold">0</span>
                       </div>
                     </div>
@@ -225,15 +228,15 @@ export default function DashboardPage() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Training Programs</CardTitle>
-                    <CardDescription>Active sheets</CardDescription>
+                    <CardTitle>{t('overview.trainingPrograms')}</CardTitle>
+                    <CardDescription>{t('overview.activeSheets')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-muted-foreground">
                       <FileText className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-sm">No training programs created yet</p>
+                      <p className="text-sm">{t('overview.noProgramsYet')}</p>
                       <Button size="sm" className="mt-3" onClick={() => router.push('/dashboard/training/new')}>
-                        Create First Program
+                        {t('overview.createFirstProgram')}
                       </Button>
                     </div>
                   </CardContent>
@@ -241,13 +244,13 @@ export default function DashboardPage() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Team Activity</CardTitle>
-                    <CardDescription>Recent updates</CardDescription>
+                    <CardTitle>{t('overview.teamActivity')}</CardTitle>
+                    <CardDescription>{t('overview.recentUpdates')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-muted-foreground">
                       <Activity className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-sm">No recent team activity</p>
+                      <p className="text-sm">{t('overview.noTeamActivity')}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -257,39 +260,39 @@ export default function DashboardPage() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <Card>
                   <CardHeader>
-                    <CardTitle>This Week's Training</CardTitle>
-                    <CardDescription>Your upcoming sessions</CardDescription>
+                    <CardTitle>{t('overview.thisWeeksTraining')}</CardTitle>
+                    <CardDescription>{t('overview.upcomingSessions')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-muted-foreground">
                       <Calendar className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-sm">No training sessions scheduled yet</p>
+                      <p className="text-sm">{t('overview.noSessionsScheduled')}</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Recent Achievements</CardTitle>
-                    <CardDescription>Your latest milestones</CardDescription>
+                    <CardTitle>{t('overview.recentAchievements')}</CardTitle>
+                    <CardDescription>{t('overview.latestMilestones')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-muted-foreground">
                       <Target className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-sm">Start training to earn achievements</p>
+                      <p className="text-sm">{t('overview.startTrainingForAchievements')}</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Training Stats</CardTitle>
-                    <CardDescription>This month's overview</CardDescription>
+                    <CardTitle>{t('overview.trainingStats')}</CardTitle>
+                    <CardDescription>{t('overview.monthOverview')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-muted-foreground">
                       <Activity className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-sm">No training data yet</p>
+                      <p className="text-sm">{t('overview.noTrainingData')}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -300,14 +303,14 @@ export default function DashboardPage() {
           <TabsContent value="activity" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Your latest training updates</CardDescription>
+                <CardTitle>{t('tabs.recentActivity')}</CardTitle>
+                <CardDescription>{t('overview.latestTrainingUpdates')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-12 text-muted-foreground">
                   <Activity className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                  <p className="text-sm">No recent activity</p>
-                  <p className="text-xs mt-2">Your training activities will appear here</p>
+                  <p className="text-sm">{t('overview.noRecentActivity')}</p>
+                  <p className="text-xs mt-2">{t('overview.activitiesWillAppear')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -317,20 +320,20 @@ export default function DashboardPage() {
             <TabsContent value="team" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Team Overview</CardTitle>
-                  <CardDescription>Manage your athletes and trainers</CardDescription>
+                  <CardTitle>{t('overview.teamOverviewTitle')}</CardTitle>
+                  <CardDescription>{t('overview.manageAthletesTrainers')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="text-center py-12 text-muted-foreground">
                       <Users className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-sm">No team members yet</p>
+                      <p className="text-sm">{t('overview.noTeamMembers')}</p>
                       <Button
                         className="mt-4"
                         onClick={() => router.push('/dashboard/athletes/invite')}
                       >
                         <Plus className="mr-2 h-4 w-4" />
-                        Invite Team Members
+                        {t('overview.inviteTeamMembers')}
                       </Button>
                     </div>
                   </div>
