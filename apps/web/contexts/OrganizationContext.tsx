@@ -113,7 +113,6 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
         setUser(data.user)
         // Force refresh the user data to get updated organization list
         await fetchUserData()
-        router.push('/dashboard')
         router.refresh()
       }
     } catch (error) {

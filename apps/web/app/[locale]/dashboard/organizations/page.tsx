@@ -45,14 +45,16 @@ import {
   Dumbbell,
   Trash2,
   RefreshCw,
-  Clock
+  Clock,
+  Check
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 export default function OrganizationsPage() {
   const router = useRouter()
-  const { currentOrganization, organizations, user } = useOrganization()
+  const { currentOrganization, organizations, user, switchOrganization } = useOrganization()
   const t = useTranslations('Organizations')
   const [editingOrg, setEditingOrg] = useState<string | null>(null)
   const [editFormData, setEditFormData] = useState({ name: '', description: '' })
@@ -249,12 +251,9 @@ export default function OrganizationsPage() {
         </p>
       </div>
 
-      <Tabs defaultValue="current" className="space-y-4">
+      <Tabs defaultValue="organizations" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="current">
-            {t('currentOrganization')}
-          </TabsTrigger>
-          <TabsTrigger value="all">
+          <TabsTrigger value="organizations">
             {t('allOrganizations')}
           </TabsTrigger>
           {(currentUserRole === 'OWNER' || currentUserRole === 'TRAINER') && (
@@ -269,55 +268,97 @@ export default function OrganizationsPage() {
           )}
         </TabsList>
 
-        <TabsContent value="current" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Building2 className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <CardTitle>{currentOrganization.name}</CardTitle>
-                    {currentOrganization.description && (
-                      <CardDescription className="mt-1">
-                        {currentOrganization.description}
-                      </CardDescription>
-                    )}
-                  </div>
-                </div>
-                <Badge variant={getRoleBadgeVariant(currentUserRole || '')}>
-                  <span className="mr-1">{getRoleIcon(currentUserRole || '')}</span>
-                  {currentUserRole ? t(`role.${currentUserRole}`) : ''}
-                </Badge>
-              </div>
-            </CardHeader>
-            {currentUserRole === 'OWNER' && (
-              <CardContent className="space-y-4">
-                <div className="grid gap-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleEditOrg(currentOrganization)}
-                    className="w-full sm:w-auto"
-                  >
-                    <Edit className="h-4 w-4 mr-2" />
-                    {t('editInformation')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full sm:w-auto"
-                    disabled
-                  >
-                    <Palette className="h-4 w-4 mr-2" />
-                    {t('customizeTheme')} {t('comingSoon')}
-                  </Button>
-                </div>
-              </CardContent>
-            )}
-          </Card>
+        <TabsContent value="organizations" className="space-y-4">
+          <div className="grid gap-4">
+            {organizations.map((org) => {
+              const isCurrentOrg = currentOrganization?.id === org.id
+              const orgRole = getCurrentUserRole(org.id)
 
-          {editingOrg === currentOrganization.id && (
-            <Card>
+              return (
+                <Card
+                  key={org.id}
+                  className={cn(
+                    "transition-all cursor-pointer bg-white",
+                    isCurrentOrg
+                      ? "ring-2 ring-blue-400 shadow-lg border-blue-300"
+                      : "hover:shadow-lg hover:border-blue-200"
+                  )}
+                  onClick={() => {
+                    if (!isCurrentOrg) {
+                      switchOrganization(org.id)
+                    }
+                  }}
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className={cn(
+                          "h-12 w-12 rounded-full flex items-center justify-center shrink-0",
+                          isCurrentOrg
+                            ? "bg-blue-100"
+                            : "bg-secondary/50"
+                        )}>
+                          <Building2 className={cn(
+                            "h-6 w-6",
+                            isCurrentOrg ? "text-blue-600" : "text-muted-foreground"
+                          )} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <CardTitle className="text-lg">{org.name}</CardTitle>
+                            {isCurrentOrg && (
+                              <Check className="h-5 w-5 text-blue-600 shrink-0" />
+                            )}
+                          </div>
+                          {org.description && (
+                            <CardDescription className="mt-1 text-sm">
+                              {org.description}
+                            </CardDescription>
+                          )}
+                          {org.joinedAt && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {t('joined')}{' '}
+                              {formatDistanceToNow(new Date(org.joinedAt), { addSuffix: true })}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2 items-end shrink-0">
+                        <Badge variant={getRoleBadgeVariant(orgRole || '')}>
+                          <span className="mr-1">{getRoleIcon(orgRole || '')}</span>
+                          {orgRole ? t(`role.${orgRole}`) : ''}
+                        </Badge>
+                        {isCurrentOrg && orgRole === 'OWNER' && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleEditOrg(org)
+                            }}
+                          >
+                            <Edit className="h-4 w-4 mr-1" />
+                            {t('editInformation')}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+              )
+            })}
+          </div>
+
+          <Button
+            onClick={() => router.push('/dashboard/organizations/new')}
+            className="w-full sm:w-auto"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            {t('createNewOrganization')}
+          </Button>
+
+          {editingOrg && (
+            <Card className="border-primary">
               <CardHeader>
                 <CardTitle>
                   {t('editOrganization')}
@@ -332,7 +373,7 @@ export default function OrganizationsPage() {
                     id="edit-name"
                     value={editFormData.name}
                     onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
-                    disabled={savingOrg === currentOrganization.id}
+                    disabled={!!savingOrg}
                   />
                 </div>
                 <div className="space-y-2">
@@ -344,15 +385,15 @@ export default function OrganizationsPage() {
                     value={editFormData.description}
                     onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
                     rows={4}
-                    disabled={savingOrg === currentOrganization.id}
+                    disabled={!!savingOrg}
                   />
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    onClick={() => handleSaveOrg(currentOrganization.id)}
-                    disabled={savingOrg === currentOrganization.id}
+                    onClick={() => handleSaveOrg(editingOrg)}
+                    disabled={!!savingOrg}
                   >
-                    {savingOrg === currentOrganization.id ? (
+                    {savingOrg ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                         {t('saving')}
@@ -367,7 +408,7 @@ export default function OrganizationsPage() {
                   <Button
                     variant="outline"
                     onClick={() => setEditingOrg(null)}
-                    disabled={savingOrg === currentOrganization.id}
+                    disabled={!!savingOrg}
                   >
                     <X className="h-4 w-4 mr-2" />
                     {t('cancel')}
@@ -376,50 +417,6 @@ export default function OrganizationsPage() {
               </CardContent>
             </Card>
           )}
-        </TabsContent>
-
-        <TabsContent value="all" className="space-y-4">
-          <div className="grid gap-4">
-            {organizations.map((org) => (
-              <Card key={org.id}>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-secondary/50 flex items-center justify-center">
-                        <Building2 className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{org.name}</CardTitle>
-                        {org.description && (
-                          <CardDescription className="mt-1 text-sm">
-                            {org.description}
-                          </CardDescription>
-                        )}
-                        {org.joinedAt && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {t('joined')}{' '}
-                            {formatDistanceToNow(new Date(org.joinedAt), { addSuffix: true })}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <Badge variant={getRoleBadgeVariant(org.role || '')}>
-                      <span className="mr-1">{getRoleIcon(org.role || '')}</span>
-                      {org.role ? t(`role.${org.role}`) : ''}
-                    </Badge>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-
-          <Button
-            onClick={() => router.push('/dashboard/organizations/new')}
-            className="w-full sm:w-auto"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            {t('createNewOrganization')}
-          </Button>
         </TabsContent>
 
         <TabsContent value="members" className="space-y-4">

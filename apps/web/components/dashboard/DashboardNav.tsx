@@ -21,7 +21,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -123,8 +123,21 @@ export function DashboardNav() {
                 <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64">
+            <SheetContent side="left" className="w-64 bg-white">
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <SheetDescription className="sr-only">
+                Navigate through the application and switch organizations
+              </SheetDescription>
               <div className="flex flex-col gap-4 mt-8">
+                {/* Organization Switcher for Mobile */}
+                <div className="px-3 pb-4 border-b">
+                  <div className="text-xs font-medium text-muted-foreground mb-2">
+                    {tOrg('organization')}
+                  </div>
+                  <OrganizationSwitcher />
+                </div>
+
+                {/* Navigation Links */}
                 {filteredNavigation.map((item) => {
                   const Icon = item.icon
                   return (

@@ -196,6 +196,7 @@
   },
   "Organizations": {
     "title": "Clubes",
+    "organization": "Clube",
     "manageTitle": "Gerenciar Clubes",
     "manageDescription": "Configure seus clubes e gerencie membros",
     "createOrganization": "Criar Clube",

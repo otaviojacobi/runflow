@@ -196,6 +196,7 @@
   },
   "Organizations": {
     "title": "Organizations",
+    "organization": "Organization",
     "manageTitle": "Manage Organizations",
     "manageDescription": "Configure your organizations and manage members",
     "createOrganization": "Create Organization",
