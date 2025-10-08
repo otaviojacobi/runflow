@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 interface PasswordInputProps extends Omit<TextInputProps, 'secureTextEntry'> {
   value: string;
   onChangeText: (text: string) => void;
+  label?: string;
+  containerStyle?: any;
 }
 
 export function PasswordInput({ value, onChangeText, style, ...props }: PasswordInputProps) {

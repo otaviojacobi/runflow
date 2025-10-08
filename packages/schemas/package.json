@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     "./auth": "./src/auth.ts",
-    "./organization": "./src/organization.ts"
+    "./organization": "./src/organization.ts",
+    "./user": "./src/user.ts",
+    "./theme": "./src/theme.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
