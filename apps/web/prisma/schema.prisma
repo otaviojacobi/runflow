@@ -21,6 +21,8 @@ model UserProfile {
   currentOrganization   Organization?          @relation("CurrentOrganization", fields: [currentOrganizationId], references: [id], onDelete: SetNull)
   organizations         OrganizationMember[]
   invitedOrganizations  OrganizationInvite[]   @relation("InvitedBy")
+  trainingsCreated      Training[]             @relation("TrainerTrainings")
+  trainingsAssigned     Training[]             @relation("MemberTrainings")
 
   @@map("user_profiles")
 }
@@ -38,6 +40,7 @@ model Organization {
   members     OrganizationMember[]
   invites     OrganizationInvite[]
   currentUsers UserProfile[]        @relation("CurrentOrganization")
+  trainings   Training[]
 
   @@map("organizations")
 }
@@ -78,6 +81,63 @@ model OrganizationInvite {
   @@map("organization_invites")
 }
 
+model Training {
+  id             String         @id @default(uuid())
+  title          String
+  subtitle       String?
+  description    String?        @db.Text
+  type           TrainingType
+  status         TrainingStatus @default(TODO)
+  trainerId      String         @map("trainer_id")
+  memberId       String         @map("member_id")
+  organizationId String         @map("organization_id")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  // Relations
+  trainer          UserProfile            @relation("TrainerTrainings", fields: [trainerId], references: [id], onDelete: Cascade)
+  member           UserProfile            @relation("MemberTrainings", fields: [memberId], references: [id], onDelete: Cascade)
+  organization     Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  doneDetails      TrainingDoneDetails?
+
+  @@index([organizationId])
+  @@index([trainerId])
+  @@index([memberId])
+  @@index([status])
+  @@map("trainings")
+}
+
+model TrainingDoneDetails {
+  id               String    @id @default(uuid())
+  trainingId       String    @unique @map("training_id")
+
+  // Running-specific fields
+  distanceKm       Float?    @map("distance_km")
+  paceMinPerKm     Float?    @map("pace_min_per_km")
+  elevationGainM   Float?    @map("elevation_gain_m")
+  routeData        Json?     @map("route_data")
+
+  // Strength-specific fields
+  exercises        Json?     // Array of {name, sets, reps, weight, restTime}
+  totalVolume      Float?    @map("total_volume")
+
+  // Common fields
+  durationSeconds  Int?      @map("duration_seconds")
+  averageHeartRate Int?      @map("average_heart_rate")
+  maxHeartRate     Int?      @map("max_heart_rate")
+  calories         Int?
+  notes            String?   @db.Text
+  completedAt      DateTime? @map("completed_at")
+
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  training         Training  @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+
+  @@map("training_done_details")
+}
+
 enum MemberRole {
   OWNER
   TRAINER
@@ -89,4 +149,15 @@ enum InviteStatus {
   ACCEPTED
   EXPIRED
   CANCELLED
+}
+
+enum TrainingType {
+  RUNNING
+  STRENGTH
+}
+
+enum TrainingStatus {
+  TODO
+  COMPLETED
+  MISSED
 }
