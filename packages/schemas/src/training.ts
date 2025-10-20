@@ -40,6 +40,7 @@ export const createTrainingSchema = z.object({
   subtitle: z.string().max(200).optional(),
   description: z.string().optional(),
   type: TrainingType,
+  scheduledDate: z.string().datetime().or(z.date()),
   memberId: z.string().uuid(),
   organizationId: z.string().uuid(),
 })
@@ -48,6 +49,7 @@ export const updateTrainingSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   subtitle: z.string().max(200).optional(),
   description: z.string().optional(),
+  scheduledDate: z.string().datetime().or(z.date()).optional(),
   status: TrainingStatus.optional(),
 })
 
@@ -61,6 +63,7 @@ export const trainingResponseSchema = z.object({
   description: z.string().nullable(),
   type: TrainingType,
   status: TrainingStatus,
+  scheduledDate: z.string().datetime(),
   trainerId: z.string().uuid(),
   memberId: z.string().uuid(),
   organizationId: z.string().uuid(),

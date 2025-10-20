@@ -28,3 +28,94 @@
 .imgDark {
   display: none;
 }
+
+/* React Big Calendar Overrides */
+.rbc-calendar {
+  font-family: inherit;
+}
+
+.rbc-header {
+  padding: 12px 4px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.rbc-today {
+  background-color: hsl(var(--accent));
+}
+
+.rbc-event {
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.rbc-event-label {
+  font-size: 0.75rem;
+}
+
+.rbc-toolbar button {
+  padding: 8px 16px;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}
+
+.rbc-toolbar button:hover {
+  background-color: hsl(var(--secondary));
+}
+
+.rbc-toolbar button.rbc-active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.rbc-month-view {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.rbc-time-view {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid hsl(var(--border));
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid hsl(var(--border));
+}
+
+.rbc-time-slot {
+  border-top: 1px solid hsl(var(--border));
+}
+
+/* Better day selection highlight */
+.rbc-day-bg:hover {
+  background-color: hsl(var(--accent));
+  cursor: pointer;
+}
+
+.rbc-selected-cell {
+  background-color: hsl(var(--primary) / 0.1) !important;
+}
+
+.rbc-off-range-bg {
+  background-color: hsl(var(--muted));
+}
+
+/* Better event highlighting */
+.rbc-event:hover {
+  opacity: 1 !important;
+  cursor: pointer;
+  transform: scale(1.02);
+  transition: transform 0.1s ease-in-out;
+}

@@ -85,6 +85,7 @@ export async function GET(
       description: training.description,
       type: training.type as 'RUNNING' | 'STRENGTH',
       status: training.status as 'TODO' | 'COMPLETED' | 'MISSED',
+      scheduledDate: training.scheduledDate.toISOString(),
       trainerId: training.trainerId,
       memberId: training.memberId,
       organizationId: training.organizationId,
@@ -240,6 +241,7 @@ export async function PUT(
         description: updatedTraining.description,
         type: updatedTraining.type as 'RUNNING' | 'STRENGTH',
         status: updatedTraining.status as 'TODO' | 'COMPLETED' | 'MISSED',
+        scheduledDate: updatedTraining.scheduledDate.toISOString(),
         trainerId: updatedTraining.trainerId,
         memberId: updatedTraining.memberId,
         organizationId: updatedTraining.organizationId,
@@ -271,6 +273,12 @@ export async function PUT(
     } else {
       // Handle basic training update
       const validatedData = updateTrainingSchema.parse(body)
+
+      // Convert scheduledDate if provided
+      const updateData: any = { ...validatedData }
+      if (validatedData.scheduledDate) {
+        updateData.scheduledDate = new Date(validatedData.scheduledDate)
+      }
 
       // Fetch training with explicit filter for query planner
       const training = await prisma.training.findFirst({
@@ -320,7 +328,7 @@ export async function PUT(
       // Update training (RLS will handle final authorization)
       const updatedTraining = await prisma.training.update({
         where: { id },
-        data: validatedData,
+        data: updateData,
         include: {
           trainer: {
             select: {
@@ -347,6 +355,7 @@ export async function PUT(
         description: updatedTraining.description,
         type: updatedTraining.type as 'RUNNING' | 'STRENGTH',
         status: updatedTraining.status as 'TODO' | 'COMPLETED' | 'MISSED',
+        scheduledDate: updatedTraining.scheduledDate.toISOString(),
         trainerId: updatedTraining.trainerId,
         memberId: updatedTraining.memberId,
         organizationId: updatedTraining.organizationId,
@@ -398,6 +407,9 @@ export async function PUT(
     )
   }
 }
+
+// PATCH alias for PUT (both do the same thing)
+export const PATCH = PUT
 
 /**
  * DELETE /api/trainings/[id]

@@ -17,7 +17,8 @@ import {
   CreditCard,
   FileText,
   Building2,
-  Bell
+  Bell,
+  Dumbbell
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -50,6 +51,18 @@ export function DashboardNav() {
       href: '/dashboard',
       icon: Home,
       roles: ['OWNER', 'TRAINER', 'ATHLETE']
+    },
+    {
+      name: 'Trainings',
+      href: '/dashboard/trainings',
+      icon: Dumbbell,
+      roles: ['OWNER', 'TRAINER']
+    },
+    {
+      name: 'My Trainings',
+      href: '/dashboard/my-trainings',
+      icon: Dumbbell,
+      roles: ['ATHLETE']
     },
     {
       name: t('trainingSheets'),

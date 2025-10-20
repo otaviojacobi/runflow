@@ -88,6 +88,7 @@ model Training {
   description    String?        @db.Text
   type           TrainingType
   status         TrainingStatus @default(TODO)
+  scheduledDate  DateTime       @map("scheduled_date") @db.Date
   trainerId      String         @map("trainer_id")
   memberId       String         @map("member_id")
   organizationId String         @map("organization_id")
@@ -104,6 +105,7 @@ model Training {
   @@index([trainerId])
   @@index([memberId])
   @@index([status])
+  @@index([scheduledDate])
   @@map("trainings")
 }
 

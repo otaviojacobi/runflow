@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
         doneDetails: true,
       },
       orderBy: {
-        createdAt: 'desc'
+        scheduledDate: 'desc'
       },
       take: validatedQuery.limit,
       skip: validatedQuery.offset,
@@ -115,6 +115,7 @@ export async function GET(request: NextRequest) {
       description: training.description,
       type: training.type as 'RUNNING' | 'STRENGTH',
       status: training.status as 'TODO' | 'COMPLETED' | 'MISSED',
+      scheduledDate: training.scheduledDate.toISOString(),
       trainerId: training.trainerId,
       memberId: training.memberId,
       organizationId: training.organizationId,
@@ -223,6 +224,7 @@ export async function POST(request: NextRequest) {
         subtitle: validatedData.subtitle,
         description: validatedData.description,
         type: validatedData.type,
+        scheduledDate: new Date(validatedData.scheduledDate),
         trainerId: user.id,
         memberId: validatedData.memberId,
         organizationId: validatedData.organizationId,
@@ -252,6 +254,7 @@ export async function POST(request: NextRequest) {
       description: training.description,
       type: training.type as 'RUNNING' | 'STRENGTH',
       status: training.status as 'TODO' | 'COMPLETED' | 'MISSED',
+      scheduledDate: training.scheduledDate.toISOString(),
       trainerId: training.trainerId,
       memberId: training.memberId,
       organizationId: training.organizationId,

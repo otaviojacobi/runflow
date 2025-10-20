@@ -17,7 +17,8 @@ import {
   Bell,
   Plus,
   FileText,
-  Target
+  Target,
+  Dumbbell
 } from 'lucide-react'
 
 export default function DashboardPage() {
@@ -101,6 +102,16 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {userRole === 'OWNER' || userRole === 'TRAINER' ? (
           <>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/trainings')}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{t('quickActions.createTraining')}</CardTitle>
+                <Dumbbell className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{t('trainingSheets')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.designSheets')}</p>
+              </CardContent>
+            </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/athletes')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">{t('quickActions.teamManagement')}</CardTitle>
@@ -109,16 +120,6 @@ export default function DashboardPage() {
               <CardContent>
                 <div className="text-2xl font-bold">{t('athletes')}</div>
                 <p className="text-xs text-muted-foreground">{t('quickActions.manageTeam')}</p>
-              </CardContent>
-            </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/training/new')}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t('quickActions.createTraining')}</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{t('quickActions.newProgram')}</div>
-                <p className="text-xs text-muted-foreground">{t('quickActions.designSheets')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/organizations/invite')}>
@@ -144,6 +145,16 @@ export default function DashboardPage() {
           </>
         ) : (
           <>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/my-trainings')}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{t('quickActions.todaysTraining')}</CardTitle>
+                <Dumbbell className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{t('quickActions.programs')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.accessTraining')}</p>
+              </CardContent>
+            </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/schedule')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">{t('quickActions.todaysTraining')}</CardTitle>
@@ -152,16 +163,6 @@ export default function DashboardPage() {
               <CardContent>
                 <div className="text-2xl font-bold">{t('schedule')}</div>
                 <p className="text-xs text-muted-foreground">{t('quickActions.viewPlan')}</p>
-              </CardContent>
-            </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/training')}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t('trainingSheets')}</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{t('quickActions.programs')}</div>
-                <p className="text-xs text-muted-foreground">{t('quickActions.accessTraining')}</p>
               </CardContent>
             </Card>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/progress')}>
