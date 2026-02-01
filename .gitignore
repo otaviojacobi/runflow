@@ -39,3 +39,4 @@ yarn-error.log*
 
 # Production setup guide (contains sensitive setup instructions)
 setup-prod.md
+.env*

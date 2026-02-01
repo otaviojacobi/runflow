@@ -615,7 +615,8 @@
       "created": "Training created successfully",
       "updated": "Training updated successfully",
       "deleted": "Training deleted successfully",
-      "synced": "Trainings synced successfully"
+      "synced": "Trainings synced successfully",
+      "dateUpdated": "Training date updated successfully"
     }
   }
 }

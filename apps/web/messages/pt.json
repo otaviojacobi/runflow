@@ -615,7 +615,8 @@
       "created": "Treino criado com sucesso",
       "updated": "Treino atualizado com sucesso",
       "deleted": "Treino excluído com sucesso",
-      "synced": "Treinos sincronizados com sucesso"
+      "synced": "Treinos sincronizados com sucesso",
+      "dateUpdated": "Data do treino atualizada com sucesso"
     }
   }
 }

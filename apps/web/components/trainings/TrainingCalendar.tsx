@@ -2,9 +2,11 @@
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { format, parse, startOfWeek, getDay, startOfDay } from 'date-fns'
 import { enUS, ptBR } from 'date-fns/locale'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import { useOrganization } from '@/contexts/OrganizationContext'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -27,6 +29,8 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 })
+
+const DragAndDropCalendar = withDragAndDrop(Calendar)
 
 interface Training {
   id: string
@@ -219,7 +223,7 @@ export default function TrainingCalendar() {
     setIsFormOpen(true)
   }, [])
 
-  const handleSelectEvent = useCallback((event: CalendarEvent) => {
+  const handleSelectEvent = useCallback((event: any) => {
     setSelectedTraining(event.resource)
     // Use the event's start date which is already in local time
     setSelectedDate(event.start)
@@ -237,7 +241,51 @@ export default function TrainingCalendar() {
     fetchTrainings()
   }
 
-  const eventStyleGetter = (event: CalendarEvent) => {
+  const handleEventDrop = useCallback(async (args: any) => {
+    if (!currentOrganization) return
+
+    const { event, start } = args
+
+    try {
+      const training = event.resource
+
+      // Convert the new date to ISO string (as local time)
+      const localDate = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0, 0)
+
+      const payload = {
+        title: training.title,
+        subtitle: training.subtitle || undefined,
+        description: training.description || undefined,
+        type: training.type,
+        scheduledDate: localDate.toISOString(),
+        memberId: training.memberId,
+        organizationId: currentOrganization.id,
+      }
+
+      const response = await fetch(`/api/trainings/${training.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (response.ok) {
+        toast.success(t('success.dateUpdated'))
+        fetchTrainings()
+      } else {
+        const error = await response.json()
+        toast.error(error.message || t('errors.failedToUpdate'))
+        fetchTrainings() // Refresh to revert UI
+      }
+    } catch (error) {
+      console.error('Error updating training date:', error)
+      toast.error(t('errors.failedToUpdate'))
+      fetchTrainings() // Refresh to revert UI
+    }
+  }, [currentOrganization, t, fetchTrainings])
+
+  const eventStyleGetter = (event: any) => {
     const training = event.resource
     let backgroundColor = '#1F56E3' // default blue
 
@@ -316,14 +364,15 @@ export default function TrainingCalendar() {
 
         <div className="bg-white rounded-lg shadow p-2" style={{ height: '500px' }}>
           {selectedAthlete ? (
-            <Calendar
+            <DragAndDropCalendar
               localizer={localizer}
               events={events}
-              startAccessor="start"
-              endAccessor="end"
+              startAccessor={(event: any) => event.start}
+              endAccessor={(event: any) => event.end}
               style={{ height: '100%' }}
               onSelectSlot={handleSelectSlot}
               onSelectEvent={handleSelectEvent}
+              onEventDrop={handleEventDrop}
               selectable={!isFormOpen}
               eventPropGetter={eventStyleGetter}
               views={['month']}
@@ -333,6 +382,7 @@ export default function TrainingCalendar() {
               popup
               messages={messages}
               culture={culture}
+              draggableAccessor={() => true}
             />
           ) : (
             <div className="flex items-center justify-center h-full text-gray-500">
@@ -432,14 +482,15 @@ export default function TrainingCalendar() {
 
           <div className="flex-1 bg-white rounded-lg shadow p-4">
             {selectedAthlete ? (
-              <Calendar
+              <DragAndDropCalendar
                 localizer={localizer}
                 events={events}
-                startAccessor="start"
-                endAccessor="end"
+                startAccessor={(event: any) => event.start}
+                endAccessor={(event: any) => event.end}
                 style={{ height: '100%' }}
                 onSelectSlot={handleSelectSlot}
                 onSelectEvent={handleSelectEvent}
+                onEventDrop={handleEventDrop}
                 selectable={!isFormOpen}
                 eventPropGetter={eventStyleGetter}
                 views={['month']}
@@ -449,6 +500,7 @@ export default function TrainingCalendar() {
                 popup
                 messages={messages}
                 culture={culture}
+                draggableAccessor={() => true}
               />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500">
