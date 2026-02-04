@@ -18,6 +18,7 @@ describe('Training Validation Schemas', () => {
         subtitle: '5K Easy Run',
         description: 'Take it easy, focus on form',
         type: 'RUNNING' as const,
+        scheduledDate: '2025-10-20T10:00:00.000Z',
         memberId: '123e4567-e89b-12d3-a456-426614174000',
         organizationId: '123e4567-e89b-12d3-a456-426614174001',
       }
@@ -29,6 +30,7 @@ describe('Training Validation Schemas', () => {
     it('should reject missing title', () => {
       const invalidData = {
         type: 'RUNNING',
+        scheduledDate: '2025-10-20T10:00:00.000Z',
         memberId: '123e4567-e89b-12d3-a456-426614174000',
         organizationId: '123e4567-e89b-12d3-a456-426614174001',
       }
@@ -40,6 +42,7 @@ describe('Training Validation Schemas', () => {
       const invalidData = {
         title: 'Test Training',
         type: 'INVALID_TYPE',
+        scheduledDate: '2025-10-20T10:00:00.000Z',
         memberId: '123e4567-e89b-12d3-a456-426614174000',
         organizationId: '123e4567-e89b-12d3-a456-426614174001',
       }
@@ -51,6 +54,7 @@ describe('Training Validation Schemas', () => {
       const invalidData = {
         title: 'Test Training',
         type: 'RUNNING',
+        scheduledDate: '2025-10-20T10:00:00.000Z',
         memberId: 'not-a-uuid',
         organizationId: '123e4567-e89b-12d3-a456-426614174001',
       }
@@ -62,6 +66,7 @@ describe('Training Validation Schemas', () => {
       const validData = {
         title: 'Test Training',
         type: 'STRENGTH' as const,
+        scheduledDate: '2025-10-20T10:00:00.000Z',
         memberId: '123e4567-e89b-12d3-a456-426614174000',
         organizationId: '123e4567-e89b-12d3-a456-426614174001',
       }

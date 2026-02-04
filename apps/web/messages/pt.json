@@ -342,6 +342,17 @@
       "shareLink": "Compartilhe este link com o convidado",
       "linkCopied": "Link copiado para a área de transferência!",
       "linkInfo": "Este link expirará em 7 dias"
+    },
+    "InvitePage": {
+      "invalidInvite": "Convite Inválido",
+      "backToHome": "Voltar para início",
+      "inviteAccepted": "Convite Aceito!",
+      "nowMemberOf": "Você agora faz parte de {organization}. Redirecionando...",
+      "youWereInvited": "Você foi convidado para fazer parte desta organização como",
+      "sentTo": "Este convite foi enviado para",
+      "loginOrRegister": "Faça login ou crie uma conta para aceitar este convite.",
+      "createAccount": "Criar conta",
+      "emailMismatch": "Este convite foi enviado para um e-mail diferente do seu"
     }
   },
   "Settings": {

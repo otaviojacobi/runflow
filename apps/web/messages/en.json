@@ -342,6 +342,17 @@
       "shareLink": "Share this link with the invitee",
       "linkCopied": "Link copied to clipboard!",
       "linkInfo": "This link will expire in 7 days"
+    },
+    "InvitePage": {
+      "invalidInvite": "Invalid Invite",
+      "backToHome": "Back to home",
+      "inviteAccepted": "Invite Accepted!",
+      "nowMemberOf": "You are now a member of {organization}. Redirecting...",
+      "youWereInvited": "You were invited to join this organization as",
+      "sentTo": "This invite was sent to",
+      "loginOrRegister": "Sign in or create an account to accept this invite.",
+      "createAccount": "Create account",
+      "emailMismatch": "This invite was sent to a different email than yours"
     }
   },
   "Settings": {

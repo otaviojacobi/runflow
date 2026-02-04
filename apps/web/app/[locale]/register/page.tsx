@@ -1,17 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { PasswordInput } from '@/components/auth/PasswordInput';
 
-export default function RegisterPage() {
+function RegisterContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const emailParam = searchParams.get('email') || '';
   const t = useTranslations('Auth.register');
-  const tNav = useTranslations('Navigation');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +22,13 @@ export default function RegisterPage() {
   const [captchaToken, setCaptchaToken] = useState<string>('');
   const [checking, setChecking] = useState(true);
 
+  // Sync email from params on mount
+  useEffect(() => {
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+  }, [emailParam]);
+
   // Redirect if already logged in
   useEffect(() => {
     const checkUser = async () => {
@@ -27,14 +36,14 @@ export default function RegisterPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (user) {
-        router.push('/dashboard');
+        router.push(redirectTo);
       } else {
         setChecking(false);
       }
     };
 
     checkUser();
-  }, [router]);
+  }, [router, redirectTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +71,11 @@ export default function RegisterPage() {
       }
 
       // Redirect to email verification page
-      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+      const verifyParams = new URLSearchParams({ email });
+      if (redirectTo !== '/dashboard') {
+        verifyParams.set('redirect', redirectTo);
+      }
+      router.push(`/verify-email?${verifyParams.toString()}`);
     } catch {
       setError(t('errorGeneric'));
     } finally {
@@ -73,6 +86,10 @@ export default function RegisterPage() {
   const handleGoogleSignUp = async () => {
     try {
       const supabase = createClient();
+      // Store redirect in localStorage for after OAuth callback
+      if (redirectTo !== '/dashboard') {
+        localStorage.setItem('auth_redirect', redirectTo);
+      }
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -250,5 +267,19 @@ export default function RegisterPage() {
       </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  const t = useTranslations('Auth.register');
+
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-violet-100">
+        <div className="text-gray-600">{t('loadingPage')}</div>
+      </div>
+    }>
+      <RegisterContent />
+    </Suspense>
   );
 }

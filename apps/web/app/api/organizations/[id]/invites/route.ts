@@ -7,6 +7,7 @@ import {
 } from '@repo/schemas/organization'
 import { ZodError } from 'zod'
 import { generateInviteToken, getInviteExpirationDate } from '@/lib/utils/token'
+import { sendInviteEmail } from '@/lib/email'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
@@ -157,8 +158,28 @@ export async function POST(
       }
     })
 
-    // TODO: Send invitation email here
-    // For now, we'll just return the invite with the token
+    // Send invitation email
+    try {
+      const organization = await prisma.organization.findUniqueOrThrow({
+        where: { id },
+        select: { name: true },
+      })
+
+      await sendInviteEmail({
+        to: invite.email,
+        organizationName: organization.name,
+        role: invite.role,
+        inviteToken: invite.token,
+      })
+    } catch (emailError) {
+      // Delete the invite if email fails
+      await prisma.organizationInvite.delete({ where: { id: invite.id } })
+      console.error('Failed to send invite email:', emailError)
+      return NextResponse.json(
+        { error: 'Failed to send invitation email' },
+        { status: 500 }
+      )
+    }
 
     const response: InviteResponse = {
       id: invite.id,

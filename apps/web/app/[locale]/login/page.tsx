@@ -1,21 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
 import { PasswordInput } from '@/components/auth/PasswordInput';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const emailParam = searchParams.get('email') || '';
   const t = useTranslations('Auth.login');
-  const tNav = useTranslations('Navigation');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
+
+  // Sync email from params on mount
+  useEffect(() => {
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+  }, [emailParam]);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -24,14 +33,14 @@ export default function LoginPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (user) {
-        router.push('/dashboard');
+        router.push(redirectTo);
       } else {
         setChecking(false);
       }
     };
 
     checkUser();
-  }, [router]);
+  }, [router, redirectTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +61,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/dashboard');
+      router.push(redirectTo);
     } catch {
       setError(t('errorGeneric'));
     } finally {
@@ -63,6 +72,10 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     try {
       const supabase = createClient();
+      // Store redirect in localStorage for after OAuth callback
+      if (redirectTo !== '/dashboard') {
+        localStorage.setItem('auth_redirect', redirectTo);
+      }
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -214,5 +227,19 @@ export default function LoginPage() {
       </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  const t = useTranslations('Auth.login');
+
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-violet-100">
+        <div className="text-gray-600">{t('loadingPage')}</div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

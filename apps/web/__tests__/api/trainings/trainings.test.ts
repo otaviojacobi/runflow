@@ -44,6 +44,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     }
   }
 
+  const scheduledDate = new Date().toISOString()
+
   // Helper to make API calls
   async function apiCall(
     method: string,
@@ -152,6 +154,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
           subtitle: 'Easy pace',
           description: 'Focus on maintaining steady breathing',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -184,6 +187,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Strength Training - Upper Body',
           type: 'STRENGTH',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -209,6 +213,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Self-assigned training',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -232,6 +237,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Invalid training',
           type: 'RUNNING',
+          scheduledDate,
           memberId: outsider.id,
           organizationId: org!.id
         },
@@ -255,6 +261,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Unauthorized training',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -296,6 +303,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         data: {
           title: 'List Test Training',
           type: 'RUNNING',
+          scheduledDate: new Date(),
           trainerId: trainer.id,
           memberId: athlete.id,
           organizationId: org,
@@ -452,6 +460,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
           subtitle: 'For single fetch tests',
           description: 'Detailed description here',
           type: 'RUNNING',
+          scheduledDate: new Date(),
           trainerId: trainer.id,
           memberId: athlete.id,
           organizationId: org,
@@ -549,6 +558,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         data: {
           title: 'Update Test Training',
           type: 'RUNNING',
+          scheduledDate: new Date(),
           trainerId: trainer.id,
           memberId: athlete.id,
           organizationId: org,
@@ -680,6 +690,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         data: {
           title: 'Strength Session',
           type: 'STRENGTH',
+          scheduledDate: new Date(),
           trainerId: trainer.id,
           memberId: athlete.id,
           organizationId: org,
@@ -745,6 +756,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Training to Delete',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -782,6 +794,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Owner Delete Test',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -812,6 +825,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Athlete Cannot Delete',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -847,6 +861,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Outsider Cannot Delete',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -880,6 +895,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Cascade Delete Test',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete.id,
           organizationId: org!.id
         },
@@ -940,6 +956,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Athlete1 Private Training',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete1.id,
           organizationId: org!.id
         },
@@ -974,6 +991,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
         {
           title: 'Protected Training',
           type: 'RUNNING',
+          scheduledDate,
           memberId: athlete1.id,
           organizationId: org!.id
         },

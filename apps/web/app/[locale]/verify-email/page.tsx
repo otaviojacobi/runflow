@@ -10,6 +10,13 @@ function VerifyEmailContent() {
   const t = useTranslations('Auth.verifyEmail')
   const searchParams = useSearchParams()
   const email = searchParams.get('email')
+  const redirectTo = searchParams.get('redirect')
+
+  // Build login URL with redirect and email params
+  const loginParams = new URLSearchParams()
+  if (email) loginParams.set('email', email)
+  if (redirectTo) loginParams.set('redirect', redirectTo)
+  const loginUrl = loginParams.toString() ? `/login?${loginParams.toString()}` : '/login'
   const [otp, setOtp] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -88,7 +95,7 @@ function VerifyEmailContent() {
             {t('successMessage')}
           </p>
           <Link
-            href="/login"
+            href={loginUrl}
             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             {t('goToSignIn')}
@@ -182,7 +189,7 @@ function VerifyEmailContent() {
 
           <div className="mt-6 pt-6 border-t text-center text-sm">
             <span className="text-gray-600">{t('alreadyVerified')} </span>
-            <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link href={loginUrl} className="font-medium text-blue-600 hover:text-blue-500">
               {t('signInLink')}
             </Link>
           </div>

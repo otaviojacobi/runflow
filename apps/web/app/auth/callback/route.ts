@@ -61,8 +61,10 @@ export async function GET(request: NextRequest) {
         console.error('Error creating user profile:', err);
       }
 
-      // Redirect to dashboard page
-      return NextResponse.redirect(new URL('/dashboard', requestUrl.origin));
+      // Check for stored redirect in cookie or default to dashboard
+      // Note: We can't access localStorage here (server-side), so we use a special
+      // redirect page that will check localStorage and redirect accordingly
+      return NextResponse.redirect(new URL('/auth/redirect', requestUrl.origin));
     }
   }
 
