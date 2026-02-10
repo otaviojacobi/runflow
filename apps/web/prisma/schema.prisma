@@ -1,165 +1,167 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
+    provider = "prisma-client-js"
+    output   = "../lib/generated/prisma"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
 }
 
 model UserProfile {
-  id                    String                 @id @default(uuid())
-  email                 String                 @unique
-  name                  String?
-  currentOrganizationId String?                @map("current_organization_id")
-  createdAt             DateTime               @default(now()) @map("created_at")
-  updatedAt             DateTime               @updatedAt @map("updated_at")
+    id                    String   @id @default(uuid())
+    email                 String   @unique
+    name                  String?
+    currentOrganizationId String?  @map("current_organization_id")
+    createdAt             DateTime @default(now()) @map("created_at")
+    updatedAt             DateTime @updatedAt @map("updated_at")
 
-  // Relations
-  currentOrganization   Organization?          @relation("CurrentOrganization", fields: [currentOrganizationId], references: [id], onDelete: SetNull)
-  organizations         OrganizationMember[]
-  invitedOrganizations  OrganizationInvite[]   @relation("InvitedBy")
-  trainingsCreated      Training[]             @relation("TrainerTrainings")
-  trainingsAssigned     Training[]             @relation("MemberTrainings")
+    // Relations
+    currentOrganization  Organization?        @relation("CurrentOrganization", fields: [currentOrganizationId], references: [id], onDelete: SetNull)
+    organizations        OrganizationMember[]
+    invitedOrganizations OrganizationInvite[] @relation("InvitedBy")
+    trainingsCreated     Training[]           @relation("TrainerTrainings")
+    trainingsAssigned    Training[]           @relation("MemberTrainings")
 
-  @@map("user_profiles")
+    @@map("user_profiles")
 }
 
 model Organization {
-  id          String                @id @default(uuid())
-  name        String
-  slug        String                @unique
-  description String?
-  logo        String?
-  createdAt   DateTime              @default(now()) @map("created_at")
-  updatedAt   DateTime              @updatedAt @map("updated_at")
+    id             String   @id @default(uuid())
+    name           String
+    slug           String   @unique
+    description    String?
+    logo           String?
+    primaryColor   String?  @map("primary_color")
+    secondaryColor String?  @map("secondary_color")
+    createdAt      DateTime @default(now()) @map("created_at")
+    updatedAt      DateTime @updatedAt @map("updated_at")
 
-  // Relations
-  members     OrganizationMember[]
-  invites     OrganizationInvite[]
-  currentUsers UserProfile[]        @relation("CurrentOrganization")
-  trainings   Training[]
+    // Relations
+    members      OrganizationMember[]
+    invites      OrganizationInvite[]
+    currentUsers UserProfile[]        @relation("CurrentOrganization")
+    trainings    Training[]
 
-  @@map("organizations")
+    @@map("organizations")
 }
 
 model OrganizationMember {
-  id             String       @id @default(uuid())
-  organizationId String       @map("organization_id")
-  userId         String       @map("user_id")
-  role           MemberRole
-  joinedAt       DateTime     @default(now()) @map("joined_at")
-  invitedById    String?      @map("invited_by_id")
+    id             String     @id @default(uuid())
+    organizationId String     @map("organization_id")
+    userId         String     @map("user_id")
+    role           MemberRole
+    joinedAt       DateTime   @default(now()) @map("joined_at")
+    invitedById    String?    @map("invited_by_id")
 
-  // Relations
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user           UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    // Relations
+    organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    user         UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([organizationId, userId])
-  @@map("organization_members")
+    @@unique([organizationId, userId])
+    @@map("organization_members")
 }
 
 model OrganizationInvite {
-  id             String       @id @default(uuid())
-  organizationId String       @map("organization_id")
-  email          String
-  role           MemberRole
-  invitedById    String       @map("invited_by_id")
-  token          String       @unique
-  status         InviteStatus @default(PENDING)
-  expiresAt      DateTime     @map("expires_at")
-  createdAt      DateTime     @default(now()) @map("created_at")
+    id             String       @id @default(uuid())
+    organizationId String       @map("organization_id")
+    email          String
+    role           MemberRole
+    invitedById    String       @map("invited_by_id")
+    token          String       @unique
+    status         InviteStatus @default(PENDING)
+    expiresAt      DateTime     @map("expires_at")
+    createdAt      DateTime     @default(now()) @map("created_at")
 
-  // Relations
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  invitedBy      UserProfile  @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
-  // Note: No foreign key on email - allows inviting users who don't have accounts yet
+    // Relations
+    organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    invitedBy    UserProfile  @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+    // Note: No foreign key on email - allows inviting users who don't have accounts yet
 
-  @@index([email])
-  @@map("organization_invites")
+    @@index([email])
+    @@map("organization_invites")
 }
 
 model Training {
-  id             String         @id @default(uuid())
-  title          String
-  subtitle       String?
-  description    String?        @db.Text
-  type           TrainingType
-  status         TrainingStatus @default(TODO)
-  scheduledDate  DateTime       @map("scheduled_date") @db.Date
-  trainerId      String         @map("trainer_id")
-  memberId       String         @map("member_id")
-  organizationId String         @map("organization_id")
-  createdAt      DateTime       @default(now()) @map("created_at")
-  updatedAt      DateTime       @updatedAt @map("updated_at")
+    id             String         @id @default(uuid())
+    title          String
+    subtitle       String?
+    description    String?        @db.Text
+    type           TrainingType
+    status         TrainingStatus @default(TODO)
+    scheduledDate  DateTime       @map("scheduled_date") @db.Date
+    trainerId      String         @map("trainer_id")
+    memberId       String         @map("member_id")
+    organizationId String         @map("organization_id")
+    createdAt      DateTime       @default(now()) @map("created_at")
+    updatedAt      DateTime       @updatedAt @map("updated_at")
 
-  // Relations
-  trainer          UserProfile            @relation("TrainerTrainings", fields: [trainerId], references: [id], onDelete: Cascade)
-  member           UserProfile            @relation("MemberTrainings", fields: [memberId], references: [id], onDelete: Cascade)
-  organization     Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  doneDetails      TrainingDoneDetails?
+    // Relations
+    trainer      UserProfile          @relation("TrainerTrainings", fields: [trainerId], references: [id], onDelete: Cascade)
+    member       UserProfile          @relation("MemberTrainings", fields: [memberId], references: [id], onDelete: Cascade)
+    organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    doneDetails  TrainingDoneDetails?
 
-  @@index([organizationId])
-  @@index([trainerId])
-  @@index([memberId])
-  @@index([status])
-  @@index([scheduledDate])
-  @@map("trainings")
+    @@index([organizationId])
+    @@index([trainerId])
+    @@index([memberId])
+    @@index([status])
+    @@index([scheduledDate])
+    @@map("trainings")
 }
 
 model TrainingDoneDetails {
-  id               String    @id @default(uuid())
-  trainingId       String    @unique @map("training_id")
+    id         String @id @default(uuid())
+    trainingId String @unique @map("training_id")
 
-  // Running-specific fields
-  distanceKm       Float?    @map("distance_km")
-  paceMinPerKm     Float?    @map("pace_min_per_km")
-  elevationGainM   Float?    @map("elevation_gain_m")
-  routeData        Json?     @map("route_data")
+    // Running-specific fields
+    distanceKm     Float? @map("distance_km")
+    paceMinPerKm   Float? @map("pace_min_per_km")
+    elevationGainM Float? @map("elevation_gain_m")
+    routeData      Json?  @map("route_data")
 
-  // Strength-specific fields
-  exercises        Json?     // Array of {name, sets, reps, weight, restTime}
-  totalVolume      Float?    @map("total_volume")
+    // Strength-specific fields
+    exercises   Json? // Array of {name, sets, reps, weight, restTime}
+    totalVolume Float? @map("total_volume")
 
-  // Common fields
-  durationSeconds  Int?      @map("duration_seconds")
-  averageHeartRate Int?      @map("average_heart_rate")
-  maxHeartRate     Int?      @map("max_heart_rate")
-  calories         Int?
-  notes            String?   @db.Text
-  completedAt      DateTime? @map("completed_at")
+    // Common fields
+    durationSeconds  Int?      @map("duration_seconds")
+    averageHeartRate Int?      @map("average_heart_rate")
+    maxHeartRate     Int?      @map("max_heart_rate")
+    calories         Int?
+    notes            String?   @db.Text
+    completedAt      DateTime? @map("completed_at")
 
-  createdAt        DateTime  @default(now()) @map("created_at")
-  updatedAt        DateTime  @updatedAt @map("updated_at")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
 
-  // Relations
-  training         Training  @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+    // Relations
+    training Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
 
-  @@map("training_done_details")
+    @@map("training_done_details")
 }
 
 enum MemberRole {
-  OWNER
-  TRAINER
-  ATHLETE
+    OWNER
+    TRAINER
+    ATHLETE
 }
 
 enum InviteStatus {
-  PENDING
-  ACCEPTED
-  EXPIRED
-  CANCELLED
+    PENDING
+    ACCEPTED
+    EXPIRED
+    CANCELLED
 }
 
 enum TrainingType {
-  RUNNING
-  STRENGTH
+    RUNNING
+    STRENGTH
 }
 
 enum TrainingStatus {
-  TODO
-  COMPLETED
-  MISSED
+    TODO
+    COMPLETED
+    MISSED
 }
