@@ -1,7 +1,5 @@
 import { prisma } from "@/lib/db";
-import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-import { json } from "stream/consumers";
 import * as z from "zod";
 
 const ColorsSchema = z.object({
@@ -21,14 +19,25 @@ export async function PATCH(
 ) {
     try {
         const body = await req.json()
+        const id = (await params).id
         const validatedData = ColorsSchema.safeParse(body)
         if (!validatedData.success) {
             return NextResponse.json(
                 { error: validatedData.error },
                 { status: 400 })
         }
+        
+        const updatedOrganization = await prisma.organization.update({
+            where: {
+                id: id,
+            },
+            data: {
+                primaryColor: validatedData.data.primaryColor,
+                secondaryColor: validatedData.data.secondaryColor
+            }
+        })
 
-        return NextResponse.json({ status: 200 })
+        return NextResponse.json({ organization: updatedOrganization }, { status: 200 })
     } catch (error) {
         return NextResponse.json(
             { error: 'Invalid body (not Json)' },
@@ -37,9 +46,4 @@ export async function PATCH(
     }
 
 
-}   
-
-// descobrir como modificar a organization com o id passado para ter as cores do body
-// se der certo, enviar um 200
-
-
+}
