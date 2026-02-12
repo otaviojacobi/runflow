@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:54322/postgres
+      DIRECT_URL: postgresql://postgres:postgres@localhost:54322/postgres
+      NEXT_PUBLIC_SUPABASE_URL: http://localhost:8000
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+      SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start Docker services
+        run: npm run docker:up
+
+      - name: Wait for PostgreSQL
+        run: |
+          echo "Waiting for PostgreSQL..."
+          for i in $(seq 1 30); do
+            if docker compose exec -T postgres pg_isready -U postgres > /dev/null 2>&1; then
+              echo "PostgreSQL is ready!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "PostgreSQL failed to start"
+              exit 1
+            fi
+            sleep 2
+          done
+
+      - name: Wait for GoTrue (Auth)
+        run: |
+          echo "Waiting for GoTrue..."
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:9999/health > /dev/null 2>&1; then
+              echo "GoTrue is ready!"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "GoTrue failed to start"
+              docker logs runflow_gotrue
+              exit 1
+            fi
+            sleep 2
+          done
+
+      - name: Wait for Kong
+        run: |
+          echo "Waiting for Kong..."
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/auth/v1/health > /dev/null 2>&1; then
+              echo "Kong is ready!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "Kong failed to start"
+              exit 1
+            fi
+            sleep 2
+          done
+
+      - name: Run Prisma migrations
+        working-directory: apps/web
+        run: npx prisma migrate deploy
+
+      - name: Generate Prisma client
+        working-directory: apps/web
+        run: npx prisma generate
+
+      - name: Run tests
+        working-directory: apps/web
+        run: npx jest --runInBand
+
+      - name: Stop Docker services
+        if: always()
+        run: npm run docker:down
