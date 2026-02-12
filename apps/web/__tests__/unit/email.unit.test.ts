@@ -51,7 +51,7 @@ describe('sendInviteEmail', () => {
 
     expect(mockSend).toHaveBeenCalledWith({
       from: 'RunFlow <otavio@runflow.club>',
-      to: 'user@example.com',
+      to: 'aaaauser@example.com',
       subject: 'Convite para Test Org — RunFlow',
       html: '<html>mock</html>',
     })
