@@ -258,8 +258,7 @@ describe('Organizations API - Complete Test Suite', () => {
         {
           primaryColor: '#111184',
           secondaryColor: '#fff'
-        },
-        testUsers[0].token
+        }
       )
       
        expect(response.status).toBe(401)
