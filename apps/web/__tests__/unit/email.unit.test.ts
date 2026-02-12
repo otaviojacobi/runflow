@@ -94,9 +94,7 @@ describe('sendInviteEmail', () => {
     await sendInviteEmail(baseParams)
 
     expect(mockedGetInviteEmailHtml).toHaveBeenCalledWith(
-      expect.objectContaining({
-        inviteUrl: 'https://app.runflow.com/invite/abc123',
-      })
+      { "inviteUrl": "https://app.runflow.com/pt/invite/abc123", "organizationName": "Test Org", "role": "TRAINER" }
     )
   })
 
@@ -107,9 +105,7 @@ describe('sendInviteEmail', () => {
     await sendInviteEmail(baseParams)
 
     expect(mockedGetInviteEmailHtml).toHaveBeenCalledWith(
-      expect.objectContaining({
-        inviteUrl: 'http://localhost:3000/invite/abc123',
-      })
+      { "inviteUrl": "http://localhost:3000/pt/invite/abc123", "organizationName": "Test Org", "role": "TRAINER" }
     )
   })
 })
