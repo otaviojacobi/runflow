@@ -78,14 +78,14 @@ describe('Organizations API - Complete Test Suite', () => {
     for (const orgId of testOrgs) {
       try {
         await prisma.organization.delete({ where: { id: orgId } })
-      } catch {}
+      } catch { }
     }
 
     for (const user of testUsers) {
       try {
         await prisma.userProfile.delete({ where: { id: user.id } })
         await supabase.auth.admin.deleteUser(user.id)
-      } catch {}
+      } catch { }
     }
 
     await prisma.$disconnect()
@@ -176,6 +176,111 @@ describe('Organizations API - Complete Test Suite', () => {
 
       expect(response.status).toBe(401)
     })
+  })
+
+  describe('Studio test -> Organization', () => {
+    let orgId: string
+
+    beforeAll(async () => {
+      const { data } = await apiCall(
+        'POST',
+        '/api/organizations',
+        {
+          name: 'Test Organization',
+          description: 'A test organization',
+          logo: 'https://example.com/logo.png'
+        },
+        testUsers[0].token
+      )
+
+      orgId = data.id;
+
+    })
+
+    it('can modify colors', async () => {
+      const { response, data } = await apiCall(
+        'PATCH',
+        `/api/organizations/${orgId}/studio`,
+        {
+          primaryColor: '#111184',
+          secondaryColor: '#fff'
+        },
+        testUsers[0].token
+      )
+
+      expect(data.organization.primaryColor).toBe('#111184')
+      expect(data.organization.secondaryColor).toBe('#fff')
+      expect(response.status).toBe(200)
+    })
+
+    it('wrong json', async () => {
+      const { response, data } = await apiCall(
+        'PATCH',
+        `/api/organizations/${orgId}/studio`,
+        'bla',
+        testUsers[0].token
+      )
+
+      expect(response.status).toBe(400)
+    })
+
+     it('wrong body', async () => {
+      const { response } = await apiCall(
+        'PATCH',
+        `/api/organizations/${orgId}/studio`,
+        {
+          primaryColor: '111184'
+        },
+        testUsers[0].token
+      )
+
+       expect(response.status).toBe(400)
+     })
+
+     it('wrong property name', async () => {
+      const { response } = await apiCall(
+        'PATCH',
+        `/api/organizations/${orgId}/studio`,
+        {
+          Color: '#111184'
+        },
+        testUsers[0].token
+      )
+
+       expect(response.status).toBe(400)
+     })
+
+     it('user unauthenticated', async () => {
+
+      const { response, data } = await apiCall(
+        'PATCH',
+        `/api/organizations/${orgId}/studio`,
+        {
+          primaryColor: '#111184',
+          secondaryColor: '#fff'
+        }
+      )
+      
+       expect(response.status).toBe(401)
+     })
+
+
+    it('user unauthorized (only organization owners can use the studio)', async () => {
+      const { response } = await apiCall(
+        'PATCH',
+        `/api/organizations/${orgId}/studio`,
+        {
+          primaryColor: '#111184',
+          secondaryColor: '#fff'
+        },
+        testUsers[1].token
+      )
+
+      expect(response.status).toBe(403)
+    })
+
+
+
   })
 
   describe('GET /api/organizations - List Organizations', () => {
