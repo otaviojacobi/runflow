@@ -5,7 +5,7 @@ import {
   updateOrganizationSchema,
   type OrganizationResponse
 } from '@repo/schemas/organization'
-import { ZodError } from 'zod'
+import { ZodError } from '@repo/schemas/zod'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })

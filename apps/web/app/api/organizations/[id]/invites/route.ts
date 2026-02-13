@@ -5,7 +5,7 @@ import {
   createInviteSchema,
   type InviteResponse
 } from '@repo/schemas/organization'
-import { ZodError } from 'zod'
+import { ZodError } from '@repo/schemas/zod'
 import { generateInviteToken, getInviteExpirationDate } from '@/lib/utils/token'
 import { sendInviteEmail } from '@/lib/email'
 

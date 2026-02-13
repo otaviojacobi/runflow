@@ -8,7 +8,7 @@ import type {
 } from '@repo/schemas/organization';
 import type { OrganizationTheme } from '@repo/schemas/theme';
 
-const API_URL = Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'https://www.runflow.club';
 
 // Helper to get auth headers
 async function getAuthHeaders(): Promise<HeadersInit> {

@@ -5,7 +5,7 @@ import {
   createOrganizationSchema,
   type OrganizationResponse
 } from '@repo/schemas/organization'
-import { ZodError } from 'zod'
+import { ZodError } from '@repo/schemas/zod'
 import { generateUniqueSlug } from '@/lib/utils/slug'
 
 export async function OPTIONS() {

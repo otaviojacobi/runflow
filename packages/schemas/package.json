@@ -8,7 +8,8 @@
     "./organization": "./src/organization.ts",
     "./user": "./src/user.ts",
     "./theme": "./src/theme.ts",
-    "./training": "./src/training.ts"
+    "./training": "./src/training.ts",
+    "./zod": "./src/zod.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

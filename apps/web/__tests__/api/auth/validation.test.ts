@@ -1,5 +1,5 @@
 import { registerSchema, loginSchema } from '@repo/schemas/auth'
-import { ZodError } from 'zod'
+import { ZodError } from '@repo/schemas/zod'
 
 describe('Auth Validation Schemas', () => {
   describe('registerSchema', () => {

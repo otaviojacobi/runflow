@@ -8,7 +8,7 @@ import {
   TrainingType,
   TrainingStatus,
 } from '@repo/schemas/training'
-import { ZodError } from 'zod'
+import { ZodError } from '@repo/schemas/zod'
 
 describe('Training Validation Schemas', () => {
   describe('createTrainingSchema', () => {
