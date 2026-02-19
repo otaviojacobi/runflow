@@ -9,6 +9,8 @@ export interface Organization {
   slug: string
   description?: string | null
   logo?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
   role?: string
   joinedAt?: string
 }

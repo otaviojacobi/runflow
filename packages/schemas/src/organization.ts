@@ -9,12 +9,16 @@ export const createOrganizationSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().optional(),
   logo: z.string().url().optional(),
+  primaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
+  secondaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
 })
 
 export const updateOrganizationSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   description: z.string().optional(),
   logo: z.string().url().optional(),
+  primaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
+  secondaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
 })
 
 export const organizationResponseSchema = z.object({
@@ -23,6 +27,8 @@ export const organizationResponseSchema = z.object({
   slug: z.string(),
   description: z.string().nullable(),
   logo: z.string().nullable(),
+  primaryColor: z.string().nullable(),
+  secondaryColor: z.string().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 })

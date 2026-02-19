@@ -353,7 +353,12 @@
       "loginOrRegister": "Sign in or create an account to accept this invite.",
       "createAccount": "Create account",
       "emailMismatch": "This invite was sent to a different email than yours"
-    }
+    },
+    "Studio": "Studio",
+    "primaryColor": "Primary Color",
+    "secondaryColor": "Secondary Color",
+    "saveColors": "Save Colors",
+    "savingColors": "Saving..."
   },
   "Settings": {
     "title": "Settings",

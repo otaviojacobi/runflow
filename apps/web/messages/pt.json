@@ -353,7 +353,12 @@
       "loginOrRegister": "Faça login ou crie uma conta para aceitar este convite.",
       "createAccount": "Criar conta",
       "emailMismatch": "Este convite foi enviado para um e-mail diferente do seu"
-    }
+    },
+    "Studio": "Estúdio",
+    "primaryColor": "Cor Primária",
+    "secondaryColor": "Cor Secundária",
+    "saveColors": "Salvar Cores",
+    "savingColors": "Salvando..."
   },
   "Settings": {
     "title": "Configurações",
