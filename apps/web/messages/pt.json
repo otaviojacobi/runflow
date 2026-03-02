@@ -358,6 +358,8 @@
     "primaryColor": "Cor Primária",
     "secondaryColor": "Cor Secundária",
     "saveColors": "Salvar Cores",
+    "savingColors": "Salvando cores...",
+    "colorsAlreadySaved": "Cores já salvas",
     "savingColors": "Salvando..."
   },
   "Settings": {
