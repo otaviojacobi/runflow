@@ -49,7 +49,7 @@ function MainTabs() {
         return;
       }
 
-      const response = await fetch(`${Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000'}/api/users/me`, {
+      const response = await fetch(`${Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'https://www.runflow.club'}/api/users/me`, {
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
         },

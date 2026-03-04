@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { loginSchema, type LoginResponse, type AuthErrorResponse } from '@repo/schemas/auth'
-import { ZodError } from 'zod'
+import { ZodError } from '@repo/schemas/zod'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })

@@ -41,10 +41,11 @@ export default {
       }
     ]
   },
+  plugins: [
+    'expo-font'
+  ],
   extra: {
     apiUrl: process.env.EXPO_PUBLIC_API_URL,
-    supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
-    supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
     turnstileSiteKey: process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY,
     googleAndroidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
     googleIosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,

@@ -6,7 +6,7 @@ import {
   updateTrainingDetailsSchema,
   type TrainingResponse,
 } from '@repo/schemas/training'
-import { ZodError } from 'zod'
+import { ZodError } from '@repo/schemas/zod'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
