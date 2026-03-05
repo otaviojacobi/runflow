@@ -355,6 +355,9 @@
       "emailMismatch": "This invite was sent to a different email than yours"
     },
     "Studio": "Studio",
+    "studioAccessDenied": "Access Denied",
+    "studioAccessDeniedDescription": "Only organization owners can access the Studio. Contact your organization owner if you need changes to the app appearance.",
+    "backToDashboard": "Back to Dashboard",
     "primaryColor": "Primary Color",
     "secondaryColor": "Secondary Color",
     "saveColors": "Save Colors",

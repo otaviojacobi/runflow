@@ -355,6 +355,9 @@
       "emailMismatch": "Este convite foi enviado para um e-mail diferente do seu"
     },
     "Studio": "Estúdio",
+    "studioAccessDenied": "Acesso Negado",
+    "studioAccessDeniedDescription": "Apenas proprietários da organização podem acessar o Estúdio. Entre em contato com o proprietário da sua organização se precisar de alterações na aparência do app.",
+    "backToDashboard": "Voltar ao Painel",
     "primaryColor": "Cor Primária",
     "secondaryColor": "Cor Secundária",
     "saveColors": "Salvar Cores",

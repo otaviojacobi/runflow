@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useOrganization } from '@/contexts/OrganizationContext'
 import { HexColorPicker } from "react-colorful";
+import { ShieldAlert } from 'lucide-react'
 
 function PhonePreview({ primaryColor, secondaryColor, orgName }: { primaryColor: string; secondaryColor: string; orgName: string }) {
   const quickActions = [
@@ -206,13 +208,18 @@ function PhonePreview({ primaryColor, secondaryColor, orgName }: { primaryColor:
 }
 
 export default function OrganizationSetupPage() {
+  const router = useRouter()
   const t = useTranslations('Organizations')
-  const { currentOrganization, loading: orgLoading, updateCurrentOrganizationColors } = useOrganization()
+  const { currentOrganization, organizations, loading: orgLoading, updateCurrentOrganizationColors } = useOrganization()
   const [loading, setLoading] = useState(false)
 
   const [draftPrimaryColor, setDraftPrimaryColor] = useState('#007bff')
   const [draftSecondaryColor, setDraftSecondaryColor] = useState('#6c757d')
   const [synced, setSynced] = useState(false)
+
+  const userRole = currentOrganization
+    ? (organizations.find(org => org.id === currentOrganization.id)?.role || 'ATHLETE')
+    : 'ATHLETE'
 
   useEffect(() => {
     if (currentOrganization) {
@@ -278,6 +285,27 @@ export default function OrganizationSetupPage() {
           </div>
           <div className="w-[260px] h-[520px] bg-gray-200 rounded-[2.5rem]" />
         </div>
+      </div>
+    )
+  }
+
+  if (userRole !== 'OWNER') {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Card className="max-w-md w-full text-center">
+          <CardHeader className="flex flex-col items-center gap-3">
+            <ShieldAlert className="h-12 w-12 text-destructive" />
+            <CardTitle>{t('studioAccessDenied')}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              {t('studioAccessDeniedDescription')}
+            </p>
+            <Button onClick={() => router.push('/dashboard')} variant="default">
+              {t('backToDashboard')}
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     )
   }
