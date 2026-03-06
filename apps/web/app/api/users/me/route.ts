@@ -71,7 +71,9 @@ export async function GET(request: NextRequest) {
         name: userProfile.currentOrganization.name,
         slug: userProfile.currentOrganization.slug,
         description: userProfile.currentOrganization.description,
-        logo: userProfile.currentOrganization.logo
+        logo: userProfile.currentOrganization.logo,
+        primaryColor: userProfile.currentOrganization.primaryColor || null,
+        secondaryColor: userProfile.currentOrganization.secondaryColor || null
       } : null,
       organizations: organizations.map(om => ({
         id: om.organization.id,
@@ -79,6 +81,8 @@ export async function GET(request: NextRequest) {
         slug: om.organization.slug,
         description: om.organization.description,
         logo: om.organization.logo,
+        primaryColor: om.organization.primaryColor || null,
+        secondaryColor: om.organization.secondaryColor || null,
         role: om.role,
         joinedAt: om.joinedAt.toISOString()
       })),

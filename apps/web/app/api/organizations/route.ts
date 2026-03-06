@@ -45,6 +45,8 @@ export async function GET(request: NextRequest) {
       slug: org.slug,
       description: org.description,
       logo: org.logo,
+      primaryColor: org.primaryColor,
+      secondaryColor: org.secondaryColor,
       createdAt: org.createdAt.toISOString(),
       updatedAt: org.updatedAt.toISOString(),
       role: org.members[0]?.role || 'ATHLETE'
@@ -119,6 +121,8 @@ export async function POST(request: NextRequest) {
       slug: organization.slug,
       description: organization.description,
       logo: organization.logo,
+      primaryColor: organization.primaryColor,
+      secondaryColor: organization.secondaryColor,
       createdAt: organization.createdAt.toISOString(),
       updatedAt: organization.updatedAt.toISOString(),
     }

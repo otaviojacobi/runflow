@@ -49,6 +49,8 @@ export async function GET(
       slug: organization.slug,
       description: organization.description,
       logo: organization.logo,
+      primaryColor: organization.primaryColor,
+      secondaryColor: organization.secondaryColor,
       createdAt: organization.createdAt.toISOString(),
       updatedAt: organization.updatedAt.toISOString(),
     }
@@ -107,6 +109,8 @@ export async function PUT(
       slug: organization.slug,
       description: organization.description,
       logo: organization.logo,
+      primaryColor: organization.primaryColor,
+      secondaryColor: organization.secondaryColor,
       createdAt: organization.createdAt.toISOString(),
       updatedAt: organization.updatedAt.toISOString(),
     }
