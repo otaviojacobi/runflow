@@ -36,8 +36,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/login?error=auth_failed', requestUrl.origin));
     }
 
+    // Detect recovery flow from query param OR JWT AMR claims
+    let isRecovery = type === 'recovery';
+    if (!isRecovery && data.session?.access_token) {
+      try {
+        const payload = JSON.parse(
+          Buffer.from(data.session.access_token.split('.')[1]!, 'base64').toString()
+        );
+        isRecovery = payload.amr?.some((entry: { method: string }) => entry.method === 'recovery');
+      } catch {
+        // Ignore JWT parsing errors
+      }
+    }
+
     // If this is a password recovery, redirect to reset-password page
-    if (type === 'recovery') {
+    if (isRecovery) {
       return NextResponse.redirect(new URL('/reset-password', requestUrl.origin));
     }
 
