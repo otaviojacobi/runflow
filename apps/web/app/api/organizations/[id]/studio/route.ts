@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
+import { getSignedLogoUrl } from "@/lib/blob";
 import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 
@@ -61,7 +62,12 @@ export async function PATCH(
             }
         })
 
-        return NextResponse.json({ organization: updatedOrganization }, { status: 200 })
+        return NextResponse.json({
+            organization: {
+                ...updatedOrganization,
+                logo: getSignedLogoUrl(updatedOrganization.logo),
+            }
+        }, { status: 200 })
     } catch (error) {
         if(error instanceof z.ZodError){
             return NextResponse.json(

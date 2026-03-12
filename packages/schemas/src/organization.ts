@@ -8,7 +8,6 @@ export const InviteStatus = z.enum(['PENDING', 'ACCEPTED', 'EXPIRED', 'CANCELLED
 export const createOrganizationSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().optional(),
-  logo: z.string().url().optional(),
   primaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
   secondaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
 })
@@ -16,7 +15,6 @@ export const createOrganizationSchema = z.object({
 export const updateOrganizationSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   description: z.string().optional(),
-  logo: z.string().url().optional(),
   primaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
   secondaryColor: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
 })

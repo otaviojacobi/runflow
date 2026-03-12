@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/db'
 import { switchOrganizationSchema } from '@repo/schemas/organization'
 import { ZodError } from '@repo/schemas/zod'
+import { getSignedLogoUrl } from '@/lib/blob'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
         name: updatedProfile.currentOrganization.name,
         slug: updatedProfile.currentOrganization.slug,
         description: updatedProfile.currentOrganization.description,
-        logo: updatedProfile.currentOrganization.logo
+        logo: getSignedLogoUrl(updatedProfile.currentOrganization.logo)
       } : null,
       role: membership.role
     }, { status: 200 })

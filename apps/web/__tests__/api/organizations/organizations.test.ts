@@ -99,9 +99,8 @@ describe('Organizations API - Complete Test Suite', () => {
         {
           name: 'Test Organization',
           description: 'A test organization',
-          logo: 'https://example.com/logo.png'
         },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       expect(response.status).toBe(201)
@@ -109,7 +108,7 @@ describe('Organizations API - Complete Test Suite', () => {
       expect(data.name).toBe('Test Organization')
       expect(data.slug).toBe('test-organization')
       expect(data.description).toBe('A test organization')
-      expect(data.logo).toBe('https://example.com/logo.png')
+      expect(data.logo).toBeNull()
 
       testOrgs.push(data.id)
 
@@ -117,7 +116,7 @@ describe('Organizations API - Complete Test Suite', () => {
       const membership = await prisma.organizationMember.findFirst({
         where: {
           organizationId: data.id,
-          userId: testUsers[0].id
+          userId: testUsers[0]!.id
         }
       })
 
@@ -126,7 +125,7 @@ describe('Organizations API - Complete Test Suite', () => {
 
       // Verify user's current organization was set
       const userProfile = await prisma.userProfile.findUnique({
-        where: { id: testUsers[0].id }
+        where: { id: testUsers[0]!.id }
       })
       expect(userProfile?.currentOrganizationId).toBe(data.id)
     })
@@ -137,7 +136,7 @@ describe('Organizations API - Complete Test Suite', () => {
         'POST',
         '/api/organizations',
         { name: 'Duplicate Name Org' },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       testOrgs.push(data1.id)
@@ -148,7 +147,7 @@ describe('Organizations API - Complete Test Suite', () => {
         'POST',
         '/api/organizations',
         { name: 'Duplicate Name Org' },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       testOrgs.push(data2.id)
@@ -160,7 +159,7 @@ describe('Organizations API - Complete Test Suite', () => {
         'POST',
         '/api/organizations',
         { description: 'Missing name' },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       expect(response.status).toBe(400)
@@ -188,9 +187,8 @@ describe('Organizations API - Complete Test Suite', () => {
         {
           name: 'Test Organization',
           description: 'A test organization',
-          logo: 'https://example.com/logo.png'
         },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       orgId = data.id;
@@ -205,7 +203,7 @@ describe('Organizations API - Complete Test Suite', () => {
           primaryColor: '#111184',
           secondaryColor: '#fff'
         },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       expect(data.organization.primaryColor).toBe('#111184')
@@ -218,7 +216,7 @@ describe('Organizations API - Complete Test Suite', () => {
         'PATCH',
         `/api/organizations/${orgId}/studio`,
         'bla',
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       expect(response.status).toBe(400)
@@ -231,7 +229,7 @@ describe('Organizations API - Complete Test Suite', () => {
         {
           primaryColor: '111184'
         },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
        expect(response.status).toBe(400)
@@ -244,7 +242,7 @@ describe('Organizations API - Complete Test Suite', () => {
         {
           Color: '#111184'
         },
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
        expect(response.status).toBe(400)
@@ -273,7 +271,7 @@ describe('Organizations API - Complete Test Suite', () => {
           primaryColor: '#111184',
           secondaryColor: '#fff'
         },
-        testUsers[1].token
+        testUsers[1]!.token
       )
 
       expect(response.status).toBe(403)
@@ -304,8 +302,8 @@ describe('Organizations API - Complete Test Suite', () => {
       // Add user as owner of org1 and member of org2
       await prisma.organizationMember.createMany({
         data: [
-          { organizationId: orgId1, userId: testUsers[0].id, role: 'OWNER' },
-          { organizationId: orgId2, userId: testUsers[0].id, role: 'ATHLETE' }
+          { organizationId: orgId1, userId: testUsers[0]!.id, role: 'OWNER' },
+          { organizationId: orgId2, userId: testUsers[0]!.id, role: 'ATHLETE' }
         ]
       })
     })
@@ -315,7 +313,7 @@ describe('Organizations API - Complete Test Suite', () => {
         'GET',
         '/api/organizations',
         undefined,
-        testUsers[0].token
+        testUsers[0]!.token
       )
 
       expect(response.status).toBe(200)
@@ -326,9 +324,9 @@ describe('Organizations API - Complete Test Suite', () => {
       const org2 = data.find((o: any) => o.id === orgId2)
 
       expect(org1).toBeDefined()
-      expect(org1.role).toBe('OWNER')
+      expect(org1!.role).toBe('OWNER')
       expect(org2).toBeDefined()
-      expect(org2.role).toBe('ATHLETE')
+      expect(org2!.role).toBe('ATHLETE')
     })
 
     it('should return empty array for user with no organizations', async () => {
@@ -336,7 +334,7 @@ describe('Organizations API - Complete Test Suite', () => {
         'GET',
         '/api/organizations',
         undefined,
-        testUsers[2].token // outsider
+        testUsers[2]!.token // outsider
       )
 
       expect(response.status).toBe(200)
@@ -357,7 +355,7 @@ describe('Organizations API - Complete Test Suite', () => {
       await prisma.organizationMember.create({
         data: {
           organizationId,
-          userId: testUsers[0].id,
+          userId: testUsers[0]!.id,
           role: 'OWNER'
         }
       })
@@ -369,7 +367,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'GET',
           `/api/organizations/${organizationId}`,
           undefined,
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -382,7 +380,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'GET',
           `/api/organizations/${organizationId}`,
           undefined,
-          testUsers[2].token // outsider
+          testUsers[2]!.token // outsider
         )
 
         expect(response.status).toBe(404)
@@ -395,7 +393,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'PUT',
           `/api/organizations/${organizationId}`,
           { name: 'Updated Name', description: 'Updated description' },
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -408,7 +406,7 @@ describe('Organizations API - Complete Test Suite', () => {
         await prisma.organizationMember.create({
           data: {
             organizationId,
-            userId: testUsers[1].id,
+            userId: testUsers[1]!.id,
             role: 'ATHLETE'
           }
         })
@@ -417,7 +415,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'PUT',
           `/api/organizations/${organizationId}`,
           { name: 'Should Fail' },
-          testUsers[1].token
+          testUsers[1]!.token
         )
 
         expect(response.status).toBe(403)
@@ -430,7 +428,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'DELETE',
           `/api/organizations/${organizationId}`,
           undefined,
-          testUsers[1].token
+          testUsers[1]!.token
         )
 
         expect(response.status).toBe(403)
@@ -441,7 +439,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'DELETE',
           `/api/organizations/${organizationId}`,
           undefined,
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -469,12 +467,12 @@ describe('Organizations API - Complete Test Suite', () => {
       // Add owner and athlete
       await prisma.organizationMember.createMany({
         data: [
-          { organizationId, userId: testUsers[0].id, role: 'OWNER' },
-          { organizationId, userId: testUsers[1].id, role: 'ATHLETE' }
+          { organizationId, userId: testUsers[0]!.id, role: 'OWNER' },
+          { organizationId, userId: testUsers[1]!.id, role: 'ATHLETE' }
         ]
       })
 
-      athleteUserId = testUsers[1].id
+      athleteUserId = testUsers[1]!.id
     })
 
     describe('GET /api/organizations/[id]/members', () => {
@@ -483,7 +481,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'GET',
           `/api/organizations/${organizationId}/members`,
           undefined,
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -491,8 +489,8 @@ describe('Organizations API - Complete Test Suite', () => {
         expect(data.members.length).toBe(2)
         expect(data.pagination).toBeDefined()
 
-        const owner = data.members.find((m: any) => m.userId === testUsers[0].id)
-        const athlete = data.members.find((m: any) => m.userId === testUsers[1].id)
+        const owner = data.members.find((m: any) => m.userId === testUsers[0]!.id)
+        const athlete = data.members.find((m: any) => m.userId === testUsers[1]!.id)
 
         expect(owner.role).toBe('OWNER')
         expect(athlete.role).toBe('ATHLETE')
@@ -503,7 +501,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'GET',
           `/api/organizations/${organizationId}/members?role=OWNER`,
           undefined,
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -516,7 +514,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'GET',
           `/api/organizations/${organizationId}/members`,
           undefined,
-          testUsers[2].token // outsider
+          testUsers[2]!.token // outsider
         )
 
         expect(response.status).toBe(403)
@@ -529,7 +527,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'PUT',
           `/api/organizations/${organizationId}/members/${athleteUserId}`,
           { role: 'TRAINER' },
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -539,9 +537,9 @@ describe('Organizations API - Complete Test Suite', () => {
       it('should prevent changing role of last owner', async () => {
         const { response, data } = await apiCall(
           'PUT',
-          `/api/organizations/${organizationId}/members/${testUsers[0].id}`,
+          `/api/organizations/${organizationId}/members/${testUsers[0]!.id}`,
           { role: 'ATHLETE' },
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(400)
@@ -551,9 +549,9 @@ describe('Organizations API - Complete Test Suite', () => {
       it('should reject role update from non-owner', async () => {
         const { response } = await apiCall(
           'PUT',
-          `/api/organizations/${organizationId}/members/${testUsers[0].id}`,
+          `/api/organizations/${organizationId}/members/${testUsers[0]!.id}`,
           { role: 'ATHLETE' },
-          testUsers[1].token
+          testUsers[1]!.token
         )
 
         expect(response.status).toBe(403)
@@ -566,7 +564,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'DELETE',
           `/api/organizations/${organizationId}/members/${athleteUserId}`,
           undefined,
-          testUsers[1].token
+          testUsers[1]!.token
         )
 
         expect(response.status).toBe(200)
@@ -586,9 +584,9 @@ describe('Organizations API - Complete Test Suite', () => {
       it('should prevent removing last owner', async () => {
         const { response, data } = await apiCall(
           'DELETE',
-          `/api/organizations/${organizationId}/members/${testUsers[0].id}`,
+          `/api/organizations/${organizationId}/members/${testUsers[0]!.id}`,
           undefined,
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(400)
@@ -612,8 +610,8 @@ describe('Organizations API - Complete Test Suite', () => {
 
       await prisma.organizationMember.createMany({
         data: [
-          { organizationId, userId: testUsers[0].id, role: 'OWNER' },
-          { organizationId, userId: testUsers[1].id, role: 'TRAINER' }
+          { organizationId, userId: testUsers[0]!.id, role: 'OWNER' },
+          { organizationId, userId: testUsers[1]!.id, role: 'TRAINER' }
         ]
       })
     })
@@ -626,7 +624,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'POST',
           `/api/organizations/${organizationId}/invites`,
           { email: newUserEmail, role: 'ATHLETE' },
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(201)
@@ -644,7 +642,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'POST',
           `/api/organizations/${organizationId}/invites`,
           { email: `trainer-invite-${Date.now()}@example.com`, role: 'ATHLETE' },
-          testUsers[1].token // trainer
+          testUsers[1]!.token // trainer
         )
 
         expect(response.status).toBe(201)
@@ -655,7 +653,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'POST',
           `/api/organizations/${organizationId}/invites`,
           { email: newUserEmail, role: 'TRAINER' },
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(400)
@@ -666,8 +664,8 @@ describe('Organizations API - Complete Test Suite', () => {
         const { response, data } = await apiCall(
           'POST',
           `/api/organizations/${organizationId}/invites`,
-          { email: testUsers[1].email, role: 'ATHLETE' },
-          testUsers[0].token
+          { email: testUsers[1]!.email, role: 'ATHLETE' },
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(400)
@@ -681,7 +679,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'GET',
           `/api/organizations/${organizationId}/invites`,
           undefined,
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -698,14 +696,14 @@ describe('Organizations API - Complete Test Suite', () => {
         testOrgs.push(tempOrg.id)
 
         await prisma.organizationMember.create({
-          data: { organizationId: tempOrg.id, userId: testUsers[2].id, role: 'ATHLETE' }
+          data: { organizationId: tempOrg.id, userId: testUsers[2]!.id, role: 'ATHLETE' }
         })
 
         const { response } = await apiCall(
           'GET',
           `/api/organizations/${tempOrg.id}/invites`,
           undefined,
-          testUsers[2].token
+          testUsers[2]!.token
         )
 
         expect(response.status).toBe(403)
@@ -813,7 +811,7 @@ describe('Organizations API - Complete Test Suite', () => {
             organizationId,
             email: `delete-test-${Date.now()}@example.com`,
             role: 'ATHLETE',
-            invitedById: testUsers[0].id,
+            invitedById: testUsers[0]!.id,
             token: `delete-token-${Date.now()}`,
             status: 'PENDING',
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -827,7 +825,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'DELETE',
           `/api/organizations/${organizationId}/invites/${deleteInviteId}`,
           undefined,
-          testUsers[0].token
+          testUsers[0]!.token
         )
 
         expect(response.status).toBe(200)
@@ -846,7 +844,7 @@ describe('Organizations API - Complete Test Suite', () => {
             organizationId,
             email: `another-${Date.now()}@example.com`,
             role: 'ATHLETE',
-            invitedById: testUsers[0].id,
+            invitedById: testUsers[0]!.id,
             token: `another-token-${Date.now()}`,
             status: 'PENDING',
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -857,7 +855,7 @@ describe('Organizations API - Complete Test Suite', () => {
           'DELETE',
           `/api/organizations/${organizationId}/invites/${invite.id}`,
           undefined,
-          testUsers[1].token // trainer (not owner)
+          testUsers[1]!.token // trainer (not owner)
         )
 
         expect(response.status).toBe(403)
@@ -885,7 +883,7 @@ describe('Organizations API - Complete Test Suite', () => {
         testOrgs.push(org.id)
 
         await prisma.organizationMember.create({
-          data: { organizationId: org.id, userId: testUsers[0].id, role: 'OWNER' }
+          data: { organizationId: org.id, userId: testUsers[0]!.id, role: 'OWNER' }
         })
 
         await prisma.organizationInvite.create({
@@ -893,7 +891,7 @@ describe('Organizations API - Complete Test Suite', () => {
             organizationId: org.id,
             email: userEmail,
             role: i === 0 ? 'TRAINER' : 'ATHLETE',
-            invitedById: testUsers[0].id,
+            invitedById: testUsers[0]!.id,
             token: `context-token-${i}-${Date.now()}`,
             status: 'PENDING',
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)

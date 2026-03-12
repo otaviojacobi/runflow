@@ -363,7 +363,18 @@
     "saveColors": "Salvar Cores",
     "savingColors": "Salvando cores...",
     "colorsAlreadySaved": "Cores já salvas",
-    "savingColors": "Salvando..."
+    "savingColors": "Salvando...",
+    "colors": "Cores",
+    "organizationLogo": "Logo da Organização",
+    "logoDropzoneText": "Arraste e solte seu logo aqui, ou clique para procurar",
+    "logoDropzoneHint": "PNG, JPG, WebP ou SVG. Máx 2MB.",
+    "uploadingLogo": "Enviando...",
+    "removeLogo": "Remover",
+    "logoUploadError": "Falha ao enviar logo",
+    "logoDeleteError": "Falha ao remover logo",
+    "saveChanges": "Salvar Alterações",
+    "saving": "Salvando...",
+    "allChangesSaved": "Todas as alterações salvas"
   },
   "Settings": {
     "title": "Configurações",

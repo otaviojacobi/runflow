@@ -26,7 +26,7 @@ export async function createVerifiedTestUser(params: {
   })
 
   if (createError || !createData.user) {
-    return { data: createData, error: createError }
+    return { data: { user: createData.user, session: null }, error: createError }
   }
 
   // Sign in to get a session

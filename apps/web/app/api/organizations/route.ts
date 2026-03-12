@@ -7,6 +7,7 @@ import {
 } from '@repo/schemas/organization'
 import { ZodError } from '@repo/schemas/zod'
 import { generateUniqueSlug } from '@/lib/utils/slug'
+import { getSignedLogoUrl } from '@/lib/blob'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
       name: org.name,
       slug: org.slug,
       description: org.description,
-      logo: org.logo,
+      logo: getSignedLogoUrl(org.logo),
       primaryColor: org.primaryColor,
       secondaryColor: org.secondaryColor,
       createdAt: org.createdAt.toISOString(),
@@ -92,7 +93,6 @@ export async function POST(request: NextRequest) {
         data: {
           name: validatedData.name,
           description: validatedData.description,
-          logo: validatedData.logo,
           slug,
         }
       })
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
       name: organization.name,
       slug: organization.slug,
       description: organization.description,
-      logo: organization.logo,
+      logo: getSignedLogoUrl(organization.logo),
       primaryColor: organization.primaryColor,
       secondaryColor: organization.secondaryColor,
       createdAt: organization.createdAt.toISOString(),
