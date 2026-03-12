@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet, TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface PasswordInputProps extends Omit<TextInputProps, 'secureTextEntry'> {
   value: string;
@@ -11,6 +12,7 @@ interface PasswordInputProps extends Omit<TextInputProps, 'secureTextEntry'> {
 
 export function PasswordInput({ value, onChangeText, style, ...props }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const { theme } = useTheme();
 
   return (
     <View style={styles.container}>
@@ -28,7 +30,7 @@ export function PasswordInput({ value, onChangeText, style, ...props }: Password
         <Ionicons
           name={showPassword ? 'eye-off-outline' : 'eye-outline'}
           size={24}
-          color="#9CA3AF"
+          color={theme.mutedForeground}
         />
       </TouchableOpacity>
     </View>

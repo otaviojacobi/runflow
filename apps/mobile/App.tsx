@@ -9,7 +9,7 @@ import Constants from 'expo-constants';
 import './i18n'; // Initialize i18n
 import { supabase } from './lib/supabase';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
-import { OrganizationProvider } from './contexts/OrganizationContext';
+import { OrganizationProvider, useOrganization } from './contexts/OrganizationContext';
 
 // Auth Screens
 import { LoginScreen } from './screens/LoginScreen';
@@ -33,6 +33,7 @@ const Tab = createBottomTabNavigator();
 function MainTabs() {
   const { theme } = useTheme();
   const { t } = useTranslation();
+  const { refreshOrganizations } = useOrganization();
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
   const [organizationName, setOrganizationName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -96,6 +97,11 @@ function MainTabs() {
   return (
     <Tab.Navigator
       key={`tabs-${currentUserRole}-${organizationName}`}
+      screenListeners={{
+        tabPress: () => {
+          refreshOrganizations().catch(() => {});
+        },
+      }}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'grid-outline';

@@ -82,8 +82,8 @@ export function ResetPasswordScreen() {
   if (success) {
     return (
       <View style={[styles.successContainer, { backgroundColor: theme.background }]}>
-        <View style={[styles.successIcon, { backgroundColor: '#10B981' }]}>
-          <Ionicons name="checkmark" size={32} color="white" />
+        <View style={[styles.successIcon, { backgroundColor: theme.primary }]}>
+          <Ionicons name="checkmark" size={32} color={theme.primaryForeground} />
         </View>
         <Text style={[styles.successTitle, { color: theme.foreground }]}>
           {t('Auth.resetPassword.successTitle', 'Password Reset!')}

@@ -5,14 +5,18 @@ import {
   loadTheme,
   saveTheme,
   clearTheme,
-  fetchOrganizationTheme,
 } from '../lib/theme';
+
+interface OrgColors {
+  primaryColor?: string | null;
+  secondaryColor?: string | null;
+}
 
 interface ThemeContextType {
   theme: OrganizationTheme;
   isLoading: boolean;
   currentOrganizationId: string | null;
-  updateTheme: (organizationId: string) => Promise<void>;
+  updateTheme: (organizationId: string, colors?: OrgColors) => Promise<void>;
   resetTheme: () => Promise<void>;
 }
 
@@ -45,32 +49,31 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     }
   };
 
-  const updateTheme = async (organizationId: string) => {
+  const updateTheme = async (organizationId: string, colors?: OrgColors) => {
     try {
-      // Only fetch if switching to a different organization
-      if (organizationId === currentOrganizationId) {
-        return;
-      }
-
       setIsLoading(true);
 
-      // Try to fetch theme from backend
-      const fetchedTheme = await fetchOrganizationTheme(organizationId);
+      console.log('[THEME DEBUG] updateTheme called with:', { organizationId, colors });
 
-      if (fetchedTheme) {
-        const newTheme = { ...defaultTheme, ...fetchedTheme };
-        setTheme(newTheme);
-        await saveTheme(fetchedTheme, organizationId);
-        setCurrentOrganizationId(organizationId);
-      } else {
-        // If no custom theme, use default
-        setTheme(defaultTheme);
-        await saveTheme({}, organizationId);
-        setCurrentOrganizationId(organizationId);
+      // Build partial theme from organization color fields
+      const partialTheme: Partial<OrganizationTheme> = {};
+      if (colors?.primaryColor) {
+        partialTheme.primary = colors.primaryColor;
+        partialTheme.ring = colors.primaryColor;
       }
+      if (colors?.secondaryColor) {
+        partialTheme.secondary = colors.secondaryColor;
+      }
+
+      console.log('[THEME DEBUG] partialTheme built:', partialTheme);
+
+      const newTheme = { ...defaultTheme, ...partialTheme };
+      console.log('[THEME DEBUG] final theme primary:', newTheme.primary, 'secondary:', newTheme.secondary);
+      setTheme(newTheme);
+      await saveTheme(partialTheme, organizationId);
+      setCurrentOrganizationId(organizationId);
     } catch (error) {
       console.error('Failed to update theme:', error);
-      // Fallback to default theme
       setTheme(defaultTheme);
     } finally {
       setIsLoading(false);

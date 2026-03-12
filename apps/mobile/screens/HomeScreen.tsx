@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../contexts/ThemeContext';
+import { defaultTheme } from '../lib/theme';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
 import { Ionicons } from '@expo/vector-icons';
@@ -56,7 +57,7 @@ export function HomeScreen() {
     <ScrollView style={{ flex: 1, backgroundColor: theme.background }}>
       {/* Hero Section */}
       <LinearGradient
-        colors={['#06B6D4', '#3B82F6', '#8B5CF6']}
+        colors={[theme.primary, theme.secondary !== defaultTheme.secondary ? theme.secondary : theme.primary + 'CC']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.heroSection}
@@ -100,18 +101,21 @@ export function HomeScreen() {
         </Text>
 
         <View style={styles.featuresGrid}>
-          {features.map((feature, index) => (
+          {features.map((feature, index) => {
+            const isSecondary = index % 2 === 1 && theme.secondary !== defaultTheme.secondary;
+            const accentColor = isSecondary ? theme.secondary : theme.primary;
+            return (
             <Card key={index} style={styles.featureCard}>
               <View
                 style={[
                   styles.featureIconContainer,
-                  { backgroundColor: `${theme.primary}20` },
+                  { backgroundColor: `${accentColor}20` },
                 ]}
               >
                 <Ionicons
                   name={feature.icon as any}
                   size={24}
-                  color={theme.primary}
+                  color={accentColor}
                 />
               </View>
               <CardHeader>
@@ -119,7 +123,8 @@ export function HomeScreen() {
                 <CardDescription>{feature.description}</CardDescription>
               </CardHeader>
             </Card>
-          ))}
+            );
+          })}
         </View>
       </View>
 

@@ -11,12 +11,13 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
+import { useTheme } from '../contexts/ThemeContext';
 
 export function ForgotPasswordScreen({ navigation }: any) {
   const { t } = useTranslation();
+  const { theme } = useTheme();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -45,32 +46,29 @@ export function ForgotPasswordScreen({ navigation }: any) {
 
   if (success) {
     return (
-      <LinearGradient
-        colors={['#E0F2FE', '#DBEAFE', '#DDD6FE']}
-        style={styles.container}
-      >
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.successContainer}>
-          <View style={styles.successCard}>
-            <View style={styles.successIcon}>
-              <Text style={styles.successIconText}>✓</Text>
+          <View style={[styles.successCard, { backgroundColor: theme.card }]}>
+            <View style={[styles.successIcon, { backgroundColor: theme.secondary }]}>
+              <Text style={[styles.successIconText, { color: theme.primary }]}>✓</Text>
             </View>
-            <Text style={styles.successTitle}>{t('auth.forgotPassword.successTitle')}</Text>
-            <Text style={styles.successMessage}>
+            <Text style={[styles.successTitle, { color: theme.foreground }]}>{t('auth.forgotPassword.successTitle')}</Text>
+            <Text style={[styles.successMessage, { color: theme.mutedForeground }]}>
               {t('auth.forgotPassword.successMessage')}{'\n'}
-              <Text style={styles.successEmail}>{email}</Text>
+              <Text style={[styles.successEmail, { color: theme.foreground }]}>{email}</Text>
             </Text>
-            <Text style={styles.successHint}>
+            <Text style={[styles.successHint, { color: theme.mutedForeground }]}>
               {t('auth.forgotPassword.successHint')}
             </Text>
             <TouchableOpacity
-              style={styles.button}
+              style={[styles.button, { backgroundColor: theme.primary }]}
               onPress={() => navigation.navigate('Login')}
             >
-              <Text style={styles.buttonText}>{t('auth.forgotPassword.backToLogin')}</Text>
+              <Text style={[styles.buttonText, { color: theme.primaryForeground }]}>{t('auth.forgotPassword.backToLogin')}</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </LinearGradient>
+      </View>
     );
   }
 
@@ -79,25 +77,23 @@ export function ForgotPasswordScreen({ navigation }: any) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <LinearGradient
-        colors={['#E0F2FE', '#DBEAFE', '#DDD6FE']}
-        style={styles.gradient}
-      >
+      <View style={[styles.gradient, { backgroundColor: theme.background }]}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.header}>
-            <Text style={styles.logo}>RunFlow</Text>
+          <View style={[styles.header, { backgroundColor: theme.card, borderBottomColor: theme.border }]}>
+            <Text style={[styles.logo, { color: theme.primary }]}>RunFlow</Text>
           </View>
 
           <View style={styles.formContainer}>
-            <View style={styles.form}>
+            <View style={[styles.form, { backgroundColor: theme.card }]}>
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>{t('auth.forgotPassword.emailLabel')}</Text>
+                <Text style={[styles.label, { color: theme.foreground }]}>{t('auth.forgotPassword.emailLabel')}</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { borderColor: theme.input, backgroundColor: theme.card, color: theme.foreground }]}
                   placeholder={t('auth.forgotPassword.emailPlaceholder')}
+                  placeholderTextColor={theme.mutedForeground}
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
@@ -107,26 +103,26 @@ export function ForgotPasswordScreen({ navigation }: any) {
               </View>
 
               <TouchableOpacity
-                style={[styles.button, loading && styles.buttonDisabled]}
+                style={[styles.button, { backgroundColor: theme.primary }, loading && styles.buttonDisabled]}
                 onPress={handleResetPassword}
                 disabled={loading}
               >
                 {loading ? (
-                  <ActivityIndicator color="white" />
+                  <ActivityIndicator color={theme.primaryForeground} />
                 ) : (
-                  <Text style={styles.buttonText}>{t('auth.forgotPassword.submitButton')}</Text>
+                  <Text style={[styles.buttonText, { color: theme.primaryForeground }]}>{t('auth.forgotPassword.submitButton')}</Text>
                 )}
               </TouchableOpacity>
 
               <View style={styles.footer}>
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                  <Text style={styles.footerLink}>{t('auth.forgotPassword.backToLogin')}</Text>
+                  <Text style={[styles.footerLink, { color: theme.primary }]}>{t('auth.forgotPassword.backToLogin')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </ScrollView>
-      </LinearGradient>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -145,14 +141,11 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 24,
     paddingBottom: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
   },
   logo: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0284C7',
   },
   formContainer: {
     flex: 1,
@@ -176,20 +169,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
     marginBottom: 6,
   },
   input: {
     height: 48,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#2563EB',
     height: 48,
     borderRadius: 8,
     justifyContent: 'center',
@@ -200,7 +189,6 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonText: {
-    color: 'white',
     fontSize: 16,
     fontWeight: '500',
   },
@@ -211,7 +199,6 @@ const styles = StyleSheet.create({
   footerLink: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#2563EB',
   },
   successContainer: {
     flex: 1,
@@ -219,7 +206,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   successCard: {
-    backgroundColor: 'white',
     padding: 32,
     borderRadius: 16,
     alignItems: 'center',
@@ -233,34 +219,28 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#D1FAE5',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
   successIconText: {
     fontSize: 32,
-    color: '#059669',
   },
   successTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#111827',
     marginBottom: 8,
   },
   successMessage: {
     fontSize: 16,
-    color: '#6B7280',
     textAlign: 'center',
     marginBottom: 16,
   },
   successEmail: {
     fontWeight: 'bold',
-    color: '#111827',
   },
   successHint: {
     fontSize: 14,
-    color: '#9CA3AF',
     textAlign: 'center',
     marginBottom: 24,
   },

@@ -6,7 +6,6 @@ import type {
   MemberResponse,
   InviteResponse
 } from '@repo/schemas/organization';
-import type { OrganizationTheme } from '@repo/schemas/theme';
 
 const API_URL = Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'https://www.runflow.club';
 
@@ -122,10 +121,6 @@ export const api = {
     return apiRequest(`/api/organizations/${organizationId}`, {
       method: 'DELETE',
     });
-  },
-
-  async getOrganizationTheme(organizationId: string) {
-    return apiRequest<Partial<OrganizationTheme>>(`/api/organizations/${organizationId}/theme`);
   },
 
   // ============ Members API ============

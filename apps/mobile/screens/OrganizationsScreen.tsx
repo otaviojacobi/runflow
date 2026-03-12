@@ -417,7 +417,7 @@ export function OrganizationsScreen({ navigation }: any) {
           <Card>
             <CardContent style={styles.emptyState}>
               <View style={[styles.emptyIconContainer, { backgroundColor: `${theme.primary}20` }]}>
-                <Ionicons name="business-outline" size={48} color={theme.mutedForeground} />
+                <Ionicons name="business-outline" size={48} color={theme.primary} />
               </View>
               <Text style={[styles.emptyStateTitle, { color: theme.foreground }]}>
                 {t('Organizations.noOrganizationSelected', 'No organization selected')}
@@ -493,22 +493,22 @@ export function OrganizationsScreen({ navigation }: any) {
                   activeOpacity={isCurrent ? 1 : 0.7}
                 >
                   <Card
-                    style={[
-                      { marginBottom: 12 },
-                      isCurrent && { borderColor: theme.primary, borderWidth: 2 }
-                    ]}
+                    style={isCurrent
+                      ? { marginBottom: 12, borderColor: theme.primary, borderWidth: 2, borderLeftWidth: 4, borderLeftColor: theme.primary }
+                      : { marginBottom: 12, borderLeftWidth: 4, borderLeftColor: theme.secondary }
+                    }
                   >
                     <CardHeader>
                       <View style={styles.organizationHeader}>
                         <View style={styles.organizationHeaderLeft}>
                           <View style={[
                             styles.orgIconSmall,
-                            { backgroundColor: isCurrent ? `${theme.primary}20` : `${theme.secondary}50` }
+                            { backgroundColor: isCurrent ? `${theme.primary}20` : `${theme.secondary}30` }
                           ]}>
                             <Ionicons
                               name={isCurrent ? "business" : "business-outline"}
                               size={20}
-                              color={isCurrent ? theme.primary : theme.foreground}
+                              color={isCurrent ? theme.primary : (theme.secondary !== '#F3F4F6' ? theme.secondary : theme.foreground)}
                             />
                           </View>
                           <View style={styles.organizationInfo}>

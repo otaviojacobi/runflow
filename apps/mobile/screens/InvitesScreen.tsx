@@ -202,12 +202,12 @@ export function InvitesScreen() {
         </View>
 
         {pendingInvites.map((invite) => (
-          <Card key={invite.id} style={[styles.inviteCard, { backgroundColor: theme.card }]}>
+          <Card key={invite.id} style={{ ...styles.inviteCard, backgroundColor: theme.card, borderTopWidth: 3, borderTopColor: theme.primary }}>
             <CardHeader>
               <View style={styles.inviteHeader}>
                 <View style={styles.orgInfo}>
-                  <View style={[styles.orgAvatar, { backgroundColor: `${theme.primary}20` }]}>
-                    <Ionicons name="business" size={24} color={theme.primary} />
+                  <View style={[styles.orgAvatar, { backgroundColor: `${theme.secondary}30` }]}>
+                    <Ionicons name="business" size={24} color={theme.secondary !== '#F3F4F6' ? theme.secondary : theme.primary} />
                   </View>
                   <View style={styles.orgDetails}>
                     <CardTitle style={styles.orgName}>{invite.organization.name}</CardTitle>

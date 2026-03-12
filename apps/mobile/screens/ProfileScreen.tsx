@@ -7,12 +7,13 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
+import { useTheme } from '../contexts/ThemeContext';
 
 export function ProfileScreen({ navigation }: any) {
   const { t } = useTranslation();
+  const { theme } = useTheme();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -53,57 +54,52 @@ export function ProfileScreen({ navigation }: any) {
 
   if (loading) {
     return (
-      <LinearGradient
-        colors={['#E0F2FE', '#DBEAFE', '#DDD6FE']}
-        style={styles.container}
-      >
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#2563EB" />
+          <ActivityIndicator size="large" color={theme.primary} />
         </View>
-      </LinearGradient>
+      </View>
     );
   }
 
   return (
-    <LinearGradient
-      colors={['#E0F2FE', '#DBEAFE', '#DDD6FE']}
-      style={styles.container}
-    >
-      <View style={styles.header}>
-        <Text style={styles.logo}>RunFlow</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      {/* Colored header banner */}
+      <View style={[styles.headerBanner, { backgroundColor: theme.primary }]}>
+        <Text style={[styles.logo, { color: theme.primaryForeground }]}>RunFlow</Text>
       </View>
 
       <View style={styles.content}>
-        <View style={styles.card}>
-          <View style={styles.avatarContainer}>
-            <Text style={styles.avatarText}>
+        <View style={[styles.card, { backgroundColor: theme.card }]}>
+          <View style={[styles.avatarContainer, { backgroundColor: theme.primary, marginTop: -56 }]}>
+            <Text style={[styles.avatarText, { color: theme.primaryForeground }]}>
               {user?.email?.charAt(0).toUpperCase() || 'U'}
             </Text>
           </View>
 
-          <Text style={styles.title}>{t('auth.profile.title')}</Text>
+          <Text style={[styles.title, { color: theme.foreground }]}>{t('auth.profile.title')}</Text>
 
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>{t('auth.profile.emailLabel')}</Text>
-            <Text style={styles.value}>{user?.email || t('auth.profile.notAvailable')}</Text>
+          <View style={[styles.infoContainer, { backgroundColor: `${theme.secondary}30`, borderRadius: 8, padding: 12 }]}>
+            <Text style={[styles.label, { color: theme.mutedForeground }]}>{t('auth.profile.emailLabel')}</Text>
+            <Text style={[styles.value, { color: theme.foreground }]}>{user?.email || t('auth.profile.notAvailable')}</Text>
           </View>
 
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>{t('auth.profile.userIdLabel')}</Text>
-            <Text style={styles.value} numberOfLines={1}>
+          <View style={[styles.infoContainer, { backgroundColor: `${theme.secondary}30`, borderRadius: 8, padding: 12 }]}>
+            <Text style={[styles.label, { color: theme.mutedForeground }]}>{t('auth.profile.userIdLabel')}</Text>
+            <Text style={[styles.value, { color: theme.foreground }]} numberOfLines={1}>
               {user?.id || t('auth.profile.notAvailable')}
             </Text>
           </View>
 
           <TouchableOpacity
-            style={styles.logoutButton}
+            style={[styles.logoutButton, { backgroundColor: theme.destructive }]}
             onPress={handleLogout}
           >
-            <Text style={styles.logoutButtonText}>{t('auth.profile.logoutButton')}</Text>
+            <Text style={[styles.logoutButtonText, { color: theme.destructiveForeground }]}>{t('auth.profile.logoutButton')}</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
@@ -111,18 +107,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
+  headerBanner: {
     paddingTop: 60,
     paddingHorizontal: 24,
-    paddingBottom: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    paddingBottom: 48,
   },
   logo: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0284C7',
   },
   content: {
     flex: 1,
@@ -130,7 +122,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   card: {
-    backgroundColor: 'white',
     padding: 32,
     borderRadius: 16,
     alignItems: 'center',
@@ -144,7 +135,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#2563EB',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
@@ -152,12 +142,10 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: 'white',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#111827',
     marginBottom: 32,
   },
   infoContainer: {
@@ -167,18 +155,15 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
     marginBottom: 6,
   },
   value: {
     fontSize: 16,
-    color: '#111827',
   },
   logoutButton: {
     width: '100%',
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#DC2626',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 12,
@@ -186,7 +171,6 @@ const styles = StyleSheet.create({
   logoutButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: 'white',
   },
   loadingContainer: {
     flex: 1,

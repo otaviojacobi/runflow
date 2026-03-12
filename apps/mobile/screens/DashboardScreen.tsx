@@ -10,6 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../contexts/ThemeContext';
+import { defaultTheme } from '../lib/theme';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -151,15 +152,19 @@ export function DashboardScreen() {
       <View style={styles.content}>
         {/* Quick Actions */}
         <View style={styles.quickActionsGrid}>
-          {quickActions.map((action, index) => (
+          {quickActions.map((action, index) => {
+            const hasCustomSecondary = theme.secondary !== defaultTheme.secondary;
+            const isSecondary = index % 2 === 1 && hasCustomSecondary;
+            const accentColor = isSecondary ? theme.secondary : theme.primary;
+            return (
             <TouchableOpacity
               key={index}
               onPress={() => navigation.navigate(action.screen as never)}
               activeOpacity={0.7}
             >
-              <Card style={styles.quickActionCard}>
-                <View style={[styles.iconContainer, { backgroundColor: `${theme.primary}20` }]}>
-                  <Ionicons name={action.icon as any} size={24} color={theme.primary} />
+              <Card style={{ ...styles.quickActionCard, borderLeftWidth: 3, borderLeftColor: accentColor }}>
+                <View style={[styles.iconContainer, { backgroundColor: `${accentColor}20` }]}>
+                  <Ionicons name={action.icon as any} size={24} color={accentColor} />
                 </View>
                 <CardHeader>
                   <CardTitle style={styles.quickActionTitle}>{action.title}</CardTitle>
@@ -169,12 +174,13 @@ export function DashboardScreen() {
                 </CardHeader>
               </Card>
             </TouchableOpacity>
-          ))}
+            );
+          })}
         </View>
 
         {/* Overview Cards */}
         <View style={styles.overviewSection}>
-          <Card style={styles.overviewCard}>
+          <Card style={{ ...styles.overviewCard, borderTopWidth: 3, borderTopColor: theme.primary }}>
             <CardHeader>
               <CardTitle>{t('Dashboard.overview.organizationStats', 'Organization Stats')}</CardTitle>
               <CardDescription>
@@ -186,19 +192,19 @@ export function DashboardScreen() {
                 <Text style={[styles.statsLabel, { color: theme.mutedForeground }]}>
                   {t('Dashboard.overview.totalMembers', 'Total Members')}
                 </Text>
-                <Text style={[styles.statsValue, { color: theme.foreground }]}>0</Text>
+                <Text style={[styles.statsValue, { color: theme.primary }]}>0</Text>
               </View>
               <View style={styles.statsRow}>
                 <Text style={[styles.statsLabel, { color: theme.mutedForeground }]}>
                   {t('Dashboard.overview.activeAthletes', 'Active Athletes')}
                 </Text>
-                <Text style={[styles.statsValue, { color: theme.foreground }]}>0</Text>
+                <Text style={[styles.statsValue, { color: theme.primary }]}>0</Text>
               </View>
               <View style={styles.statsRow}>
                 <Text style={[styles.statsLabel, { color: theme.mutedForeground }]}>
                   {t('Dashboard.overview.pendingInvites', 'Pending Invites')}
                 </Text>
-                <Text style={[styles.statsValue, { color: theme.foreground }]}>0</Text>
+                <Text style={[styles.statsValue, { color: theme.secondary !== defaultTheme.secondary ? theme.secondary : theme.primary }]}>0</Text>
               </View>
             </CardContent>
           </Card>
