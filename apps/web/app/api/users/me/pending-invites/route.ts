@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/db'
+import { getSignedLogoUrl } from '@/lib/blob'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
           name: invite.organization.name,
           slug: invite.organization.slug,
           description: invite.organization.description,
-          logo: invite.organization.logo
+          logo: getSignedLogoUrl(invite.organization.logo)
         },
         invitedBy: invite.invitedBy
       }))

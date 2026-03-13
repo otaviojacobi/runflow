@@ -6,6 +6,7 @@ import {
   type OrganizationResponse
 } from '@repo/schemas/organization'
 import { ZodError } from '@repo/schemas/zod'
+import { getSignedLogoUrl, deleteBlob } from '@/lib/blob'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
@@ -48,7 +49,7 @@ export async function GET(
       name: organization.name,
       slug: organization.slug,
       description: organization.description,
-      logo: organization.logo,
+      logo: getSignedLogoUrl(organization.logo),
       primaryColor: organization.primaryColor,
       secondaryColor: organization.secondaryColor,
       createdAt: organization.createdAt.toISOString(),
@@ -108,7 +109,7 @@ export async function PUT(
       name: organization.name,
       slug: organization.slug,
       description: organization.description,
-      logo: organization.logo,
+      logo: getSignedLogoUrl(organization.logo),
       primaryColor: organization.primaryColor,
       secondaryColor: organization.secondaryColor,
       createdAt: organization.createdAt.toISOString(),
@@ -167,6 +168,16 @@ export async function DELETE(
         { error: 'Only organization owners can delete organizations' },
         { status: 403 }
       )
+    }
+
+    // Delete logo blob if exists
+    const organization = await prisma.organization.findUnique({
+      where: { id },
+      select: { logo: true }
+    })
+
+    if (organization?.logo) {
+      await deleteBlob(organization.logo)
     }
 
     // Delete organization (cascade will handle members and invites)

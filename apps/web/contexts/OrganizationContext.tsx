@@ -53,6 +53,7 @@ interface OrganizationContextType {
   switchOrganization: (organizationId: string) => Promise<void>
   refreshOrganizations: () => Promise<void>
   updateCurrentOrganizationColors: (primaryColor?: string | null, secondaryColor?: string | null) => void
+  updateCurrentOrganizationLogo: (logo: string | null) => void
   acceptInvite: (token: string) => Promise<void>
   declineInvite: (inviteId: string) => Promise<void>
 }
@@ -149,6 +150,20 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
     }))
   }
 
+  const updateCurrentOrganizationLogo = (logo: string | null) => {
+    setCurrentOrganization(prev => {
+      if (!prev) return prev
+      return { ...prev, logo }
+    })
+
+    setOrganizations(prev => prev.map(org => {
+      if (org.id === currentOrganization?.id) {
+        return { ...org, logo }
+      }
+      return org
+    }))
+  }
+
   const acceptInvite = async (token: string) => {
     try {
       const response = await fetch(`/api/invites/${token}/accept`, {
@@ -181,6 +196,7 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
         switchOrganization,
         refreshOrganizations,
           updateCurrentOrganizationColors,
+          updateCurrentOrganizationLogo,
         acceptInvite,
         declineInvite,
       }}

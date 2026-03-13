@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { type InviteResponse } from '@repo/schemas/organization'
+import { getSignedLogoUrl } from '@/lib/blob'
 
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 })
@@ -75,7 +76,10 @@ export async function GET(
         expiresAt: invite.expiresAt.toISOString(),
         createdAt: invite.createdAt.toISOString()
       },
-      organization: invite.organization,
+      organization: {
+        ...invite.organization,
+        logo: getSignedLogoUrl(invite.organization.logo),
+      },
       invitedBy: invite.invitedBy
     }, { status: 200 })
   } catch (error) {

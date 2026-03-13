@@ -140,8 +140,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
 
   describe('POST /api/trainings - Create Training', () => {
     it('should allow owner to create training for athlete', async () => {
-      const owner = testUsers[0]
-      const athlete = testUsers[2]
+      const owner = testUsers[0]!
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: owner.id, role: 'OWNER' } } }
       })
@@ -175,8 +175,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow trainer to create training for athlete', async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: trainer.id, role: 'TRAINER' } } }
       })
@@ -202,7 +202,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject when athlete tries to create training', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: athlete.id } } }
       })
@@ -225,8 +225,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject when creating training for non-member', async () => {
-      const owner = testUsers[0]
-      const outsider = testUsers[4]
+      const owner = testUsers[0]!
+      const outsider = testUsers[4]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: owner.id, role: 'OWNER' } } }
       })
@@ -249,8 +249,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject when outsider tries to create training', async () => {
-      const outsider = testUsers[4]
-      const athlete = testUsers[2]
+      const outsider = testUsers[4]!
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: athlete.id } } }
       })
@@ -273,7 +273,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should validate required fields', async () => {
-      const owner = testUsers[0]
+      const owner = testUsers[0]!
 
       const { response, data } = await apiCall(
         'POST',
@@ -295,9 +295,9 @@ describe('Trainings API - Complete Integration Test Suite', () => {
 
     beforeAll(async () => {
       // Create a training directly in DB for listing tests
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
-      const org = testOrgs[0]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
+      const org = testOrgs[0]!
 
       const training = await prisma.training.create({
         data: {
@@ -315,7 +315,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow athlete to list their own trainings', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -335,7 +335,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow trainer to list trainings in their org', async () => {
-      const trainer = testUsers[1]
+      const trainer = testUsers[1]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -350,7 +350,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should filter trainings by organizationId', async () => {
-      const owner = testUsers[0]
+      const owner = testUsers[0]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: owner.id, role: 'OWNER' } } }
       })
@@ -369,8 +369,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should filter trainings by memberId', async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -386,7 +386,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should filter trainings by status', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -402,7 +402,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should filter trainings by type', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -418,7 +418,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should not show trainings to outsiders', async () => {
-      const outsider = testUsers[4]
+      const outsider = testUsers[4]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -432,7 +432,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should respect pagination', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -450,9 +450,9 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     let testTrainingId: string
 
     beforeAll(async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
-      const org = testOrgs[0]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
+      const org = testOrgs[0]!
 
       const training = await prisma.training.create({
         data: {
@@ -472,7 +472,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow athlete to view their own training', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -491,7 +491,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow trainer to view training they created', async () => {
-      const trainer = testUsers[1]
+      const trainer = testUsers[1]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -505,7 +505,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow owner to view trainings in their org', async () => {
-      const owner = testUsers[0]
+      const owner = testUsers[0]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -519,7 +519,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject outsider from viewing training', async () => {
-      const outsider = testUsers[4]
+      const outsider = testUsers[4]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -533,7 +533,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should return 404 for non-existent training', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'GET',
@@ -550,9 +550,9 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     let testTrainingId: string
 
     beforeAll(async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
-      const org = testOrgs[0]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
+      const org = testOrgs[0]!
 
       const training = await prisma.training.create({
         data: {
@@ -570,7 +570,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow trainer to update training details', async () => {
-      const trainer = testUsers[1]
+      const trainer = testUsers[1]!
 
       const { response, data } = await apiCall(
         'PUT',
@@ -590,7 +590,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow athlete to update training status', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'PUT',
@@ -606,7 +606,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject athlete updating non-status fields', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'PUT',
@@ -622,7 +622,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow athlete to add completion details', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'PUT',
@@ -646,7 +646,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject trainer from updating completion details', async () => {
-      const trainer = testUsers[1]
+      const trainer = testUsers[1]!
 
       const { response, data } = await apiCall(
         'PUT',
@@ -663,7 +663,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject outsider from updating training', async () => {
-      const outsider = testUsers[4]
+      const outsider = testUsers[4]!
 
       const { response, data } = await apiCall(
         'PUT',
@@ -682,9 +682,9 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     let strengthTrainingId: string
 
     beforeAll(async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
-      const org = testOrgs[0]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
+      const org = testOrgs[0]!
 
       const training = await prisma.training.create({
         data: {
@@ -702,7 +702,7 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow athlete to add strength training completion details', async () => {
-      const athlete = testUsers[2]
+      const athlete = testUsers[2]!
 
       const { response, data } = await apiCall(
         'PUT',
@@ -743,8 +743,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
 
   describe('DELETE /api/trainings/[id] - Delete Training', () => {
     it('should allow trainer to delete their own training', async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: trainer.id, role: 'TRAINER' } } }
       })
@@ -781,8 +781,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should allow owner to delete trainings in their org', async () => {
-      const owner = testUsers[0]
-      const athlete = testUsers[2]
+      const owner = testUsers[0]!
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: owner.id, role: 'OWNER' } } }
       })
@@ -812,8 +812,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject athlete from deleting training', async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: trainer.id, role: 'TRAINER' } } }
       })
@@ -847,9 +847,9 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should reject outsider from deleting training', async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
-      const outsider = testUsers[4]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
+      const outsider = testUsers[4]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: trainer.id, role: 'TRAINER' } } }
       })
@@ -882,8 +882,8 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should cascade delete completion details', async () => {
-      const trainer = testUsers[1]
-      const athlete = testUsers[2]
+      const trainer = testUsers[1]!
+      const athlete = testUsers[2]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: trainer.id, role: 'TRAINER' } } }
       })
@@ -942,9 +942,9 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should enforce RLS - athlete cannot see other athletes trainings', async () => {
-      const trainer = testUsers[1]
-      const athlete1 = testUsers[2]
-      const athlete2 = testUsers[3]
+      const trainer = testUsers[1]!
+      const athlete1 = testUsers[2]!
+      const athlete2 = testUsers[3]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: trainer.id, role: 'TRAINER' } } }
       })
@@ -977,9 +977,9 @@ describe('Trainings API - Complete Integration Test Suite', () => {
     })
 
     it('should prevent athlete from modifying other athletes completion details', async () => {
-      const trainer = testUsers[1]
-      const athlete1 = testUsers[2]
-      const athlete2 = testUsers[3]
+      const trainer = testUsers[1]!
+      const athlete1 = testUsers[2]!
+      const athlete2 = testUsers[3]!
       const org = await prisma.organization.findFirst({
         where: { members: { some: { userId: trainer.id, role: 'TRAINER' } } }
       })
