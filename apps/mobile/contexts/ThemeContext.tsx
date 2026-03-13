@@ -53,8 +53,6 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     try {
       setIsLoading(true);
 
-      console.log('[THEME DEBUG] updateTheme called with:', { organizationId, colors });
-
       // Build partial theme from organization color fields
       const partialTheme: Partial<OrganizationTheme> = {};
       if (colors?.primaryColor) {
@@ -65,10 +63,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         partialTheme.secondary = colors.secondaryColor;
       }
 
-      console.log('[THEME DEBUG] partialTheme built:', partialTheme);
-
       const newTheme = { ...defaultTheme, ...partialTheme };
-      console.log('[THEME DEBUG] final theme primary:', newTheme.primary, 'secondary:', newTheme.secondary);
       setTheme(newTheme);
       await saveTheme(partialTheme, organizationId);
       setCurrentOrganizationId(organizationId);

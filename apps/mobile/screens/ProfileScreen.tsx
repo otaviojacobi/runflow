@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  ScrollView,
   StyleSheet,
   ActivityIndicator,
   Alert,
@@ -10,12 +10,19 @@ import {
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 import { useTheme } from '../contexts/ThemeContext';
+import { useOrganization } from '../contexts/OrganizationContext';
+import { defaultTheme } from '../lib/theme';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 
 export function ProfileScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { theme } = useTheme();
+  const { user: orgUser } = useOrganization();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const primaryColor = theme.primary;
 
   useEffect(() => {
     loadUser();
@@ -23,16 +30,11 @@ export function ProfileScreen({ navigation }: any) {
 
   const loadUser = async () => {
     try {
-      // First check if we have a session
       const { data: { session } } = await supabase.auth.getSession();
-      console.log('Session:', session ? 'exists' : 'none');
-
       if (session) {
         const { data: { user } } = await supabase.auth.getUser();
-        console.log('User loaded:', user?.email, user?.id);
         setUser(user);
       } else {
-        console.log('No session found, redirecting to login');
         navigation.replace('Login');
       }
     } catch (error) {
@@ -54,7 +56,7 @@ export function ProfileScreen({ navigation }: any) {
 
   if (loading) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.primary} />
         </View>
@@ -63,43 +65,76 @@ export function ProfileScreen({ navigation }: any) {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* Colored header banner */}
-      <View style={[styles.headerBanner, { backgroundColor: theme.primary }]}>
-        <Text style={[styles.logo, { color: theme.primaryForeground }]}>RunFlow</Text>
-      </View>
-
+    <ScrollView style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       <View style={styles.content}>
-        <View style={[styles.card, { backgroundColor: theme.card }]}>
-          <View style={[styles.avatarContainer, { backgroundColor: theme.primary, marginTop: -56 }]}>
-            <Text style={[styles.avatarText, { color: theme.primaryForeground }]}>
-              {user?.email?.charAt(0).toUpperCase() || 'U'}
-            </Text>
-          </View>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: theme.foreground }]}>
+            {t('auth.profile.title')}
+          </Text>
+          <Text style={[styles.subtitle, { color: theme.mutedForeground }]}>
+            {t('auth.profile.description', 'Manage your account')}
+          </Text>
+        </View>
 
-          <Text style={[styles.title, { color: theme.foreground }]}>{t('auth.profile.title')}</Text>
+        {/* Account Info Card */}
+        <Card style={{ ...styles.card, borderLeftWidth: 3, borderLeftColor: primaryColor }}>
+          <CardHeader>
+            <CardTitle style={styles.cardTitleText}>
+              {t('auth.profile.accountInfo', 'Account Information')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {/* Avatar Row */}
+            <View style={styles.avatarRow}>
+              <View style={[styles.avatarContainer, { backgroundColor: primaryColor }]}>
+                <Text style={[styles.avatarText, { color: theme.primaryForeground }]}>
+                  {user?.email?.charAt(0).toUpperCase() || 'U'}
+                </Text>
+              </View>
+              <View style={styles.avatarInfo}>
+                <Text style={[styles.avatarName, { color: theme.foreground }]}>
+                  {orgUser?.name || user?.email || t('auth.profile.notAvailable')}
+                </Text>
+              </View>
+            </View>
 
-          <View style={[styles.infoContainer, { backgroundColor: `${theme.secondary}30`, borderRadius: 8, padding: 12 }]}>
-            <Text style={[styles.label, { color: theme.mutedForeground }]}>{t('auth.profile.emailLabel')}</Text>
-            <Text style={[styles.value, { color: theme.foreground }]}>{user?.email || t('auth.profile.notAvailable')}</Text>
-          </View>
+            <View style={[styles.separator, { borderBottomColor: 'rgba(0,0,0,0.05)' }]} />
 
-          <View style={[styles.infoContainer, { backgroundColor: `${theme.secondary}30`, borderRadius: 8, padding: 12 }]}>
-            <Text style={[styles.label, { color: theme.mutedForeground }]}>{t('auth.profile.userIdLabel')}</Text>
-            <Text style={[styles.value, { color: theme.foreground }]} numberOfLines={1}>
-              {user?.id || t('auth.profile.notAvailable')}
-            </Text>
-          </View>
+            {/* Email */}
+            <View style={styles.settingRow}>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: theme.mutedForeground }]}>
+                  {t('auth.profile.emailLabel')}
+                </Text>
+              </View>
+              <Text style={[styles.settingValue, { color: theme.foreground }]}>
+                {user?.email || t('auth.profile.notAvailable')}
+              </Text>
+            </View>
 
-          <TouchableOpacity
-            style={[styles.logoutButton, { backgroundColor: theme.destructive }]}
-            onPress={handleLogout}
-          >
-            <Text style={[styles.logoutButtonText, { color: theme.destructiveForeground }]}>{t('auth.profile.logoutButton')}</Text>
-          </TouchableOpacity>
+            {/* User ID */}
+            <View style={[styles.settingRow, styles.settingRowLast]}>
+              <View style={styles.settingTextContainer}>
+                <Text style={[styles.settingLabel, { color: theme.mutedForeground }]}>
+                  {t('auth.profile.userIdLabel')}
+                </Text>
+              </View>
+              <Text style={[styles.settingValue, { color: theme.foreground }]} numberOfLines={1}>
+                {user?.id || t('auth.profile.notAvailable')}
+              </Text>
+            </View>
+          </CardContent>
+        </Card>
+
+        {/* Logout Button */}
+        <View style={styles.logoutContainer}>
+          <Button variant="destructive" onPress={handleLogout} style={{ width: '100%' }}>
+            {t('auth.profile.logoutButton')}
+          </Button>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -107,70 +142,82 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerBanner: {
-    paddingTop: 60,
-    paddingHorizontal: 24,
-    paddingBottom: 48,
-  },
-  logo: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
   content: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
+    padding: 16,
   },
-  card: {
-    padding: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  avatarContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+  header: {
     marginBottom: 24,
-  },
-  avatarText: {
-    fontSize: 32,
-    fontWeight: 'bold',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 32,
+    marginBottom: 8,
   },
-  infoContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 6,
-  },
-  value: {
+  subtitle: {
     fontSize: 16,
   },
-  logoutButton: {
-    width: '100%',
-    height: 48,
-    borderRadius: 8,
+  card: {
+    marginBottom: 16,
+  },
+  cardTitleText: {
+    fontSize: 18,
+  },
+  avatarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 12,
+  },
+  avatarContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 12,
   },
-  logoutButtonText: {
-    fontSize: 16,
+  avatarText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  avatarInfo: {
+    flex: 1,
+  },
+  avatarName: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  separator: {
+    borderBottomWidth: 1,
+    marginBottom: 4,
+  },
+  settingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
+  settingRowLast: {
+    borderBottomWidth: 0,
+  },
+  settingTextContainer: {
+    flex: 1,
+    marginRight: 16,
+  },
+  settingLabel: {
+    fontSize: 14,
     fontWeight: '500',
+  },
+  settingValue: {
+    fontSize: 14,
+    maxWidth: '60%',
+    textAlign: 'right',
+  },
+  logoutContainer: {
+    marginTop: 8,
+    marginBottom: 32,
   },
   loadingContainer: {
     flex: 1,

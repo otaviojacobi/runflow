@@ -394,7 +394,7 @@ export function OrganizationsScreen({ navigation }: any) {
   // Loading state
   if (loading) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: theme.background }]}>
+      <View style={[styles.centerContainer, { backgroundColor: `${theme.primary}08` }]}>
         <ActivityIndicator size="large" color={theme.primary} />
         <Text style={[styles.loadingText, { color: theme.mutedForeground }]}>
           {t('Organizations.loading', 'Loading...')}
@@ -406,7 +406,7 @@ export function OrganizationsScreen({ navigation }: any) {
   // No organization selected
   if (!currentOrganization) {
     return (
-      <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+      <ScrollView style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.foreground }]}>
@@ -852,7 +852,7 @@ export function OrganizationsScreen({ navigation }: any) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={[styles.title, { color: theme.foreground }]}>

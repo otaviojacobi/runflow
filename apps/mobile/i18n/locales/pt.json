@@ -53,10 +53,23 @@
     },
     "profile": {
       "title": "Perfil",
+      "description": "Gerencie sua conta",
       "emailLabel": "E-mail",
       "userIdLabel": "ID do Usuário",
       "logoutButton": "Sair",
-      "notAvailable": "Não disponível"
+      "notAvailable": "Não disponível",
+      "accountInfo": "Informações da Conta",
+      "accountInfoDescription": "Seus dados pessoais",
+      "organization": "Organização",
+      "organizationDescription": "Sua organização atual",
+      "organizationName": "Organização",
+      "role": "Função",
+      "joinedAt": "Entrou em",
+      "quickActions": "Ações Rápidas",
+      "quickActionsDescription": "Navegue para ações comuns",
+      "settings": "Configurações",
+      "switchOrganization": "Trocar Organização",
+      "noOrganization": "Nenhuma organização selecionada"
     },
     "errors": {
       "loginFailed": "Falha no login",
@@ -216,7 +229,8 @@
   "Dashboard": {
     "loading": "Carregando...",
     "dashboard": "Painel",
-    "welcomeBack": "Bem-vindo de volta",
+    "hello": "Olá",
+    "helloName": "Olá, {{name}}",
     "currentlyViewing": "Visualizando atualmente",
     "invitations": "Convites",
     "quickActions": {

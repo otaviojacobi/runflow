@@ -134,7 +134,7 @@ export function InvitesScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: theme.background }]}>
+      <View style={[styles.centerContainer, { backgroundColor: `${theme.primary}08` }]}>
         <ActivityIndicator size="large" color={theme.primary} />
         <Text style={[styles.loadingText, { color: theme.mutedForeground }]}>
           {t('organizations.loadingInvites', 'Loading invitations...')}
@@ -146,7 +146,7 @@ export function InvitesScreen() {
   if (pendingInvites.length === 0) {
     return (
       <ScrollView
-        style={[styles.container, { backgroundColor: theme.background }]}
+        style={[styles.container, { backgroundColor: `${theme.primary}08` }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.primary} />
         }
@@ -186,7 +186,7 @@ export function InvitesScreen() {
 
   return (
     <ScrollView
-      style={[styles.container, { backgroundColor: theme.background }]}
+      style={[styles.container, { backgroundColor: `${theme.primary}08` }]}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.primary} />
       }

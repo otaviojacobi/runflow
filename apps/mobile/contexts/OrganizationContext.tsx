@@ -21,6 +21,8 @@ interface OrganizationContextType {
   switchOrganization: (organizationId: string) => Promise<void>;
   acceptInvite: (token: string) => Promise<void>;
   declineInvite: (inviteId: string) => Promise<void>;
+  updateCurrentOrganizationColors: (primaryColor: string, secondaryColor: string) => void;
+  updateCurrentOrganizationLogo: (logo: string | null) => void;
 }
 
 const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
@@ -172,6 +174,35 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
     }
   };
 
+  const updateCurrentOrganizationColors = (primaryColor: string, secondaryColor: string) => {
+    setCurrentOrganization(prev => {
+      if (!prev) return prev;
+      return { ...prev, primaryColor, secondaryColor };
+    });
+    setOrganizations(prev => prev.map(org => {
+      if (org.id === currentOrganization?.id) {
+        return { ...org, primaryColor, secondaryColor };
+      }
+      return org;
+    }));
+    if (currentOrganization) {
+      updateTheme(currentOrganization.id, { primaryColor, secondaryColor });
+    }
+  };
+
+  const updateCurrentOrganizationLogo = (logo: string | null) => {
+    setCurrentOrganization(prev => {
+      if (!prev) return prev;
+      return { ...prev, logo };
+    });
+    setOrganizations(prev => prev.map(org => {
+      if (org.id === currentOrganization?.id) {
+        return { ...org, logo };
+      }
+      return org;
+    }));
+  };
+
   return (
     <OrganizationContext.Provider
       value={{
@@ -184,6 +215,8 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
         switchOrganization,
         acceptInvite,
         declineInvite,
+        updateCurrentOrganizationColors,
+        updateCurrentOrganizationLogo,
       }}
     >
       {children}

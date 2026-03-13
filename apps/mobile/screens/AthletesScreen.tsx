@@ -304,7 +304,7 @@ export function AthletesScreen() {
   // No organization selected state
   if (!currentOrganization) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
         <View style={styles.emptyStateContainer}>
           <Card style={styles.emptyStateCard}>
             <CardContent style={styles.emptyStateContent}>
@@ -335,7 +335,7 @@ export function AthletesScreen() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>

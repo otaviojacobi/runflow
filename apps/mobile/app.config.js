@@ -42,7 +42,13 @@ export default {
     ]
   },
   plugins: [
-    'expo-font'
+    'expo-font',
+    [
+      'expo-image-picker',
+      {
+        photosPermission: 'The app accesses your photos to let you set an organization logo.'
+      }
+    ]
   ],
   extra: {
     apiUrl: process.env.EXPO_PUBLIC_API_URL,

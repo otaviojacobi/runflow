@@ -42,7 +42,7 @@ export function SettingsScreen() {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+    <ScrollView style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={[styles.title, { color: theme.foreground }]}>
