@@ -111,7 +111,7 @@ function MainTabs() {
           } else if (route.name === 'Schedule') {
             iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Organizations') {
-            iconName = focused ? 'business' : 'business-outline';
+            iconName = focused ? 'flag' : 'flag-outline';
           } else if (route.name === 'Athletes') {
             iconName = focused ? 'people' : 'people-outline';
           } else if (route.name === 'Profile') {

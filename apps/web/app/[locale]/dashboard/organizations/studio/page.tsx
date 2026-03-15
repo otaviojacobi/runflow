@@ -227,8 +227,8 @@ function PreviewIcon({ name, size = 16, color = 'currentColor' }: { name: string
   switch (name) {
     case 'grid':
       return <svg {...props}><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
-    case 'business':
-      return <svg {...props}><path d="M3 21h18" /><path d="M5 21V7l8-4v18" /><path d="M19 21V11l-6-4" /><path d="M9 9h1" /><path d="M9 13h1" /><path d="M9 17h1" /></svg>
+    case 'flag':
+      return <svg {...props}><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
     case 'people':
       return <svg {...props}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
     case 'person':
@@ -395,7 +395,7 @@ function PhonePreview({
           >
             {[
               { icon: 'grid', label: 'Dashboard', active: true },
-              { icon: 'business', label: 'Organizations', active: false },
+              { icon: 'flag', label: 'Organizations', active: false },
               { icon: 'people', label: 'Athletes', active: false },
               { icon: 'person', label: 'Profile', active: false },
             ].map((tab, i) => (

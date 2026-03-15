@@ -30,7 +30,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import {
-  Building2,
+  Flag,
   Users,
   Settings,
   Palette,
@@ -224,7 +224,7 @@ export default function OrganizationsPage() {
         </h1>
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <Building2 className="h-12 w-12 text-muted-foreground mb-4" />
+            <Flag className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-lg font-medium mb-2">
               {t('noOrganizationSelected')}
             </p>
@@ -298,7 +298,7 @@ export default function OrganizationsPage() {
                             ? "bg-blue-100"
                             : "bg-secondary/50"
                         )}>
-                          <Building2 className={cn(
+                          <Flag className={cn(
                             "h-6 w-6",
                             isCurrentOrg ? "text-blue-600" : "text-muted-foreground"
                           )} />

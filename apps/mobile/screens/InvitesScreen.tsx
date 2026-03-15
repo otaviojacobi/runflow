@@ -207,7 +207,7 @@ export function InvitesScreen() {
               <View style={styles.inviteHeader}>
                 <View style={styles.orgInfo}>
                   <View style={[styles.orgAvatar, { backgroundColor: `${theme.secondary}30` }]}>
-                    <Ionicons name="business" size={24} color={theme.secondary !== '#F3F4F6' ? theme.secondary : theme.primary} />
+                    <Ionicons name="flag" size={24} color={theme.secondary !== '#F3F4F6' ? theme.secondary : theme.primary} />
                   </View>
                   <View style={styles.orgDetails}>
                     <CardTitle style={styles.orgName}>{invite.organization.name}</CardTitle>

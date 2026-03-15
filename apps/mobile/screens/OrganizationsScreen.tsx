@@ -417,7 +417,7 @@ export function OrganizationsScreen({ navigation }: any) {
           <Card>
             <CardContent style={styles.emptyState}>
               <View style={[styles.emptyIconContainer, { backgroundColor: `${theme.primary}20` }]}>
-                <Ionicons name="business-outline" size={48} color={theme.primary} />
+                <Ionicons name="flag-outline" size={48} color={theme.primary} />
               </View>
               <Text style={[styles.emptyStateTitle, { color: theme.foreground }]}>
                 {t('Organizations.noOrganizationSelected', 'No organization selected')}
@@ -506,7 +506,7 @@ export function OrganizationsScreen({ navigation }: any) {
                             { backgroundColor: isCurrent ? `${theme.primary}20` : `${theme.secondary}30` }
                           ]}>
                             <Ionicons
-                              name={isCurrent ? "business" : "business-outline"}
+                              name={isCurrent ? "flag" : "flag-outline"}
                               size={20}
                               color={isCurrent ? theme.primary : (theme.secondary !== '#F3F4F6' ? theme.secondary : theme.foreground)}
                             />

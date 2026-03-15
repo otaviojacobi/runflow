@@ -16,7 +16,7 @@ import {
   UserCircle,
   CreditCard,
   FileText,
-  Building2,
+  Flag,
   Bell,
   Dumbbell
 } from 'lucide-react'
@@ -244,7 +244,7 @@ export function DashboardNav() {
                   {t('profile')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/dashboard/organizations')}>
-                  <Building2 className="mr-2 h-4 w-4" />
+                  <Flag className="mr-2 h-4 w-4" />
                   {t('organizations')}
                   {pendingInvites.length > 0 && (
                     <Badge variant="secondary" className="ml-auto">

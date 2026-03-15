@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Building2, UserPlus, ArrowRight } from 'lucide-react'
+import { Flag, UserPlus, ArrowRight } from 'lucide-react'
 
 export default function OrganizationSetupPage() {
   const router = useRouter()
@@ -34,7 +34,7 @@ export default function OrganizationSetupPage() {
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Building2 className="h-6 w-6 text-primary" />
+                <Flag className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <CardTitle>{t('createNewOrganization')}</CardTitle>
