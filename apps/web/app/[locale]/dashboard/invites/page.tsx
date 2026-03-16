@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Building2, Clock, UserPlus, X, Check } from 'lucide-react'
+import { Flag, Clock, UserPlus, X, Check } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 export default function PendingInvitesPage() {
@@ -110,7 +110,7 @@ export default function PendingInvitesPage() {
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12">
                     <AvatarFallback>
-                      <Building2 className="h-6 w-6" />
+                      <Flag className="h-6 w-6" />
                     </AvatarFallback>
                   </Avatar>
                   <div>

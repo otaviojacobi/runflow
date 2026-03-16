@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, ChevronsUpDown, Plus, Building2 } from 'lucide-react'
+import { Check, ChevronsUpDown, Plus, Flag } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -55,7 +55,7 @@ export function OrganizationSwitcher() {
                     <AvatarImage src={currentOrganization.logo} alt={currentOrganization.name} />
                   ) : (
                     <AvatarFallback className="text-xs">
-                      <Building2 className="h-3 w-3" />
+                      <Flag className="h-3 w-3" />
                     </AvatarFallback>
                   )}
                 </Avatar>
@@ -85,7 +85,7 @@ export function OrganizationSwitcher() {
                       <AvatarImage src={org.logo} alt={org.name} />
                     ) : (
                       <AvatarFallback className="text-xs">
-                        <Building2 className="h-3 w-3" />
+                        <Flag className="h-3 w-3" />
                       </AvatarFallback>
                     )}
                   </Avatar>

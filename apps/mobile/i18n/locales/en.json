@@ -53,10 +53,23 @@
     },
     "profile": {
       "title": "Profile",
+      "description": "Manage your account",
       "emailLabel": "Email",
       "userIdLabel": "User ID",
       "logoutButton": "Logout",
-      "notAvailable": "Not available"
+      "notAvailable": "Not available",
+      "accountInfo": "Account Information",
+      "accountInfoDescription": "Your personal details",
+      "organization": "Organization",
+      "organizationDescription": "Your current organization",
+      "organizationName": "Organization",
+      "role": "Role",
+      "joinedAt": "Joined",
+      "quickActions": "Quick Actions",
+      "quickActionsDescription": "Navigate to common actions",
+      "settings": "Settings",
+      "switchOrganization": "Switch Organization",
+      "noOrganization": "No organization selected"
     },
     "errors": {
       "loginFailed": "Login failed",
@@ -216,7 +229,8 @@
   "Dashboard": {
     "loading": "Loading...",
     "dashboard": "Dashboard",
-    "welcomeBack": "Welcome back",
+    "hello": "Hello",
+    "helloName": "Hello, {{name}}",
     "currentlyViewing": "Currently viewing",
     "invitations": "Invitations",
     "quickActions": {

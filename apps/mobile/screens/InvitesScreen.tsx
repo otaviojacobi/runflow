@@ -134,7 +134,7 @@ export function InvitesScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: theme.background }]}>
+      <View style={[styles.centerContainer, { backgroundColor: `${theme.primary}08` }]}>
         <ActivityIndicator size="large" color={theme.primary} />
         <Text style={[styles.loadingText, { color: theme.mutedForeground }]}>
           {t('organizations.loadingInvites', 'Loading invitations...')}
@@ -146,7 +146,7 @@ export function InvitesScreen() {
   if (pendingInvites.length === 0) {
     return (
       <ScrollView
-        style={[styles.container, { backgroundColor: theme.background }]}
+        style={[styles.container, { backgroundColor: `${theme.primary}08` }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.primary} />
         }
@@ -186,7 +186,7 @@ export function InvitesScreen() {
 
   return (
     <ScrollView
-      style={[styles.container, { backgroundColor: theme.background }]}
+      style={[styles.container, { backgroundColor: `${theme.primary}08` }]}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.primary} />
       }
@@ -202,12 +202,12 @@ export function InvitesScreen() {
         </View>
 
         {pendingInvites.map((invite) => (
-          <Card key={invite.id} style={[styles.inviteCard, { backgroundColor: theme.card }]}>
+          <Card key={invite.id} style={{ ...styles.inviteCard, backgroundColor: theme.card, borderTopWidth: 3, borderTopColor: theme.primary }}>
             <CardHeader>
               <View style={styles.inviteHeader}>
                 <View style={styles.orgInfo}>
-                  <View style={[styles.orgAvatar, { backgroundColor: `${theme.primary}20` }]}>
-                    <Ionicons name="business" size={24} color={theme.primary} />
+                  <View style={[styles.orgAvatar, { backgroundColor: `${theme.secondary}30` }]}>
+                    <Ionicons name="flag" size={24} color={theme.secondary !== '#F3F4F6' ? theme.secondary : theme.primary} />
                   </View>
                   <View style={styles.orgDetails}>
                     <CardTitle style={styles.orgName}>{invite.organization.name}</CardTitle>

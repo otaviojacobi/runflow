@@ -46,7 +46,7 @@ function AthleteItem({ athlete, onPress, theme }: AthleteItemProps) {
     <TouchableOpacity
       onPress={() => onPress(athlete)}
       activeOpacity={0.7}
-      style={[styles.athleteItem, { backgroundColor: theme.card, borderColor: theme.border }]}
+      style={[styles.athleteItem, { backgroundColor: theme.card, borderColor: theme.border, borderLeftWidth: 3, borderLeftColor: theme.primary }]}
     >
       <View style={styles.athleteHeader}>
         <View style={[styles.athleteAvatar, { backgroundColor: `${theme.primary}20` }]}>
@@ -63,22 +63,22 @@ function AthleteItem({ athlete, onPress, theme }: AthleteItemProps) {
         </Badge>
       </View>
 
-      <View style={[styles.athleteStats, { borderTopColor: theme.border }]}>
+      <View style={[styles.athleteStats, { borderTopColor: theme.border, backgroundColor: `${theme.secondary}15` }]}>
         <View style={styles.statItem}>
-          <Ionicons name="calendar-outline" size={16} color={theme.mutedForeground} />
+          <Ionicons name="calendar-outline" size={16} color={theme.primary} />
           <Text style={[styles.statLabel, { color: theme.mutedForeground }]}>
             {t('Athletes.table.lastActivity', 'Last Activity')}
           </Text>
-          <Text style={[styles.statValue, { color: theme.foreground }]}>
+          <Text style={[styles.statValue, { color: theme.primary }]}>
             {athlete.lastActivity.toLocaleDateString()}
           </Text>
         </View>
         <View style={styles.statItem}>
-          <Ionicons name="fitness-outline" size={16} color={theme.mutedForeground} />
+          <Ionicons name="fitness-outline" size={16} color={theme.primary} />
           <Text style={[styles.statLabel, { color: theme.mutedForeground }]}>
             {t('Athletes.table.sessions', 'Sessions')}
           </Text>
-          <Text style={[styles.statValue, { color: theme.foreground }]}>
+          <Text style={[styles.statValue, { color: theme.primary }]}>
             {athlete.sessionsCompleted}
           </Text>
         </View>
@@ -304,7 +304,7 @@ export function AthletesScreen() {
   // No organization selected state
   if (!currentOrganization) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
         <View style={styles.emptyStateContainer}>
           <Card style={styles.emptyStateCard}>
             <CardContent style={styles.emptyStateContent}>
@@ -335,7 +335,7 @@ export function AthletesScreen() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>

@@ -394,7 +394,7 @@ export function OrganizationsScreen({ navigation }: any) {
   // Loading state
   if (loading) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: theme.background }]}>
+      <View style={[styles.centerContainer, { backgroundColor: `${theme.primary}08` }]}>
         <ActivityIndicator size="large" color={theme.primary} />
         <Text style={[styles.loadingText, { color: theme.mutedForeground }]}>
           {t('Organizations.loading', 'Loading...')}
@@ -406,7 +406,7 @@ export function OrganizationsScreen({ navigation }: any) {
   // No organization selected
   if (!currentOrganization) {
     return (
-      <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+      <ScrollView style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.foreground }]}>
@@ -417,7 +417,7 @@ export function OrganizationsScreen({ navigation }: any) {
           <Card>
             <CardContent style={styles.emptyState}>
               <View style={[styles.emptyIconContainer, { backgroundColor: `${theme.primary}20` }]}>
-                <Ionicons name="business-outline" size={48} color={theme.mutedForeground} />
+                <Ionicons name="flag-outline" size={48} color={theme.primary} />
               </View>
               <Text style={[styles.emptyStateTitle, { color: theme.foreground }]}>
                 {t('Organizations.noOrganizationSelected', 'No organization selected')}
@@ -493,22 +493,22 @@ export function OrganizationsScreen({ navigation }: any) {
                   activeOpacity={isCurrent ? 1 : 0.7}
                 >
                   <Card
-                    style={[
-                      { marginBottom: 12 },
-                      isCurrent && { borderColor: theme.primary, borderWidth: 2 }
-                    ]}
+                    style={isCurrent
+                      ? { marginBottom: 12, borderColor: theme.primary, borderWidth: 2, borderLeftWidth: 4, borderLeftColor: theme.primary }
+                      : { marginBottom: 12, borderLeftWidth: 4, borderLeftColor: theme.secondary }
+                    }
                   >
                     <CardHeader>
                       <View style={styles.organizationHeader}>
                         <View style={styles.organizationHeaderLeft}>
                           <View style={[
                             styles.orgIconSmall,
-                            { backgroundColor: isCurrent ? `${theme.primary}20` : `${theme.secondary}50` }
+                            { backgroundColor: isCurrent ? `${theme.primary}20` : `${theme.secondary}30` }
                           ]}>
                             <Ionicons
-                              name={isCurrent ? "business" : "business-outline"}
+                              name={isCurrent ? "flag" : "flag-outline"}
                               size={20}
-                              color={isCurrent ? theme.primary : theme.foreground}
+                              color={isCurrent ? theme.primary : (theme.secondary !== '#F3F4F6' ? theme.secondary : theme.foreground)}
                             />
                           </View>
                           <View style={styles.organizationInfo}>
@@ -852,7 +852,7 @@ export function OrganizationsScreen({ navigation }: any) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={[styles.title, { color: theme.foreground }]}>

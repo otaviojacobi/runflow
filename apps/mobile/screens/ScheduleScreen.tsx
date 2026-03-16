@@ -15,7 +15,7 @@ export function ScheduleScreen() {
   const { theme } = useTheme();
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+    <ScrollView style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={[styles.title, { color: theme.foreground }]}>
@@ -26,9 +26,11 @@ export function ScheduleScreen() {
           </Text>
         </View>
 
-        <Card>
+        <Card style={{ borderTopWidth: 3, borderTopColor: theme.primary }}>
           <CardContent style={styles.emptyState}>
-            <Ionicons name="calendar-outline" size={48} color={theme.mutedForeground} />
+            <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: `${theme.primary}15`, alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+              <Ionicons name="calendar-outline" size={36} color={theme.primary} />
+            </View>
             <Text style={[styles.emptyStateTitle, { color: theme.foreground }]}>
               {t('Schedule.noSchedule', 'No training schedule yet')}
             </Text>

@@ -7,12 +7,13 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { api } from '../lib/api';
+import { useTheme } from '../contexts/ThemeContext';
 
 export function VerifyEmailScreen({ route, navigation }: any) {
   const { t } = useTranslation();
+  const { theme } = useTheme();
   const { email } = route.params;
   const [loading, setLoading] = useState(false);
 
@@ -29,48 +30,45 @@ export function VerifyEmailScreen({ route, navigation }: any) {
   };
 
   return (
-    <LinearGradient
-      colors={['#E0F2FE', '#DBEAFE', '#DDD6FE']}
-      style={styles.container}
-    >
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.content}>
-        <View style={styles.card}>
-          <View style={styles.iconContainer}>
+        <View style={[styles.card, { backgroundColor: theme.card }]}>
+          <View style={[styles.iconContainer, { backgroundColor: theme.secondary }]}>
             <Text style={styles.iconText}>✉️</Text>
           </View>
 
-          <Text style={styles.title}>{t('auth.verifyEmail.title')}</Text>
+          <Text style={[styles.title, { color: theme.foreground }]}>{t('auth.verifyEmail.title')}</Text>
 
-          <Text style={styles.message}>
+          <Text style={[styles.message, { color: theme.mutedForeground }]}>
             {t('auth.verifyEmail.message')}{'\n'}
-            <Text style={styles.email}>{email}</Text>
+            <Text style={[styles.email, { color: theme.foreground }]}>{email}</Text>
           </Text>
 
-          <Text style={styles.hint}>
+          <Text style={[styles.hint, { color: theme.mutedForeground }]}>
             {t('auth.verifyEmail.hint')}
           </Text>
 
           <TouchableOpacity
-            style={[styles.resendButton, loading && styles.buttonDisabled]}
+            style={[styles.resendButton, { borderColor: theme.primary }, loading && styles.buttonDisabled]}
             onPress={handleResendEmail}
             disabled={loading}
           >
             {loading ? (
-              <ActivityIndicator color="#2563EB" />
+              <ActivityIndicator color={theme.primary} />
             ) : (
-              <Text style={styles.resendButtonText}>{t('auth.verifyEmail.resendButton')}</Text>
+              <Text style={[styles.resendButtonText, { color: theme.primary }]}>{t('auth.verifyEmail.resendButton')}</Text>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.loginButton}
+            style={[styles.loginButton, { backgroundColor: theme.primary }]}
             onPress={() => navigation.navigate('Login')}
           >
-            <Text style={styles.loginButtonText}>{t('auth.verifyEmail.backToLogin')}</Text>
+            <Text style={[styles.loginButtonText, { color: theme.primaryForeground }]}>{t('auth.verifyEmail.backToLogin')}</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
@@ -84,7 +82,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   card: {
-    backgroundColor: 'white',
     padding: 32,
     borderRadius: 16,
     alignItems: 'center',
@@ -98,7 +95,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#DBEAFE',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
@@ -109,22 +105,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#111827',
     marginBottom: 16,
   },
   message: {
     fontSize: 16,
-    color: '#6B7280',
     textAlign: 'center',
     marginBottom: 12,
   },
   email: {
     fontWeight: 'bold',
-    color: '#111827',
   },
   hint: {
     fontSize: 14,
-    color: '#9CA3AF',
     textAlign: 'center',
     marginBottom: 32,
   },
@@ -133,8 +125,6 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#2563EB',
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -145,19 +135,16 @@ const styles = StyleSheet.create({
   resendButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#2563EB',
   },
   loginButton: {
     width: '100%',
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#2563EB',
     justifyContent: 'center',
     alignItems: 'center',
   },
   loginButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: 'white',
   },
 });

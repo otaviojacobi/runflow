@@ -30,6 +30,7 @@ export default function ProfilePage() {
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [name, setName] = useState('')
+  const [apiName, setApiName] = useState('')
 
   useEffect(() => {
     async function loadUser() {
@@ -38,7 +39,26 @@ export default function ProfilePage() {
 
       if (user) {
         setUser(user as UserProfile)
-        setName(user.user_metadata?.name || '')
+
+        // Fetch name from API (database) instead of Supabase auth metadata
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session?.access_token) {
+            const res = await fetch('/api/users/me', {
+              headers: { Authorization: `Bearer ${session.access_token}` },
+            })
+            if (res.ok) {
+              const data = await res.json()
+              const dbName = data.user?.name || ''
+              setApiName(dbName)
+              setName(dbName)
+            } else {
+              setName(user.user_metadata?.name || '')
+            }
+          }
+        } catch {
+          setName(user.user_metadata?.name || '')
+        }
       }
       setLoading(false)
     }
@@ -104,7 +124,7 @@ export default function ProfilePage() {
                 <User className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <CardTitle>{name || user.email}</CardTitle>
+                <CardTitle>{apiName || user.email}</CardTitle>
                 <CardDescription>{user.email}</CardDescription>
               </div>
             </div>
@@ -146,7 +166,7 @@ export default function ProfilePage() {
                 variant="outline"
                 onClick={() => {
                   setEditing(false)
-                  setName(user.user_metadata?.name || '')
+                  setName(apiName)
                 }}
                 disabled={saving}
               >

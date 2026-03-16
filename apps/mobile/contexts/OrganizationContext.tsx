@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
+import { AppState } from 'react-native';
 import type { UserProfile } from '@repo/schemas/user';
 import type { OrganizationResponse, InviteResponse } from '@repo/schemas/organization';
 import { api } from '../lib/api';
@@ -20,6 +21,8 @@ interface OrganizationContextType {
   switchOrganization: (organizationId: string) => Promise<void>;
   acceptInvite: (token: string) => Promise<void>;
   declineInvite: (inviteId: string) => Promise<void>;
+  updateCurrentOrganizationColors: (primaryColor: string, secondaryColor: string) => void;
+  updateCurrentOrganizationLogo: (logo: string | null) => void;
 }
 
 const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
@@ -36,10 +39,24 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
   const [loading, setLoading] = useState(true);
   const { updateTheme } = useTheme();
 
+  const appState = useRef(AppState.currentState);
+
   // Fetch user and organizations on mount
   useEffect(() => {
     fetchUserAndOrganizations();
   }, []);
+
+  // Re-fetch when app comes back to foreground (e.g. after changing colors in studio)
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        refreshOrganizations();
+      }
+      appState.current = nextAppState;
+    });
+
+    return () => subscription.remove();
+  }, [user?.currentOrganizationId]);
 
   // Update current organization when user changes
   useEffect(() => {
@@ -47,9 +64,12 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
       const current = organizations.find(org => org.id === user.currentOrganizationId);
       setCurrentOrganization(current || null);
 
-      // Update theme when organization changes
+      // Apply organization colors to theme
       if (current) {
-        updateTheme(current.id);
+        updateTheme(current.id, {
+          primaryColor: current.primaryColor,
+          secondaryColor: current.secondaryColor,
+        });
       }
     } else {
       setCurrentOrganization(null);
@@ -67,7 +87,11 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
         api.getPendingInvites(),
       ]);
 
-      setUser(userData);
+      // The /api/users/me endpoint returns { user: {...}, organizations: [...], ... }
+      // Extract the nested user object
+      const userProfile = (userData as any).user ?? userData;
+
+      setUser(userProfile);
       setOrganizations(orgsData);
       setPendingInvites(invitesData);
     } catch (error) {
@@ -86,6 +110,17 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
 
       setOrganizations(orgsData);
       setPendingInvites(invitesData);
+
+      // Re-apply theme colors in case they changed in studio
+      if (user?.currentOrganizationId) {
+        const current = orgsData.find((o: OrganizationWithRole) => o.id === user.currentOrganizationId);
+        if (current) {
+          await updateTheme(current.id, {
+            primaryColor: current.primaryColor,
+            secondaryColor: current.secondaryColor,
+          });
+        }
+      }
     } catch (error) {
       console.error('Failed to refresh organizations:', error);
       throw error;
@@ -99,8 +134,12 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
       // Update user's current organization
       setUser(prev => prev ? { ...prev, currentOrganizationId: organizationId } : null);
 
-      // Update theme
-      await updateTheme(organizationId);
+      // Apply theme from the org data we already have
+      const org = organizations.find(o => o.id === organizationId);
+      await updateTheme(organizationId, {
+        primaryColor: org?.primaryColor,
+        secondaryColor: org?.secondaryColor,
+      });
     } catch (error) {
       console.error('Failed to switch organization:', error);
       throw error;
@@ -135,6 +174,35 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
     }
   };
 
+  const updateCurrentOrganizationColors = (primaryColor: string, secondaryColor: string) => {
+    setCurrentOrganization(prev => {
+      if (!prev) return prev;
+      return { ...prev, primaryColor, secondaryColor };
+    });
+    setOrganizations(prev => prev.map(org => {
+      if (org.id === currentOrganization?.id) {
+        return { ...org, primaryColor, secondaryColor };
+      }
+      return org;
+    }));
+    if (currentOrganization) {
+      updateTheme(currentOrganization.id, { primaryColor, secondaryColor });
+    }
+  };
+
+  const updateCurrentOrganizationLogo = (logo: string | null) => {
+    setCurrentOrganization(prev => {
+      if (!prev) return prev;
+      return { ...prev, logo };
+    });
+    setOrganizations(prev => prev.map(org => {
+      if (org.id === currentOrganization?.id) {
+        return { ...org, logo };
+      }
+      return org;
+    }));
+  };
+
   return (
     <OrganizationContext.Provider
       value={{
@@ -147,6 +215,8 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
         switchOrganization,
         acceptInvite,
         declineInvite,
+        updateCurrentOrganizationColors,
+        updateCurrentOrganizationLogo,
       }}
     >
       {children}

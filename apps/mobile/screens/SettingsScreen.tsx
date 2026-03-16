@@ -42,7 +42,7 @@ export function SettingsScreen() {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+    <ScrollView style={[styles.container, { backgroundColor: `${theme.primary}08` }]}>
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={[styles.title, { color: theme.foreground }]}>
@@ -57,7 +57,9 @@ export function SettingsScreen() {
         <Card style={styles.card}>
           <CardHeader>
             <View style={styles.cardTitleRow}>
-              <Ionicons name="notifications-outline" size={20} color={theme.foreground} />
+              <View style={[styles.cardIconContainer, { backgroundColor: `${theme.primary}20` }]}>
+                <Ionicons name="notifications-outline" size={18} color={theme.primary} />
+              </View>
               <CardTitle style={styles.cardTitleText}>
                 {t('Settings.notifications.title', 'Notifications')}
               </CardTitle>
@@ -107,7 +109,9 @@ export function SettingsScreen() {
         <Card style={styles.card}>
           <CardHeader>
             <View style={styles.cardTitleRow}>
-              <Ionicons name="globe-outline" size={20} color={theme.foreground} />
+              <View style={[styles.cardIconContainer, { backgroundColor: `${theme.secondary}30` }]}>
+                <Ionicons name="globe-outline" size={18} color={theme.secondary !== '#F3F4F6' ? theme.secondary : theme.primary} />
+              </View>
               <CardTitle style={styles.cardTitleText}>
                 {t('Settings.language.title', 'Language')}
               </CardTitle>
@@ -141,7 +145,9 @@ export function SettingsScreen() {
         <Card style={styles.card}>
           <CardHeader>
             <View style={styles.cardTitleRow}>
-              <Ionicons name="moon-outline" size={20} color={theme.foreground} />
+              <View style={[styles.cardIconContainer, { backgroundColor: `${theme.primary}20` }]}>
+                <Ionicons name="moon-outline" size={18} color={theme.primary} />
+              </View>
               <CardTitle style={styles.cardTitleText}>
                 {t('Settings.appearance.title', 'Appearance')}
               </CardTitle>
@@ -178,7 +184,9 @@ export function SettingsScreen() {
         <Card style={styles.card}>
           <CardHeader>
             <View style={styles.cardTitleRow}>
-              <Ionicons name="flash-outline" size={20} color={theme.foreground} />
+              <View style={[styles.cardIconContainer, { backgroundColor: `${theme.secondary}30` }]}>
+                <Ionicons name="flash-outline" size={18} color={theme.secondary !== '#F3F4F6' ? theme.secondary : theme.primary} />
+              </View>
               <CardTitle style={styles.cardTitleText}>
                 {t('Settings.performance.title', 'Performance')}
               </CardTitle>
@@ -241,6 +249,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     marginBottom: 4,
+  },
+  cardIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cardTitleText: {
     fontSize: 18,

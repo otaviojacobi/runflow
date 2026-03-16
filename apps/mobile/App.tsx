@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, View, TouchableOpacity, Text } from 'react-native';
+import { ActivityIndicator, View, TouchableOpacity, Text, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import Constants from 'expo-constants';
 import './i18n'; // Initialize i18n
 import { supabase } from './lib/supabase';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
-import { OrganizationProvider } from './contexts/OrganizationContext';
+import { OrganizationProvider, useOrganization } from './contexts/OrganizationContext';
 
 // Auth Screens
 import { LoginScreen } from './screens/LoginScreen';
@@ -33,6 +33,7 @@ const Tab = createBottomTabNavigator();
 function MainTabs() {
   const { theme } = useTheme();
   const { t } = useTranslation();
+  const { refreshOrganizations, currentOrganization } = useOrganization();
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
   const [organizationName, setOrganizationName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -96,6 +97,11 @@ function MainTabs() {
   return (
     <Tab.Navigator
       key={`tabs-${currentUserRole}-${organizationName}`}
+      screenListeners={{
+        tabPress: () => {
+          refreshOrganizations().catch(() => {});
+        },
+      }}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'grid-outline';
@@ -105,7 +111,7 @@ function MainTabs() {
           } else if (route.name === 'Schedule') {
             iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Organizations') {
-            iconName = focused ? 'business' : 'business-outline';
+            iconName = focused ? 'flag' : 'flag-outline';
           } else if (route.name === 'Athletes') {
             iconName = focused ? 'people' : 'people-outline';
           } else if (route.name === 'Profile') {
@@ -117,19 +123,33 @@ function MainTabs() {
         tabBarActiveTintColor: theme.primary,
         tabBarInactiveTintColor: theme.mutedForeground,
         tabBarStyle: {
-          backgroundColor: theme.card,
-          borderTopColor: theme.border,
+          backgroundColor: `${theme.primary}10`,
+          borderTopColor: `${theme.primary}30`,
           borderTopWidth: 1,
         },
         headerStyle: {
-          backgroundColor: theme.card,
-          borderBottomColor: theme.border,
-          borderBottomWidth: 1,
+          backgroundColor: theme.primary,
         },
-        headerTintColor: theme.foreground,
+        headerTintColor: theme.primaryForeground,
         headerTitleStyle: {
           fontWeight: '600',
         },
+        headerLeft: () => (
+          <View style={{ marginLeft: 16 }}>
+            {currentOrganization?.logo ? (
+              <Image
+                source={{ uri: currentOrganization.logo }}
+                style={{ width: 28, height: 28, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' }}
+              />
+            ) : (
+              <View style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#FFFFFF' }}>
+                  {(organizationName || 'O').charAt(0).toUpperCase()}
+                </Text>
+              </View>
+            )}
+          </View>
+        ),
       })}
     >
       <Tab.Screen
@@ -200,9 +220,9 @@ function AppNavigator() {
         screenOptions={{
           headerShown: true,
           headerStyle: {
-            backgroundColor: theme.card,
+            backgroundColor: theme.primary,
           },
-          headerTintColor: theme.foreground,
+          headerTintColor: theme.primaryForeground,
           headerTitleStyle: {
             fontWeight: '600',
           },

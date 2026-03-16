@@ -220,6 +220,30 @@ function LogoDropzone({
   )
 }
 
+// ─── Preview Icon (inline SVGs for phone preview) ────────────────────────────
+
+function PreviewIcon({ name, size = 16, color = 'currentColor' }: { name: string; size?: number; color?: string }) {
+  const props = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: color, strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+  switch (name) {
+    case 'grid':
+      return <svg {...props}><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+    case 'flag':
+      return <svg {...props}><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
+    case 'people':
+      return <svg {...props}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+    case 'person':
+      return <svg {...props}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+    case 'document':
+      return <svg {...props}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" /><path d="M14 2v6h6" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><line x1="10" y1="9" x2="8" y2="9" /></svg>
+    case 'mail':
+      return <svg {...props}><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
+    case 'chart':
+      return <svg {...props}><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>
+    default:
+      return null
+  }
+}
+
 // ─── Phone Preview ───────────────────────────────────────────────────────────
 
 function PhonePreview({
@@ -234,10 +258,10 @@ function PhonePreview({
   logoUrl: string | null
 }) {
   const quickActions = [
-    { icon: '👥', title: 'Team Management', description: 'Manage your athletes' },
-    { icon: '📋', title: 'Create Training', description: 'Design training sheets' },
-    { icon: '✉️', title: 'Invitations', description: 'Manage invites' },
-    { icon: '📊', title: 'Team Analytics', description: 'Track progress' },
+    { icon: 'people', title: 'Team Management', description: 'Manage your athletes' },
+    { icon: 'document', title: 'Create Training', description: 'Design training sheets' },
+    { icon: 'mail', title: 'Invitations', description: 'Manage invites' },
+    { icon: 'chart', title: 'Team Analytics', description: 'Track progress' },
   ]
 
   return (
@@ -281,168 +305,103 @@ function PhonePreview({
           </div>
 
           {/* Content area */}
-          <div className="flex-1 p-3 space-y-2.5 bg-gray-50 overflow-y-auto">
+          <div className="flex-1 p-3 space-y-2.5 overflow-y-auto" style={{ backgroundColor: `${primaryColor}08` }}>
             {/* Welcome banner */}
             <div
-              className="rounded-xl p-3 text-white relative overflow-hidden"
-              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}
+              className="rounded-xl text-white relative overflow-hidden"
+              style={{ padding: '20px 20px 20px 12px', background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}
             >
-              <div className="flex items-center gap-2">
-                {logoUrl && (
-                  <img
-                    src={logoUrl}
-                    alt=""
-                    className="w-8 h-8 rounded-lg object-cover border border-white/30 shrink-0"
-                  />
-                )}
-                <div>
-                  <p className="text-[11px] font-bold">Welcome back!</p>
-                  <p className="text-[9px] opacity-80 mt-0.5">{orgName || 'Organization'} Dashboard</p>
-                </div>
-              </div>
+              <p className="text-sm font-bold">Hello, User!</p>
               <div className="absolute -right-3 -bottom-3 w-16 h-16 rounded-full opacity-20 bg-white" />
               <div className="absolute -right-1 -top-4 w-10 h-10 rounded-full opacity-10 bg-white" />
             </div>
 
-            {/* Quick Actions Grid */}
-            <div className="grid grid-cols-2 gap-2">
-              {quickActions.map((action, i) => (
-                <div key={i} className="rounded-xl bg-white p-2.5 shadow-sm border border-gray-200">
+            {/* Quick Actions — vertical list */}
+            <div className="flex flex-col gap-2.5">
+              {quickActions.map((action, i) => {
+                const accentColor = i % 2 === 1 ? secondaryColor : primaryColor
+                return (
                   <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center text-sm mb-1.5"
-                    style={{ backgroundColor: i % 2 === 0 ? `${primaryColor}20` : `${secondaryColor}20` }}
+                    key={i}
+                    className="rounded-xl bg-white shadow-sm border border-gray-200 flex items-center gap-2.5 p-2.5"
+                    style={{ borderLeft: `3px solid ${accentColor}` }}
                   >
-                    {action.icon}
+                    <div
+                      className="flex items-center justify-center shrink-0"
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 10,
+                        backgroundColor: `${accentColor}20`,
+                      }}
+                    >
+                      <PreviewIcon name={action.icon} size={18} color={accentColor} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-semibold text-gray-900 leading-tight">{action.title}</p>
+                      <p className="text-[8px] text-gray-400 mt-0.5">{action.description}</p>
+                    </div>
                   </div>
-                  <p className="text-[10px] font-semibold text-gray-900 leading-tight">{action.title}</p>
-                  <p className="text-[8px] text-gray-400 mt-0.5">{action.description}</p>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* Organization Stats Card */}
-            <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200">
-              <div className="px-3 py-2" style={{ backgroundColor: secondaryColor }}>
-                <p className="text-[11px] font-semibold text-white">Organization Stats</p>
-                <p className="text-[8px] text-white/70">Team overview</p>
+            <div
+              className="rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-white"
+              style={{ borderTop: `3px solid ${primaryColor}` }}
+            >
+              <div className="px-3 py-2">
+                <p className="text-[11px] font-semibold text-gray-900">Organization Stats</p>
+                <p className="text-[8px] text-gray-400">Team overview</p>
               </div>
-              <div className="bg-white px-3 py-2 space-y-1.5">
+              <div className="px-3 pb-2 space-y-1.5">
                 {[
-                  { label: 'Total Members', value: '24', icon: '👥' },
-                  { label: 'Active Athletes', value: '18', icon: '🏃' },
-                  { label: 'Pending Invites', value: '3', icon: '✉️' },
+                  { label: 'Total Members', value: '0' },
+                  { label: 'Active Athletes', value: '0' },
+                  { label: 'Pending Invites', value: '0' },
                 ].map((stat, i) => (
                   <div key={i} className="flex justify-between items-center py-1 border-b border-gray-50 last:border-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px]">{stat.icon}</span>
-                      <span className="text-[9px] text-gray-500">{stat.label}</span>
-                    </div>
+                    <span className="text-[9px] text-gray-500">{stat.label}</span>
                     <span className="text-[11px] font-bold" style={{ color: primaryColor }}>{stat.value}</span>
                   </div>
                 ))}
               </div>
-              {/* Mini bar chart */}
-              <div className="bg-white px-3 pb-2 flex items-end gap-1 h-10">
-                {[40, 65, 50, 80, 55, 70, 90].map((h, i) => (
-                  <div
-                    key={i}
-                    className="flex-1 rounded-t-sm"
-                    style={{
-                      height: `${h}%`,
-                      backgroundColor: i % 2 === 0 ? primaryColor : secondaryColor,
-                      opacity: 0.7,
-                    }}
-                  />
-                ))}
-              </div>
             </div>
 
-            {/* Training Programs Card */}
-            <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200">
-              <div className="px-3 py-2" style={{ backgroundColor: primaryColor }}>
-                <p className="text-[11px] font-semibold text-white">Training Programs</p>
-                <p className="text-[8px] text-white/70">Active sheets</p>
+            {/* Training Programs Card — empty state */}
+            <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-white">
+              <div className="px-3 py-2">
+                <p className="text-[11px] font-semibold text-gray-900">Training Programs</p>
+                <p className="text-[8px] text-gray-400">Active sheets</p>
               </div>
-              <div className="bg-white p-3 space-y-2">
-                {[
-                  { name: 'Strength A', progress: 75 },
-                  { name: 'Cardio B', progress: 40 },
-                ].map((prog, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-[9px] text-white font-bold shrink-0"
-                      style={{ backgroundColor: i === 0 ? primaryColor : secondaryColor }}
-                    >
-                      {prog.name[0]}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-[9px] font-medium text-gray-900">{prog.name}</p>
-                      <div className="h-1.5 rounded-full bg-gray-100 w-full mt-0.5 overflow-hidden">
-                        <div
-                          className="h-full rounded-full"
-                          style={{
-                            width: `${prog.progress}%`,
-                            backgroundColor: i === 0 ? primaryColor : secondaryColor,
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <span className="text-[8px] font-medium" style={{ color: i === 0 ? primaryColor : secondaryColor }}>{prog.progress}%</span>
-                  </div>
-                ))}
+              <div className="flex flex-col items-center py-5 px-3">
+                <PreviewIcon name="document" size={28} color="#6B7280" />
+                <p className="text-[9px] text-gray-400 mt-2">No programs yet</p>
                 <button
-                  className="w-full rounded-lg py-1.5 text-[9px] font-medium text-white mt-1"
-                  style={{ backgroundColor: secondaryColor }}
+                  className="rounded-lg px-3 py-1 text-[8px] font-medium text-white mt-2"
+                  style={{ backgroundColor: primaryColor }}
                 >
-                  + Create new program
+                  Create first program
                 </button>
-              </div>
-            </div>
-
-            {/* Upcoming Schedule */}
-            <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200">
-              <div className="px-3 py-2 flex justify-between items-center" style={{ backgroundColor: `${primaryColor}10` }}>
-                <p className="text-[10px] font-semibold text-gray-900">Upcoming Schedule</p>
-                <span className="text-[8px] font-medium" style={{ color: primaryColor }}>See all</span>
-              </div>
-              <div className="bg-white px-3 py-2 space-y-2">
-                {[
-                  { time: '08:00', title: 'Morning Run', tag: 'Cardio' },
-                  { time: '14:00', title: 'Weight Training', tag: 'Strength' },
-                  { time: '17:30', title: 'Team Practice', tag: 'Group' },
-                ].map((event, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div
-                      className="w-1 h-8 rounded-full shrink-0"
-                      style={{ backgroundColor: i % 2 === 0 ? primaryColor : secondaryColor }}
-                    />
-                    <div className="flex-1">
-                      <p className="text-[9px] font-medium text-gray-900">{event.title}</p>
-                      <p className="text-[8px] text-gray-400">{event.time}</p>
-                    </div>
-                    <span
-                      className="text-[7px] font-medium px-1.5 py-0.5 rounded-full text-white"
-                      style={{ backgroundColor: i % 2 === 0 ? primaryColor : secondaryColor }}
-                    >
-                      {event.tag}
-                    </span>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
 
           {/* Bottom Tab Bar */}
-          <div className="flex items-center justify-around py-2 border-t" style={{ borderColor: '#E5E7EB', backgroundColor: 'white' }}>
+          <div
+            className="flex items-center py-2 border-t"
+            style={{ borderColor: `${primaryColor}30`, backgroundColor: `${primaryColor}10` }}
+          >
             {[
-              { icon: '▦', label: 'Dashboard', active: true },
-              { icon: '🏢', label: 'Orgs', active: false },
-              { icon: '👥', label: 'Athletes', active: false },
-              { icon: '👤', label: 'Profile', active: false },
+              { icon: 'grid', label: 'Dashboard', active: true },
+              { icon: 'flag', label: 'Organizations', active: false },
+              { icon: 'people', label: 'Athletes', active: false },
+              { icon: 'person', label: 'Profile', active: false },
             ].map((tab, i) => (
-              <div key={i} className="flex flex-col items-center gap-0.5">
-                <span className="text-sm" style={{ color: tab.active ? primaryColor : secondaryColor }}>{tab.icon}</span>
-                <span className="text-[8px] font-medium" style={{ color: tab.active ? primaryColor : secondaryColor }}>{tab.label}</span>
+              <div key={i} className="flex flex-col items-center gap-0.5 flex-1">
+                <PreviewIcon name={tab.icon} size={16} color={tab.active ? primaryColor : '#6B7280'} />
+                <span className="text-[8px] font-medium" style={{ color: tab.active ? primaryColor : '#6B7280' }}>{tab.label}</span>
               </div>
             ))}
           </div>

@@ -6,7 +6,6 @@ import type {
   MemberResponse,
   InviteResponse
 } from '@repo/schemas/organization';
-import type { OrganizationTheme } from '@repo/schemas/theme';
 
 const API_URL = Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'https://www.runflow.club';
 
@@ -44,6 +43,28 @@ async function apiRequest<T>(
     throw new Error(data.error || data.message || 'Request failed');
   }
 
+  return data;
+}
+
+// Helper for FormData requests (logo upload) — no Content-Type header
+async function apiRequestFormData<T>(
+  endpoint: string,
+  formData: FormData
+): Promise<T> {
+  const { data: { session } } = await supabase.auth.getSession();
+  const headers: Record<string, string> = {};
+  if (session?.access_token) {
+    headers['Authorization'] = `Bearer ${session.access_token}`;
+  }
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || data.message || 'Request failed');
+  }
   return data;
 }
 
@@ -124,10 +145,6 @@ export const api = {
     });
   },
 
-  async getOrganizationTheme(organizationId: string) {
-    return apiRequest<Partial<OrganizationTheme>>(`/api/organizations/${organizationId}/theme`);
-  },
-
   // ============ Members API ============
   async getOrganizationMembers(organizationId: string) {
     return apiRequest<{ members: MemberResponse[] }>(`/api/organizations/${organizationId}/members`);
@@ -191,5 +208,36 @@ export const api = {
 
   async removeAthlete(organizationId: string, userId: string) {
     return this.removeMember(organizationId, userId);
+  },
+
+  // ============ Studio API ============
+  async uploadOrganizationLogo(organizationId: string, imageUri: string, fileName: string, mimeType: string) {
+    const formData = new FormData();
+    formData.append('file', {
+      uri: imageUri,
+      name: fileName,
+      type: mimeType,
+    } as any);
+    return apiRequestFormData<OrganizationResponse>(
+      `/api/organizations/${organizationId}/logo`,
+      formData
+    );
+  },
+
+  async removeOrganizationLogo(organizationId: string) {
+    return apiRequest<{ success: boolean }>(
+      `/api/organizations/${organizationId}/logo`,
+      { method: 'DELETE' }
+    );
+  },
+
+  async updateOrganizationColors(organizationId: string, primaryColor: string, secondaryColor: string) {
+    return apiRequest<{ organization: OrganizationResponse }>(
+      `/api/organizations/${organizationId}/studio`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ primaryColor, secondaryColor }),
+      }
+    );
   },
 };

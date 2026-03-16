@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Building2, UserPlus, Clock, AlertCircle, CheckCircle, Mail } from 'lucide-react'
+import { Flag, UserPlus, Clock, AlertCircle, CheckCircle, Mail } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 interface InviteData {
@@ -238,7 +238,7 @@ export default function InvitePage({ params }: { params: Promise<{ token: string
             <div className="flex items-start gap-4">
               <Avatar className="h-14 w-14">
                 <AvatarFallback className="bg-blue-100">
-                  <Building2 className="h-7 w-7 text-blue-600" />
+                  <Flag className="h-7 w-7 text-blue-600" />
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1">

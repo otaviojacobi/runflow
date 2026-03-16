@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Building2, ArrowLeft } from 'lucide-react'
+import { Flag, ArrowLeft } from 'lucide-react'
 import { useOrganization } from '@/contexts/OrganizationContext'
 
 export default function NewOrganizationPage() {
@@ -77,7 +77,7 @@ export default function NewOrganizationPage() {
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Building2 className="h-5 w-5 text-primary" />
+                <Flag className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <CardTitle>
