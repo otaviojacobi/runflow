@@ -12,13 +12,14 @@ import {
   Activity,
   Users,
   Calendar,
-  TrendingUp,
   ArrowRight,
   Bell,
   Plus,
   FileText,
-  Target,
-  Dumbbell
+  Palette,
+  Dumbbell,
+  UserCircle,
+  Flag
 } from 'lucide-react'
 
 export default function DashboardPage() {
@@ -132,30 +133,20 @@ export default function DashboardPage() {
                 <p className="text-xs text-muted-foreground">{t('quickActions.sendTrackInvites')}</p>
               </CardContent>
             </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/analytics')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/organizations/studio')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t('quickActions.teamAnalytics')}</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">{t('quickActions.studio')}</CardTitle>
+                <Palette className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{t('quickActions.performance')}</div>
-                <p className="text-xs text-muted-foreground">{t('quickActions.trackProgress')}</p>
+                <div className="text-2xl font-bold">{t('quickActions.studioContent')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.studioDescription')}</p>
               </CardContent>
             </Card>
           </>
         ) : (
           <>
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/my-trainings')}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t('quickActions.todaysTraining')}</CardTitle>
-                <Dumbbell className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{t('quickActions.programs')}</div>
-                <p className="text-xs text-muted-foreground">{t('quickActions.accessTraining')}</p>
-              </CardContent>
-            </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/schedule')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">{t('quickActions.todaysTraining')}</CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -165,24 +156,24 @@ export default function DashboardPage() {
                 <p className="text-xs text-muted-foreground">{t('quickActions.viewPlan')}</p>
               </CardContent>
             </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/progress')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/profile')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t('quickActions.myProgress')}</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">{t('quickActions.myProfile')}</CardTitle>
+                <UserCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{t('analytics')}</div>
-                <p className="text-xs text-muted-foreground">{t('quickActions.trackPerformance')}</p>
+                <div className="text-2xl font-bold">{t('quickActions.profileContent')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.myProfileDescription')}</p>
               </CardContent>
             </Card>
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/achievements')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push('/dashboard/organizations')}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t('quickActions.achievements')}</CardTitle>
-                <Target className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">{t('quickActions.myClub')}</CardTitle>
+                <Flag className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{t('quickActions.goals')}</div>
-                <p className="text-xs text-muted-foreground">{t('quickActions.viewMilestones')}</p>
+                <div className="text-2xl font-bold">{t('quickActions.clubContent')}</div>
+                <p className="text-xs text-muted-foreground">{t('quickActions.myClubDescription')}</p>
               </CardContent>
             </Card>
           </>
@@ -236,7 +227,7 @@ export default function DashboardPage() {
                     <div className="text-center py-8 text-muted-foreground">
                       <FileText className="h-12 w-12 mx-auto mb-3 text-gray-300" />
                       <p className="text-sm">{t('overview.noProgramsYet')}</p>
-                      <Button size="sm" className="mt-3" onClick={() => router.push('/dashboard/training/new')}>
+                      <Button size="sm" className="mt-3" onClick={() => router.push('/dashboard/trainings')}>
                         {t('overview.createFirstProgram')}
                       </Button>
                     </div>
@@ -279,7 +270,7 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-muted-foreground">
-                      <Target className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                      <Activity className="h-12 w-12 mx-auto mb-3 text-gray-300" />
                       <p className="text-sm">{t('overview.startTrainingForAchievements')}</p>
                     </div>
                   </CardContent>
@@ -331,7 +322,7 @@ export default function DashboardPage() {
                       <p className="text-sm">{t('overview.noTeamMembers')}</p>
                       <Button
                         className="mt-4"
-                        onClick={() => router.push('/dashboard/athletes/invite')}
+                        onClick={() => router.push('/dashboard/organizations/invite')}
                       >
                         <Plus className="mr-2 h-4 w-4" />
                         {t('overview.inviteTeamMembers')}

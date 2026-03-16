@@ -319,12 +319,11 @@ function PhonePreview({
             {/* Quick Actions — vertical list */}
             <div className="flex flex-col gap-2.5">
               {quickActions.map((action, i) => {
-                const accentColor = i % 2 === 1 ? secondaryColor : primaryColor
                 return (
                   <div
                     key={i}
-                    className="rounded-xl bg-white shadow-sm border border-gray-200 flex items-center gap-2.5 p-2.5"
-                    style={{ borderLeft: `3px solid ${accentColor}` }}
+                    className="rounded-xl bg-white shadow-sm border border-gray-200 border-l-3 flex items-center gap-2.5 p-2.5"
+                    style={{ borderLeftColor: primaryColor }}
                   >
                     <div
                       className="flex items-center justify-center shrink-0"
@@ -332,10 +331,10 @@ function PhonePreview({
                         width: 36,
                         height: 36,
                         borderRadius: 10,
-                        backgroundColor: `${accentColor}20`,
+                        backgroundColor: `${secondaryColor}20`,
                       }}
                     >
-                      <PreviewIcon name={action.icon} size={18} color={accentColor} />
+                      <PreviewIcon name={action.icon} size={18} color={primaryColor} />
                     </div>
                     <div>
                       <p className="text-[10px] font-semibold text-gray-900 leading-tight">{action.title}</p>

@@ -231,6 +231,19 @@
     "dashboard": "Painel",
     "hello": "Olá",
     "helloName": "Olá, {{name}}",
+    "today": "Hoje",
+    "tomorrow": "Amanhã",
+    "upNext": "Próximo treino",
+    "allDoneThisWeek": "Você está em dia esta semana!",
+    "days": {
+      "sunday": "Domingo",
+      "monday": "Segunda-feira",
+      "tuesday": "Terça-feira",
+      "wednesday": "Quarta-feira",
+      "thursday": "Quinta-feira",
+      "friday": "Sexta-feira",
+      "saturday": "Sábado"
+    },
     "currentlyViewing": "Visualizando atualmente",
     "invitations": "Convites",
     "quickActions": {
@@ -248,7 +261,13 @@
       "myProgress": "Meu Progresso",
       "viewProgress": "Veja seu progresso",
       "myProfile": "Meu Perfil",
-      "updateProfile": "Atualize seu perfil"
+      "updateProfile": "Atualize seu perfil",
+      "manageClub": "Gerenciar Clube",
+      "manageClubDescription": "Gerencie seu clube",
+      "myTrainings": "Meus Treinos",
+      "myTrainingsDescription": "Veja treinos atribuídos",
+      "myClub": "Meu Clube",
+      "myClubDescription": "Veja seu clube"
     },
     "overview": {
       "organizationStats": "Estatísticas do Clube",
@@ -271,12 +290,76 @@
     "settings": "Configurações",
     "invitations": "Convites",
     "forgotPassword": "Esqueceu a Senha",
-    "verifyEmail": "Verificar E-mail"
+    "verifyEmail": "Verificar E-mail",
+    "createOrganization": "Criar Clube",
+    "inviteMembers": "Convidar Membros",
+    "createTraining": "Criar Treino"
   },
   "Schedule": {
     "title": "Agenda de Treinos",
     "description": "Veja sua agenda semanal de treinos",
     "noSchedule": "Ainda sem agenda de treinos",
-    "noScheduleDescription": "Seu treinador irá atribuir treinos a você em breve"
+    "noScheduleDescription": "Seu treinador irá atribuir treinos a você em breve",
+    "pullToRefresh": "Puxe para atualizar",
+    "markAsDone": "Marcar como Feito",
+    "markAsMissed": "Marcar como Perdido",
+    "markAsTodo": "Marcar como Pendente",
+    "statusTodo": "Pendente",
+    "statusCompleted": "Concluído",
+    "statusMissed": "Perdido",
+    "running": "Corrida",
+    "strength": "Força",
+    "failedToLoad": "Falha ao carregar treinos",
+    "statusUpdated": "Status do treino atualizado",
+    "failedToUpdateStatus": "Falha ao atualizar status do treino",
+    "noTrainingsThisWeek": "Sem treinos esta semana",
+    "noTrainingsThisWeekDescription": "Tente verificar outra semana ou puxe para atualizar",
+    "backToThisWeek": "Voltar para esta semana"
+  },
+  "CreateOrganization": {
+    "title": "Criar Clube",
+    "description": "Crie um novo clube para gerenciar sua equipe",
+    "nameLabel": "Nome do Clube",
+    "namePlaceholder": "Digite o nome do clube",
+    "descriptionLabel": "Descrição (opcional)",
+    "descriptionPlaceholder": "Digite uma descrição para seu clube",
+    "createButton": "Criar Clube",
+    "creating": "Criando...",
+    "success": "Clube criado com sucesso",
+    "error": "Falha ao criar clube",
+    "nameRequired": "O nome do clube é obrigatório"
+  },
+  "InviteMembers": {
+    "title": "Convidar Membros",
+    "description": "Convide novos membros para seu clube",
+    "emailLabel": "Endereço de E-mail",
+    "emailPlaceholder": "Digite o e-mail",
+    "roleLabel": "Função",
+    "selectRole": "Selecione uma função",
+    "sendButton": "Enviar Convite",
+    "sending": "Enviando...",
+    "success": "Convite enviado com sucesso",
+    "error": "Falha ao enviar convite",
+    "emailRequired": "O endereço de e-mail é obrigatório"
+  },
+  "CreateTraining": {
+    "title": "Criar Treino",
+    "description": "Crie um novo treino para um atleta",
+    "titleLabel": "Título do Treino",
+    "titlePlaceholder": "Digite o título do treino",
+    "athleteLabel": "Atleta",
+    "selectAthlete": "Selecione um atleta",
+    "dateLabel": "Data Agendada",
+    "datePlaceholder": "AAAA-MM-DD",
+    "typeLabel": "Tipo de Treino",
+    "descriptionLabel": "Descrição (opcional)",
+    "descriptionPlaceholder": "Digite a descrição do treino",
+    "createButton": "Criar Treino",
+    "creating": "Criando...",
+    "success": "Treino criado com sucesso",
+    "error": "Falha ao criar treino",
+    "titleRequired": "O título do treino é obrigatório",
+    "athleteRequired": "Selecione um atleta",
+    "dateRequired": "A data agendada é obrigatória"
   }
 }

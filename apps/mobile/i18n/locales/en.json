@@ -231,6 +231,19 @@
     "dashboard": "Dashboard",
     "hello": "Hello",
     "helloName": "Hello, {{name}}",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "upNext": "Up next",
+    "allDoneThisWeek": "You're all caught up this week!",
+    "days": {
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    },
     "currentlyViewing": "Currently viewing",
     "invitations": "Invitations",
     "quickActions": {
@@ -248,7 +261,13 @@
       "myProgress": "My Progress",
       "viewProgress": "View your progress",
       "myProfile": "My Profile",
-      "updateProfile": "Update your profile"
+      "updateProfile": "Update your profile",
+      "manageClub": "Manage Club",
+      "manageClubDescription": "Manage your organization",
+      "myTrainings": "My Trainings",
+      "myTrainingsDescription": "View assigned trainings",
+      "myClub": "My Club",
+      "myClubDescription": "View your organization"
     },
     "overview": {
       "organizationStats": "Organization Stats",
@@ -271,12 +290,76 @@
     "settings": "Settings",
     "invitations": "Invitations",
     "forgotPassword": "Forgot Password",
-    "verifyEmail": "Verify Email"
+    "verifyEmail": "Verify Email",
+    "createOrganization": "Create Organization",
+    "inviteMembers": "Invite Members",
+    "createTraining": "Create Training"
   },
   "Schedule": {
     "title": "Training Schedule",
     "description": "View your weekly training schedule",
     "noSchedule": "No training schedule yet",
-    "noScheduleDescription": "Your trainer will assign workouts to you soon"
+    "noScheduleDescription": "Your trainer will assign workouts to you soon",
+    "pullToRefresh": "Pull to refresh",
+    "markAsDone": "Mark as Done",
+    "markAsMissed": "Mark as Missed",
+    "markAsTodo": "Mark as To Do",
+    "statusTodo": "To Do",
+    "statusCompleted": "Completed",
+    "statusMissed": "Missed",
+    "running": "Running",
+    "strength": "Strength",
+    "failedToLoad": "Failed to load trainings",
+    "statusUpdated": "Training status updated",
+    "failedToUpdateStatus": "Failed to update training status",
+    "noTrainingsThisWeek": "No trainings this week",
+    "noTrainingsThisWeekDescription": "Try checking another week or pull to refresh",
+    "backToThisWeek": "Back to this week"
+  },
+  "CreateOrganization": {
+    "title": "Create Organization",
+    "description": "Create a new organization to manage your team",
+    "nameLabel": "Organization Name",
+    "namePlaceholder": "Enter organization name",
+    "descriptionLabel": "Description (optional)",
+    "descriptionPlaceholder": "Enter a description for your organization",
+    "createButton": "Create Organization",
+    "creating": "Creating...",
+    "success": "Organization created successfully",
+    "error": "Failed to create organization",
+    "nameRequired": "Organization name is required"
+  },
+  "InviteMembers": {
+    "title": "Invite Members",
+    "description": "Invite new members to your organization",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "Enter email address",
+    "roleLabel": "Role",
+    "selectRole": "Select a role",
+    "sendButton": "Send Invite",
+    "sending": "Sending...",
+    "success": "Invitation sent successfully",
+    "error": "Failed to send invitation",
+    "emailRequired": "Email address is required"
+  },
+  "CreateTraining": {
+    "title": "Create Training",
+    "description": "Create a new training for an athlete",
+    "titleLabel": "Training Title",
+    "titlePlaceholder": "Enter training title",
+    "athleteLabel": "Athlete",
+    "selectAthlete": "Select an athlete",
+    "dateLabel": "Scheduled Date",
+    "datePlaceholder": "YYYY-MM-DD",
+    "typeLabel": "Training Type",
+    "descriptionLabel": "Description (optional)",
+    "descriptionPlaceholder": "Enter training description",
+    "createButton": "Create Training",
+    "creating": "Creating...",
+    "success": "Training created successfully",
+    "error": "Failed to create training",
+    "titleRequired": "Training title is required",
+    "athleteRequired": "Please select an athlete",
+    "dateRequired": "Scheduled date is required"
   }
 }

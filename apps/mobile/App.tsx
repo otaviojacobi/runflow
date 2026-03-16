@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, View, TouchableOpacity, Text, Image } from 'react-native';
+import { ActivityIndicator, View, Text, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import Constants from 'expo-constants';
 import './i18n'; // Initialize i18n
 import { supabase } from './lib/supabase';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
@@ -26,6 +25,9 @@ import { OrganizationsScreen } from './screens/OrganizationsScreen';
 import { AthletesScreen } from './screens/AthletesScreen';
 import { InvitesScreen } from './screens/InvitesScreen';
 import { ScheduleScreen } from './screens/ScheduleScreen';
+import { CreateOrganizationScreen } from './screens/CreateOrganizationScreen';
+import { InviteMembersScreen } from './screens/InviteMembersScreen';
+import { CreateTrainingScreen } from './screens/CreateTrainingScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,66 +35,15 @@ const Tab = createBottomTabNavigator();
 function MainTabs() {
   const { theme } = useTheme();
   const { t } = useTranslation();
-  const { refreshOrganizations, currentOrganization } = useOrganization();
-  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
-  const [organizationName, setOrganizationName] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { refreshOrganizations, currentOrganization, organizations, user, loading } = useOrganization();
 
-  useEffect(() => {
-    fetchUserRole();
-  }, []);
-
-  const fetchUserRole = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        setIsLoading(false);
-        return;
-      }
-
-      const response = await fetch(`${Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'https://www.runflow.club'}/api/users/me`, {
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const currentOrg = data.currentOrganization;
-        const organizations = data.organizations || [];
-
-        // Find the role from the organizations array
-        const role = currentOrg
-          ? organizations.find((org: any) => org.id === currentOrg.id)?.role
-          : null;
-
-        setCurrentUserRole(role);
-        setOrganizationName(currentOrg?.name);
-      }
-    } catch (error) {
-      console.error('Failed to fetch user role:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const currentUserRole = currentOrganization
+    ? organizations.find(org => org.id === currentOrganization.id)?.role ?? null
+    : null;
+  const organizationName = currentOrganization?.name ?? null;
 
   const isTrainerOrOwner = currentUserRole === 'OWNER' || currentUserRole === 'TRAINER';
   const isAthlete = currentUserRole === 'ATHLETE';
-
-  // Add listener for organization changes and refetch periodically
-  useEffect(() => {
-    const subscription = supabase.auth.onAuthStateChange(() => {
-      fetchUserRole();
-    });
-
-    // Also refetch every time the component mounts or user navigates
-    const interval = setInterval(fetchUserRole, 2000); // Check every 2 seconds
-
-    return () => {
-      subscription.data.subscription.unsubscribe();
-      clearInterval(interval);
-    };
-  }, []);
 
   return (
     <Tab.Navigator
@@ -126,6 +77,7 @@ function MainTabs() {
           backgroundColor: `${theme.primary}10`,
           borderTopColor: `${theme.primary}30`,
           borderTopWidth: 1,
+          elevation: 0,
         },
         headerStyle: {
           backgroundColor: theme.primary,
@@ -274,6 +226,21 @@ function AppNavigator() {
               name="Invites"
               component={InvitesScreen}
               options={{ title: t('navigation.invitations', 'Invitations') }}
+            />
+            <Stack.Screen
+              name="CreateOrganization"
+              component={CreateOrganizationScreen}
+              options={{ title: t('navigation.createOrganization', 'Create Organization') }}
+            />
+            <Stack.Screen
+              name="InviteMembers"
+              component={InviteMembersScreen}
+              options={{ title: t('navigation.inviteMembers', 'Invite Members') }}
+            />
+            <Stack.Screen
+              name="CreateTraining"
+              component={CreateTrainingScreen}
+              options={{ title: t('navigation.createTraining', 'Create Training') }}
             />
           </>
         )}
