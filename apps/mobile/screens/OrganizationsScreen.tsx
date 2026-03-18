@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
+import { useOrganization } from '../contexts/OrganizationContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -64,6 +65,7 @@ type TabType = 'all' | 'members' | 'invites';
 export function OrganizationsScreen({ navigation }: any) {
   const { t } = useTranslation();
   const { theme } = useTheme();
+  const { switchOrganization: contextSwitchOrg, refreshOrganizations } = useOrganization();
 
   // State
   const [activeTab, setActiveTab] = useState<TabType>('all');
@@ -426,7 +428,7 @@ export function OrganizationsScreen({ navigation }: any) {
                 {t('Organizations.createOrJoinPrompt', 'Create or join an organization to get started')}
               </Text>
               <Button
-                onPress={() => navigation.navigate('OrganizationSetup')}
+                onPress={() => navigation.navigate('CreateOrganization')}
                 style={{ marginTop: 16 }}
               >
                 {t('Organizations.getStarted', 'Get Started')}
@@ -438,37 +440,13 @@ export function OrganizationsScreen({ navigation }: any) {
     );
   }
 
-  // Handle switch organization
+  // Handle switch organization — use context so theme updates
   const handleSwitchOrganization = async (orgId: string) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
-      const response = await fetch(`${API_URL}/api/users/switch-organization`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({ organizationId: orgId })
-      });
-
-      if (response.ok) {
-        Alert.alert(
-          t('Organizations.success', 'Success'),
-          t('Organizations.organizationSwitched', 'Organization switched successfully')
-        );
-        await fetchUserData();
-
-        // Force navigation to refresh
-        navigation.navigate('Dashboard' as never);
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        Alert.alert(
-          t('Organizations.error', 'Error'),
-          errorData.message || t('Organizations.failedToSwitchOrganization', 'Failed to switch organization')
-        );
-      }
+      await contextSwitchOrg(orgId);
+      await fetchUserData();
+      await refreshOrganizations();
+      navigation.navigate('Dashboard' as never);
     } catch (error) {
       console.error('Failed to switch organization:', error);
       Alert.alert(

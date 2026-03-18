@@ -44,7 +44,8 @@ export default function StudentTrainingCards() {
   const locale = useLocale()
   const dateLocale = locale === 'pt' ? ptBR : enUS
   const [trainings, setTrainings] = useState<Training[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [initialLoad, setInitialLoad] = useState(true)
   const [isOnline, setIsOnline] = useState(true)
   const [lastSync, setLastSync] = useState<Date | null>(null)
   const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }))
@@ -103,7 +104,11 @@ export default function StudentTrainingCards() {
   }
 
   const fetchTrainings = async () => {
-    if (!currentOrganization || !user) return
+    if (!currentOrganization || !user) {
+      setLoading(false)
+      setInitialLoad(false)
+      return
+    }
 
     setLoading(true)
     try {
@@ -116,7 +121,9 @@ export default function StudentTrainingCards() {
         const data: Training[] = await response.json()
         setTrainings(data)
         saveToCache(data)
-        toast.success(t('syncSuccess'))
+        if (!initialLoad) {
+          toast.success(t('syncSuccess'))
+        }
       } else {
         toast.error(t('errors.failedToFetch'))
       }
@@ -125,6 +132,7 @@ export default function StudentTrainingCards() {
       toast.error(t('syncErrorUsingCache'))
     } finally {
       setLoading(false)
+      setInitialLoad(false)
     }
   }
 
@@ -265,11 +273,19 @@ export default function StudentTrainingCards() {
 
   const isCurrentWeek = isSameDay(currentWeekStart, startOfWeek(new Date(), { weekStartsOn: 1 }))
 
+  if (initialLoad && loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 className="text-2xl font-bold">{t('myTrainings')}</h2>
+          <h2 className="text-2xl font-bold">{t('myTrainingSchedule')}</h2>
           <p className="text-sm text-gray-500">
             {format(weekStart, 'MMM d', { locale: dateLocale })} - {format(weekEnd, 'MMM d, yyyy', { locale: dateLocale })}
           </p>

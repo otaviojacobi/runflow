@@ -17,10 +17,8 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Badge } from '../components/ui/Badge';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '../lib/supabase';
-import Constants from 'expo-constants';
-
-const API_URL = Constants.expoConfig?.extra?.apiUrl || process.env.EXPO_PUBLIC_API_URL || 'https://www.runflow.club';
+import { useOrganization } from '../contexts/OrganizationContext';
+import { api } from '../lib/api';
 
 interface Athlete {
   id: string;
@@ -95,28 +93,7 @@ export function AthletesScreen() {
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [currentOrganization, setCurrentOrganization] = useState<any>(null);
-
-  // Load current organization
-  useEffect(() => {
-    loadCurrentOrganization();
-  }, []);
-
-  const loadCurrentOrganization = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigation.navigate('Login' as never);
-        return;
-      }
-
-      // For now, we'll use a mock organization until the OrganizationContext is implemented
-      // TODO: Replace with actual organization context
-      setCurrentOrganization({ id: 'mock-org-id', name: 'My Team' });
-    } catch (error) {
-      console.error('Failed to load organization:', error);
-    }
-  };
+  const { currentOrganization } = useOrganization();
 
   // Fetch athletes when organization is available
   useEffect(() => {
@@ -130,44 +107,20 @@ export function AthletesScreen() {
 
     setLoadingAthletes(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigation.navigate('Login' as never);
-        return;
-      }
-
-      const response = await fetch(
-        `${API_URL}/api/organizations/${currentOrganization.id}/members`,
-        {
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        // Filter only athletes and transform data
-        const athletesData = (data.members || [])
-          .filter((member: any) => member.role === 'ATHLETE')
-          .map((member: any) => ({
-            id: member.id,
-            userId: member.userId,
-            name: member.user?.name || member.user?.email?.split('@')[0] || 'Unknown',
-            email: member.user?.email,
-            status: 'active', // Mock - will be replaced later
-            joinedAt: new Date(member.joinedAt),
-            lastActivity: new Date(), // Mock - will be replaced later
-            sessionsCompleted: Math.floor(Math.random() * 50), // Mock - will be replaced later
-          }));
-        setAthletes(athletesData);
-      } else {
-        Alert.alert(
-          t('Athletes.error', 'Error'),
-          t('Athletes.failedToLoadAthletes', 'Failed to load athletes')
-        );
-      }
+      const data = await api.getOrganizationMembers(currentOrganization.id);
+      const athletesData = (data.members || [])
+        .filter((member: any) => member.role === 'ATHLETE')
+        .map((member: any) => ({
+          id: member.id,
+          userId: member.userId,
+          name: member.user?.name || member.user?.email?.split('@')[0] || 'Unknown',
+          email: member.user?.email,
+          status: 'active' as const,
+          joinedAt: new Date(member.joinedAt),
+          lastActivity: new Date(),
+          sessionsCompleted: 0,
+        }));
+      setAthletes(athletesData);
     } catch (error) {
       console.error('Failed to fetch athletes:', error);
       Alert.alert(
@@ -249,35 +202,12 @@ export function AthletesScreen() {
     if (!currentOrganization) return;
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigation.navigate('Login' as never);
-        return;
-      }
-
-      const response = await fetch(
-        `${API_URL}/api/organizations/${currentOrganization.id}/members/${athlete.userId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        }
+      await api.removeMember(currentOrganization.id, athlete.userId);
+      Alert.alert(
+        t('Athletes.success', 'Success'),
+        t('Athletes.memberRemoved', 'Athlete removed successfully')
       );
-
-      if (response.ok) {
-        Alert.alert(
-          t('Athletes.success', 'Success'),
-          t('Athletes.memberRemoved', 'Athlete removed successfully')
-        );
-        fetchAthletes();
-      } else {
-        Alert.alert(
-          t('Athletes.error', 'Error'),
-          t('Athletes.failedToRemoveMember', 'Failed to remove athlete')
-        );
-      }
+      fetchAthletes();
     } catch (error) {
       console.error('Failed to remove athlete:', error);
       Alert.alert(
@@ -294,11 +224,7 @@ export function AthletesScreen() {
   );
 
   const handleInviteAthlete = () => {
-    // TODO: Navigate to invite athlete screen
-    Alert.alert(
-      t('Athletes.comingSoon', 'Coming Soon'),
-      t('Athletes.inviteFeatureComingSoon', 'Athlete invitation feature is coming soon')
-    );
+    navigation.navigate('InviteMembers' as never, { defaultRole: 'ATHLETE' } as never);
   };
 
   // No organization selected state

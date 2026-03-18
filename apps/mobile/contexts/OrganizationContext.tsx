@@ -103,17 +103,21 @@ export function OrganizationProvider({ children }: OrganizationProviderProps) {
 
   const refreshOrganizations = async () => {
     try {
-      const [orgsData, invitesData] = await Promise.all([
+      const [userData, orgsData, invitesData] = await Promise.all([
+        api.getCurrentUser(),
         api.getOrganizations(),
         api.getPendingInvites(),
       ]);
 
+      const userProfile = (userData as any).user ?? userData;
+      setUser(userProfile);
       setOrganizations(orgsData);
       setPendingInvites(invitesData);
 
       // Re-apply theme colors in case they changed in studio
-      if (user?.currentOrganizationId) {
-        const current = orgsData.find((o: OrganizationWithRole) => o.id === user.currentOrganizationId);
+      const currentOrgId = userProfile.currentOrganizationId;
+      if (currentOrgId) {
+        const current = orgsData.find((o: OrganizationWithRole) => o.id === currentOrgId);
         if (current) {
           await updateTheme(current.id, {
             primaryColor: current.primaryColor,

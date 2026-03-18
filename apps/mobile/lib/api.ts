@@ -240,4 +240,37 @@ export const api = {
       }
     );
   },
+
+  // ============ Trainings API ============
+  async getTrainings(params: { organizationId?: string; memberId?: string; status?: string; type?: string }) {
+    const searchParams = new URLSearchParams();
+    if (params.organizationId) searchParams.append('organizationId', params.organizationId);
+    if (params.memberId) searchParams.append('memberId', params.memberId);
+    if (params.status) searchParams.append('status', params.status);
+    if (params.type) searchParams.append('type', params.type);
+    const query = searchParams.toString();
+    return apiRequest<any[]>(`/api/trainings${query ? `?${query}` : ''}`);
+  },
+
+  async createTraining(data: {
+    title: string;
+    type: 'RUNNING' | 'STRENGTH';
+    scheduledDate: string;
+    memberId: string;
+    organizationId: string;
+    subtitle?: string;
+    description?: string;
+  }) {
+    return apiRequest('/api/trainings', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async updateTrainingStatus(trainingId: string, status: string) {
+    return apiRequest(`/api/trainings/${trainingId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  },
 };

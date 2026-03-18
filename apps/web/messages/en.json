@@ -354,6 +354,7 @@
       "createAccount": "Create account",
       "emailMismatch": "This invite was sent to a different email than yours"
     },
+    "studio": "Studio",
     "Studio": "Studio",
     "studioAccessDenied": "Access Denied",
     "studioAccessDeniedDescription": "Only organization owners can access the Studio. Contact your organization owner if you need changes to the app appearance.",
@@ -515,7 +516,16 @@
       "trackPerformance": "Track your performance",
       "achievements": "Achievements",
       "goals": "Goals",
-      "viewMilestones": "View your milestones"
+      "viewMilestones": "View your milestones",
+      "studio": "Studio",
+      "studioContent": "Customize",
+      "studioDescription": "Customize your organization",
+      "myProfile": "My Profile",
+      "profileContent": "Profile",
+      "myProfileDescription": "View and update your profile",
+      "myClub": "My Club",
+      "clubContent": "Organization",
+      "myClubDescription": "View your organization"
     },
     "tabs": {
       "overview": "Overview",
@@ -556,6 +566,7 @@
   "Trainings": {
     "title": "Trainings",
     "myTrainings": "My Trainings",
+    "myTrainingSchedule": "My Training Schedule",
     "trainingCalendar": "Training Calendar",
     "newTraining": "New Training",
     "editTraining": "Edit Training",

@@ -329,17 +329,30 @@ export default function OrganizationsPage() {
                           {orgRole ? t(`role.${orgRole}`) : ''}
                         </Badge>
                         {isCurrentOrg && orgRole === 'OWNER' && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleEditOrg(org)
-                            }}
-                          >
-                            <Edit className="h-4 w-4 mr-1" />
-                            {t('editInformation')}
-                          </Button>
+                          <>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleEditOrg(org)
+                              }}
+                            >
+                              <Edit className="h-4 w-4 mr-1" />
+                              {t('editInformation')}
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                router.push('/dashboard/organizations/studio')
+                              }}
+                            >
+                              <Palette className="h-4 w-4 mr-1" />
+                              {t('studio')}
+                            </Button>
+                          </>
                         )}
                       </div>
                     </div>

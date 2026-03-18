@@ -9,16 +9,13 @@ import {
   X,
   Home,
   Users,
-  Calendar,
-  BarChart3,
   Settings,
   LogOut,
   UserCircle,
-  CreditCard,
-  FileText,
   Flag,
   Bell,
-  Dumbbell
+  Dumbbell,
+  Calendar
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -44,6 +41,7 @@ export function DashboardNav() {
   const { user, currentOrganization, pendingInvites } = useOrganization()
   const t = useTranslations('Dashboard')
   const tOrg = useTranslations('Organizations')
+  const tTrainings = useTranslations('Trainings')
 
   const navigation = [
     {
@@ -53,46 +51,22 @@ export function DashboardNav() {
       roles: ['OWNER', 'TRAINER', 'ATHLETE']
     },
     {
-      name: 'Trainings',
+      name: tTrainings('title'),
       href: '/dashboard/trainings',
       icon: Dumbbell,
       roles: ['OWNER', 'TRAINER']
     },
     {
-      name: 'My Trainings',
+      name: tTrainings('myTrainingSchedule'),
       href: '/dashboard/my-trainings',
-      icon: Dumbbell,
+      icon: Calendar,
       roles: ['ATHLETE']
-    },
-    {
-      name: t('trainingSheets'),
-      href: '/dashboard/training',
-      icon: FileText,
-      roles: ['OWNER', 'TRAINER', 'ATHLETE']
     },
     {
       name: t('athletes'),
       href: '/dashboard/athletes',
       icon: Users,
       roles: ['OWNER', 'TRAINER']
-    },
-    {
-      name: t('schedule'),
-      href: '/dashboard/schedule',
-      icon: Calendar,
-      roles: ['OWNER', 'TRAINER', 'ATHLETE']
-    },
-    {
-      name: t('analytics'),
-      href: '/dashboard/analytics',
-      icon: BarChart3,
-      roles: ['OWNER', 'TRAINER']
-    },
-    {
-      name: t('billing'),
-      href: '/dashboard/billing',
-      icon: CreditCard,
-      roles: ['OWNER']
     },
   ]
 

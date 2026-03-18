@@ -354,6 +354,7 @@
       "createAccount": "Criar conta",
       "emailMismatch": "Este convite foi enviado para um e-mail diferente do seu"
     },
+    "studio": "Estúdio",
     "Studio": "Estúdio",
     "studioAccessDenied": "Acesso Negado",
     "studioAccessDeniedDescription": "Apenas proprietários do clube podem acessar o Estúdio. Entre em contato com o proprietário do seu clube se precisar de alterações na aparência do app.",
@@ -515,7 +516,16 @@
       "trackPerformance": "Acompanhe seu desempenho",
       "achievements": "Conquistas",
       "goals": "Objetivos",
-      "viewMilestones": "Veja suas conquistas"
+      "viewMilestones": "Veja suas conquistas",
+      "studio": "Estúdio",
+      "studioContent": "Personalizar",
+      "studioDescription": "Personalize seu clube",
+      "myProfile": "Meu Perfil",
+      "profileContent": "Perfil",
+      "myProfileDescription": "Veja e atualize seu perfil",
+      "myClub": "Meu Clube",
+      "clubContent": "Clube",
+      "myClubDescription": "Veja seu clube"
     },
     "tabs": {
       "overview": "Visão Geral",
@@ -556,6 +566,7 @@
   "Trainings": {
     "title": "Treinos",
     "myTrainings": "Meus Treinos",
+    "myTrainingSchedule": "Minha Agenda de Treinos",
     "trainingCalendar": "Calendário de Treinos",
     "newTraining": "Novo Treino",
     "editTraining": "Editar Treino",
