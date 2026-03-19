@@ -144,7 +144,7 @@
       "subtitle": "Enviamos um e-mail de verificação para",
       "instructions": "Clique no link no e-mail para verificar sua conta, ou digite o código de verificação abaixo.",
       "verificationCodeLabel": "Código de Verificação",
-      "verificationCodePlaceholder": "Digite o código de 6 dígitos",
+      "verificationCodePlaceholder": "Digite o código de verificação",
       "verifyButton": "Verificar E-mail",
       "verifyingButton": "Verificando...",
       "didntReceive": "Não recebeu o e-mail?",
