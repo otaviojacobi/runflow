@@ -163,7 +163,7 @@ function VerifyEmailContent() {
                 onChange={(e) => setOtp(e.target.value)}
                 placeholder={t('verificationCodePlaceholder')}
                 maxLength={6}
-                className="block w-full px-4 py-3 text-center text-2xl tracking-widest border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-4 py-3 text-center text-base tracking-widest border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
