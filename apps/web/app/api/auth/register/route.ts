@@ -28,6 +28,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<RegisterR
     })
 
     if (authError) {
+      // Detect duplicate user from Supabase error
+      if (
+        authError.message.toLowerCase().includes('user already registered') ||
+        authError.status === 422
+      ) {
+        return NextResponse.json(
+          { error: 'An account with this email already exists. Please sign in instead.', code: 'USER_ALREADY_EXISTS' },
+          { status: 409 }
+        )
+      }
       return NextResponse.json({ error: authError.message }, { status: 400 })
     }
 
@@ -35,6 +45,19 @@ export async function POST(request: NextRequest): Promise<NextResponse<RegisterR
       return NextResponse.json(
         { error: 'Failed to create user' },
         { status: 500 }
+      )
+    }
+
+    // When email confirmation is enabled, Supabase returns a user with empty
+    // identities array instead of an error for duplicate signups (to prevent
+    // email enumeration). Detect this case.
+    if (
+      authData.user.identities &&
+      authData.user.identities.length === 0
+    ) {
+      return NextResponse.json(
+        { error: 'An account with this email already exists. Please sign in instead.', code: 'USER_ALREADY_EXISTS' },
+        { status: 409 }
       )
     }
 
@@ -70,6 +93,19 @@ export async function POST(request: NextRequest): Promise<NextResponse<RegisterR
       return NextResponse.json(
         { error: 'Validation failed', details },
         { status: 400 }
+      )
+    }
+
+    // Handle Prisma unique constraint violation (email already exists in UserProfile)
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      error.code === 'P2002'
+    ) {
+      return NextResponse.json(
+        { error: 'An account with this email already exists. Please sign in instead.', code: 'USER_ALREADY_EXISTS' },
+        { status: 409 }
       )
     }
 

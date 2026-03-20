@@ -50,6 +50,22 @@ function RegisterContent() {
     setError('');
     setLoading(true);
 
+    // Frontend password validation
+    const hasMinLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    if (!hasMinLength || !hasUppercase || !hasLowercase || !hasNumber) {
+      setError(t('passwordRequirements') + ' ' + [
+        !hasMinLength && t('passwordMinLength'),
+        !hasUppercase && t('passwordUppercase'),
+        !hasLowercase && t('passwordLowercase'),
+        !hasNumber && t('passwordNumber'),
+      ].filter(Boolean).join(', '));
+      setLoading(false);
+      return;
+    }
+
     if (!captchaToken) {
       setError(t('errorCaptchaRequired'));
       setLoading(false);
@@ -66,7 +82,11 @@ function RegisterContent() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || t('errorFailedCreate'));
+        if (data.code === 'USER_ALREADY_EXISTS') {
+          setError(t('errorUserAlreadyExists'));
+        } else {
+          setError(data.error || t('errorFailedCreate'));
+        }
         return;
       }
 
@@ -196,6 +216,30 @@ function RegisterContent() {
                 autoComplete="new-password"
                 required
               />
+              <div className="mt-2 space-y-1">
+                  <p className="text-xs font-medium text-gray-500">{t('passwordRequirements')}</p>
+                  <ul className="space-y-0.5">
+                    {([
+                      { key: 'passwordMinLength', met: password.length >= 8 },
+                      { key: 'passwordUppercase', met: /[A-Z]/.test(password) },
+                      { key: 'passwordLowercase', met: /[a-z]/.test(password) },
+                      { key: 'passwordNumber', met: /\d/.test(password) },
+                    ] as const).map(({ key, met }) => (
+                      <li key={key} className={`flex items-center gap-1.5 text-xs ${met ? 'text-green-600' : 'text-gray-400'}`}>
+                        {met ? (
+                          <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9" strokeWidth={2} />
+                          </svg>
+                        )}
+                        {t(key)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
             </div>
           </div>
 
@@ -216,7 +260,7 @@ function RegisterContent() {
 
           <button
             type="submit"
-            disabled={loading || !captchaToken}
+            disabled={loading || !captchaToken || password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password)}
             className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             {loading ? t('loadingButton') : t('submitButton')}
