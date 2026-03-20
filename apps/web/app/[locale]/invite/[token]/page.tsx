@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/i18n/routing'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Flag, UserPlus, Clock, AlertCircle, CheckCircle, Mail } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { enUS, ptBR } from 'date-fns/locale'
 
 interface InviteData {
   invite: {
@@ -39,6 +40,8 @@ export default function InvitePage({ params }: { params: Promise<{ token: string
   const router = useRouter()
   const t = useTranslations('Organizations')
   const tAuth = useTranslations('Auth.login')
+  const locale = useLocale()
+  const dateLocale = locale === 'pt' ? ptBR : enUS
   const [token, setToken] = useState<string | null>(null)
   const [inviteData, setInviteData] = useState<InviteData | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -291,7 +294,7 @@ export default function InvitePage({ params }: { params: Promise<{ token: string
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span>
-                  {t('expiresIn')} {inviteData?.invite.expiresAt && formatDistanceToNow(new Date(inviteData.invite.expiresAt), { addSuffix: true })}
+                  {t('expiresIn')} {inviteData?.invite.expiresAt && formatDistanceToNow(new Date(inviteData.invite.expiresAt), { addSuffix: true, locale: dateLocale })}
                 </span>
               </div>
             </div>
@@ -320,16 +323,16 @@ export default function InvitePage({ params }: { params: Promise<{ token: string
                 <div className="flex gap-2 w-full">
                   <Button
                     className="flex-1"
-                    onClick={() => router.push(`/login?redirect=/invite/${token}&email=${encodeURIComponent(inviteEmail)}`)}
+                    onClick={() => router.push(`/register?redirect=/invite/${token}&email=${encodeURIComponent(inviteEmail)}`)}
                   >
-                    {tAuth('submitButton')}
+                    {t('InvitePage.createAccount')}
                   </Button>
                   <Button
                     variant="outline"
                     className="flex-1"
-                    onClick={() => router.push(`/register?redirect=/invite/${token}&email=${encodeURIComponent(inviteEmail)}`)}
+                    onClick={() => router.push(`/login?redirect=/invite/${token}&email=${encodeURIComponent(inviteEmail)}`)}
                   >
-                    {t('InvitePage.createAccount')}
+                    {tAuth('submitButton')}
                   </Button>
                 </div>
               </>

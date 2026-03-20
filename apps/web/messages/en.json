@@ -144,7 +144,7 @@
       "subtitle": "We've sent a verification email to",
       "instructions": "Click the link in the email to verify your account, or enter the verification code below.",
       "verificationCodeLabel": "Verification Code",
-      "verificationCodePlaceholder": "Enter 6-digit code",
+      "verificationCodePlaceholder": "Enter verification code",
       "verifyButton": "Verify Email",
       "verifyingButton": "Verifying...",
       "didntReceive": "Didn't receive the email?",

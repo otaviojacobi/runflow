@@ -162,14 +162,14 @@ function VerifyEmailContent() {
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 placeholder={t('verificationCodePlaceholder')}
-                maxLength={6}
-                className="block w-full px-4 py-3 text-center text-2xl tracking-widest border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                maxLength={8}
+                className="block w-full px-4 py-3 text-center text-base tracking-widest border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <button
               type="submit"
-              disabled={loading || otp.length !== 6}
+              disabled={loading || otp.length !== 8}
               className="w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? t('verifyingButton') : t('verifyButton')}

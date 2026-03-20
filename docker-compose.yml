@@ -62,6 +62,7 @@ services:
       GOTRUE_MAILER_TEMPLATES_RECOVERY: "http://templates/recovery.html"
       GOTRUE_MAILER_SUBJECTS_CONFIRMATION: "Confirm your email - RunFlow"
       GOTRUE_MAILER_SUBJECTS_RECOVERY: "Reset your password - RunFlow"
+      GOTRUE_MAILER_OTP_LENGTH: "8"
       # Google OAuth
       GOTRUE_EXTERNAL_GOOGLE_ENABLED: "true"
       # Testing keys from old "stride" app on google cloud
