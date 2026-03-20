@@ -54,5 +54,6 @@ export type LoginResponse = {
 
 export type AuthErrorResponse = {
   error: string
+  code?: string
   details?: Record<string, string[]>
 }

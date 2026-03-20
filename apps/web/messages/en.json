@@ -105,8 +105,14 @@
       "errorGeneric": "An error occurred. Please try again.",
       "errorGoogleSignUp": "Failed to sign up with Google",
       "errorCaptchaFailed": "Captcha verification failed. Please try again.",
+      "errorUserAlreadyExists": "An account with this email already exists. Please sign in instead.",
       "loadingButton": "Loading...",
-      "loadingPage": "Loading..."
+      "loadingPage": "Loading...",
+      "passwordRequirements": "Password must have:",
+      "passwordMinLength": "At least 8 characters",
+      "passwordUppercase": "At least one uppercase letter",
+      "passwordLowercase": "At least one lowercase letter",
+      "passwordNumber": "At least one number"
     },
     "forgotPassword": {
       "title": "Forgot Password",
